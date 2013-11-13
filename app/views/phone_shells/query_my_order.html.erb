@@ -1,0 +1,70 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header">我的订单</div>
+
+<% if @orders.size() == 0 %>
+<div class="order_content">您暂时没有订单!</div>
+<% else %>
+<% @orders.each_with_index do |order, i| %>
+<div class="order_content">
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">订单号: </label>
+		<span><%= order["id"]%></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">机型: </label>
+		<span><%= @detail_info[i]["display_name"]%></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">模版: </label>
+		<span><%= @detail_info[i]["tplname"]%></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">收货人: </label>
+		<span><%= order["address"]["recipient"] %></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">电话: </label>
+		<span><%= order["address"]["telephone"] %> </span>
+	</div>
+
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">地址: </label>
+		<span><%= order["address"]["city"] + order["address"]["detail_address"] %></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">状态: </label>
+
+		<% if order["state"] == "NOT_PAY" %>
+		<span>未支付</span>
+		<button class="btn-zhifu" data-orderid="<%= order["id"]%>">立即支付</button>
+		<% elsif order["state"] == "EXPRESS_SENT" %>
+		<span>已支付</span>
+		<button class="btn-express" data-orderid="<%= order["id"]%>">查看物流</button>
+		<% else %>
+		<span>已支付</span>
+		<% end %>
+	</div>
+
+</div>
+
+<% end %>
+<% end %>
+<script type="text/javascript">
+$(function(){
+	$(".btn-zhifu").click(function(){
+		goto_confirm_page("<%= params[:user_name] %>", $(this).data("orderid"))
+	});
+	$(".btn-express").click(function(){
+		goto_express_page("<%= params[:user_name] %>", $(this).data("orderid"))
+	});
+});
+</script>

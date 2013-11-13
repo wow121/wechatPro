@@ -1,0 +1,116 @@
+<div class="header">确认并支付</div>
+
+<div class="order_content">
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">订单号: </label>
+		<span><%= @order["id"]%></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">机型: </label>
+		<span><%= @order["products"][0]["items"][0]["detail_info"]["display_name"] %></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">模版: </label>
+		<span><%= @order["products"][0]["items"][0]["detail_info"]["tplname"] %></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">收货人: </label>
+		<span><%= @order["address"]["recipient"] %></span>
+	</div>
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">电话: </label>
+		<span><%= @order["address"]["telephone"] %> </span>
+	</div>
+
+
+	<div class="order_content_line clearfix">
+		<label class="order_content_label">地址: </label>
+		<% if @order["address"]["city"] != nil %>
+		<span><%= @order["address"]["city"] + " " + @order["address"]["detail_address"] %></span>
+		<% else %>
+		<span><%= @order["address"]["detail_address"] %></span>
+		<% end %>
+	</div>
+
+</div>
+
+
+
+<div class="order_content">
+	<div class="coupon_list clearfix">
+		<% @order["coupons"].each do |coupon| %>
+		<label><%= coupon["code"] %> <%= coupon["coupon_type"]["description"] %></label></br>
+		<% end %> 
+	</div>
+	<div class="div_coupon order_content_line">
+		<label class="order_content_label">输入代金券：</label>
+		<input id="coupon" type="text"/>
+		<button id="btnUseCoupon">确认</button>
+	</div>
+</div>
+
+<div style="position:fixed; bottom:0; width:100%">
+
+	<label id="coupon_tips" style="color:red;">代金券使用不正确！</label>
+
+	<div class="div_price clearfix">
+		<label style="float:left;margin-left:15px;">原价:￥<%= @order["original_price"] %>&nbsp;&nbsp;运费:￥<%= @order["express_price"] %>  </label>
+		<span id="pay_price" class="pay-price">￥<%= @order["price"] %></span>
+		<span class="pay-price-label">结算金额:</span>
+	</div>
+
+	<div class="div_pay clearfix">
+		<div class="title">
+			支付宝网页支付
+		</div>
+		<div class="text">
+			支持支付宝余额及卡通
+		</div>
+	</div>
+</div>
+
+<script>
+$(function(){
+	$("#coupon_tips").hide();
+
+	$("#btnUseCoupon").click(function(){
+		var code = $("#coupon").val();
+
+		$.getJSON( "/phone_shells/use_coupon.json" , {"order_id": <%= @order["id"] %>, "code": code} ,
+		function( data ) {
+			if ( data .result == 0 )
+			{
+				if (data.order.price == "0") {
+					location.reload();
+					return;
+				}
+				var coupons = data.order.coupons;
+				for(var i = 0; i < coupons.length; i++)
+				{
+					if(coupons[i].code == code){
+						var label = "<label>" + coupons[i].code + " " + coupons[i].coupon_type.description  + "</label></br>";
+						$(".coupon_list").append(label);
+					}
+				}
+
+				$("#pay_price").text("￥" + data.order.price.toString());
+
+			} else
+			{
+				$("#coupon_tips").text(data.error_msg).fadeIn(500).fadeOut(1000);
+			}
+
+		});
+
+	});
+
+	$(".div_pay").click(function(){
+		goto_pay_page(<%= @order["id"] %>);
+	});
+})
+</script>

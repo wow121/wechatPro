@@ -1,0 +1,140 @@
+{
+    "manufacturers": [
+        {
+            "manufacturer": "Apple",
+            "models": [
+                {
+                    "model_name": "iPhone5",
+                    "display_name": "iPhone 5s",
+					"folder_name": "Apple_iPhone5",
+                    "preview_info": {
+                        "width": 640,
+                        "height": 754,
+                        "font_size": 15,
+                        "text_y": 570
+                    },
+                    "output_info": {
+                        "width": 1080,
+                        "height": 1740,
+                        "font_size": 30,
+                        "text_y": 1276
+                    },
+                    "crop_size": {
+                        "width": 720,
+                        "height": 1500
+                    }
+                },
+                {
+                    "model_name": "iPhone5",
+                    "display_name": "iPhone 5",
+					"folder_name": "Apple_iPhone5",
+                    "preview_info": {
+                        "width": 640,
+                        "height": 754,
+                        "font_size": 15,
+                        "text_y": 570
+                    },
+                    "output_info": {
+                        "width": 1080,
+                        "height": 1740,
+                        "font_size": 30,
+                        "text_y": 1276
+                    },
+                    "crop_size": {
+                        "width": 720,
+                        "height": 1500
+                    }
+                },
+                {
+                    "model_name": "iPhone4_4S",
+                    "display_name": "iPhone 4/4S",
+					"folder_name": "Apple_iPhone4_4S",
+                    "preview_info": {
+                        "width": 640,
+                        "height": 754,
+                        "font_size": 15,
+                        "text_y": 570
+                    },
+                    "output_info": {
+                        "width": 1080,
+                        "height": 1620,
+                        "font_size": 30,
+                        "text_y": 1198
+                    },
+                    "crop_size": {
+                        "width": 720,
+                        "height": 1416
+                    }
+                }
+            ]
+        },
+        {
+            "manufacturer": "Samsung",
+            "models": [
+                {
+                    "model_name": "GalaxyS3",
+                    "display_name": "Galaxy S3",
+					"folder_name": "Samsung_GalaxyS3",
+                    "preview_info": {
+                        "width": 640,
+                        "height": 754,
+                        "font_size": 15,
+                        "text_y": 560
+                    },
+                    "output_info": {
+                        "width": 1260,
+                        "height": 1800,
+                        "font_size": 30,
+                        "text_y": 1306
+                    },
+                    "crop_size": {
+                        "width": 708,
+                        "height": 1500
+                    }
+                },
+                {
+                    "model_name": "GalaxyS4",
+                    "display_name": "Galaxy S4",
+					"folder_name": "Samsung_GalaxyS4",
+                    "preview_info": {
+                        "width": 640,
+                        "height": 754,
+                        "font_size": 15,
+                        "text_y": 560
+                    },
+                    "output_info": {
+                        "width": 1260,
+                        "height": 1800,
+                        "font_size": 30,
+                        "text_y": 1322
+                    },
+                    "crop_size": {
+                        "width": 708,
+                        "height": 1500
+                    }
+                },
+                {
+                    "model_name": "GalaxyNote2",
+                    "display_name": "Galaxy Note2",
+					"folder_name": "Samsung_GalaxyNote2",
+                    "preview_info": {
+                        "width": 640,
+                        "height": 754,
+                        "font_size": 15,
+                        "text_y": 560
+                    },
+                    "output_info": {
+                        "width": 1260,
+                        "height": 1980,
+                        "font_size": 30,
+                        "text_y": 1442
+                    },
+                    "crop_size": {
+                        "width": 864,
+                        "height": 1680
+                    }
+                }
+            ]
+        }
+    ]
+}

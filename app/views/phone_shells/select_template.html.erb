@@ -1,0 +1,87 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header"><button class="btn" id="confirm">点击下单</button>选择模板</div>
+
+<div class="tpl-selector clearfix">
+<ul>
+	<li><%= image_tag("weixin/tpl_full.png", "data-no" => 0) %><%= image_tag("weixin/active-tpl.png", class: "active-tpl") %></li>
+	<li><%= image_tag("weixin/tpl_love.png", "data-no" => 1) %></li>
+	<li><%= image_tag("weixin/tpl_rock.png", "data-no" => 2) %></li>
+	<li><%= image_tag("weixin/tpl_4_love.png", "data-no" => 3) %></li>
+	<li><%= image_tag("weixin/tpl_lets.png", "data-no" => 4) %></li>
+	<li><%= image_tag("weixin/tpl_heart.png", "data-no" => 5) %></li>
+	<li><%= image_tag("weixin/tpl_more.png", "data-no" => 6) %></li>
+</ul>
+</div>
+
+<div id="photo_container" style="width:<%= @preview_width %>px; height: <%= @preview_height %>px;">
+	<img src="<%= @session_info["pic_url"] %>" class="orginal-pic" />
+	<div class="cycle-slideshow" data-cycle-fx="scrollHorz" data-cycle-timeout="0" style="width: 100%;height:100%;z-index:2;"> 
+		<%= template_img("t001", "Standard", @tpl_folder, @session_info) %>
+		<%= template_img("t009", "Love by Design", @tpl_folder, @session_info) %>
+		<%= template_img("t006", "Rock all Day", @tpl_folder, @session_info) %>
+		<%= template_img("t007", "为爱定制", @tpl_folder, @session_info) %>
+		<%= template_img("t008", "Fall in Love", @tpl_folder, @session_info) %>
+		<%= template_img("t010", "Heart", @tpl_folder, @session_info) %>
+	</div>
+	
+	<%= shell_mask(@session_info, @tpl_folder) %>
+</div>
+<div class="shell-more hide">
+	<div class="shell-more-text">
+		更多模板和功能，<br>
+		敬请期待微米印手机App
+	</div>
+</div>
+
+<div class="bottom-bar">
+	<button class="select-shell" id="select-shell"><%= shell_select_text(@session_info) %></button>
+</div>
+<script>
+$(function(){
+	var preview_width = <%= @preview_width %>,
+		preview_height = <%= @preview_height %>,
+		doc_width = $( document ).height(),
+		height = preview_height*doc_width/preview_width*0.55,
+		width = doc_width*0.55;
+		
+	$("#photo_container").height(height).width(width);
+
+	$(".orginal-pic").one("load", function(){
+		var o_pic = $(this);
+		o_pic.height("95%");
+		o_pic.css({
+			left: -(o_pic.width() - width)/2
+		});
+	}).each(function(){
+		if(this.complete) $(this).load();
+	});
+
+	$("#confirm").click(function(){
+		var active = $(".cycle-slideshow img.cycle-slide-active");
+		save_current_page_state("<%= params[:user_name] %>", {"template": active.data("no"), "tplname": active.data("tplname"), "border": $("#mask").data("border")}, goto_address_page);
+	});
+	
+	$(".tpl-selector").click(function(e){
+		var no = $(e.target).data("no");
+		if(!isNaN(no)) {
+			$this = $(this);
+			//more
+			if (no == "6") {
+				$(".shell-more").fadeIn();
+				return false;
+			}
+			$(".shell-more").fadeOut();
+			$('.cycle-slideshow').cycle('goto', no);
+			$( "li:nth-child(" + (no + 1) + ")", $this ).append( $("img.active-tpl", $this) );
+		}
+		return false;
+	});
+	
+	$("#select-shell").click(function(){
+		goto_shell_page("<%= params[:user_name] %>")
+	})
+
+});
+</script>

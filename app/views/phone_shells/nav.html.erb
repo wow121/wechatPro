@@ -1,0 +1,69 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header">微信定制手机壳</div>
+
+<p class="tips">只需三步，你的手机将与众不同</p>
+
+<div class="step_image step0">
+</div>
+
+<div style="margin-bottom: 120px;">
+<ul>
+	<% if @session_info.nil? || @session_info["display_name"].nil? %>
+	<li class="step_nav step_do" id="step1">1.选择机型/模版</li>
+	<% else %>
+    <li class="step_nav step_done step_do" id="step1">
+  	  	<div class="step_title">1.机型模版：</div>
+  	  	<div class="step_text"><%= @session_info["display_name"]%>，<%= @session_info["tplname"]%></div>
+    </li>
+	<% end %>
+	
+	<% if @session_info && @session_info["address"] %>
+    <li class="step_nav step_done" id="step2">
+    	<div class="step_title">2.收货信息：</div>
+    	<div class="step_text"><%= @session_info["address"]["recipient"]%>，<%= @session_info["address"]["detail_address"]%></div>
+    </li>
+	<% else %>
+	<li class="step_nav" id="step2">2.填写收货信息</li>
+	<% end %>
+
+	<li class="step_nav" id="step3">3.支付</li>
+<ul>
+</div>
+
+<div class="bottom-bar blue">
+	<button class="btn-nav" id="shell-info">工艺介绍</button><button class="btn-nav" id="query_my_order">查询订单</button><button class="btn-nav" id="faq-info">常见问题</button>
+</div>
+
+<script>
+$(function(){
+	$(".step_nav").click(function(){
+		var step = $(this).attr("id");
+
+		if(step == "step1"){
+			save_current_page_state("<%= params[:user_name] %>", {"pic_url": "<%= params[:pic_url] %>"}, goto_machine_page);
+		}
+		// else if (step == "step2" && !$(this).hasClass("step_undo")){
+// 			save_current_page_state("<%= params[:user_name] %>", {"pic_url": "<%= params[:pic_url] %>"}, goto_address_page);
+// 		}
+// 		else if(step == "step3" &&  $(this).hasClass("step_do")){
+// 			save_current_page_state("<%= params[:user_name] %>", {"pic_url": "<%= params[:pic_url] %>"}, goto_confirm_page);
+// 		}
+	});
+
+	$("#query_my_order").click(function(){
+		goto_query_my_order_page("<%= params[:user_name] %>");
+	});
+	
+	$("#shell-info").click(function(){
+		location.href = "http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5Njc3NjYyMQ==&appmsgid=10000181&itemidx=1&sign=da359435e4f8790f628958f3202d7f21#wechat_redirect";
+	});
+
+	$("#faq-info").click(function(){
+		location.href = "http://mp.weixin.qq.com/mp/appmsg/show?__biz=MjM5Njc3NjYyMQ==&appmsgid=10000192&itemidx=1&sign=5723da93b6bb573b2030bbb30c1bbf3d#wechat_redirect";
+	})
+	
+	
+});
+</script>

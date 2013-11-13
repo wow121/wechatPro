@@ -1,0 +1,47 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header"><button class="btn" id="confirm">去确认</button>填写收货信息</div> 
+
+<div class="address_li">
+	<%= image_tag("weixin/recipient.png", :class => "address_image") %>
+	<input type="text" id="recipient" class="input_style" placeholder="收货人" value="<%= @address["recipient"] %>"/>
+</div>
+
+<div class="address_li">
+	<%= image_tag("weixin/phone.png",:class => "address_image" ) %>
+	<input type="text" id="telephone" class="input_style" placeholder="电话" value="<%= @address["telephone"] %>"/>
+</div>
+
+<div class="address_li">
+	<%= image_tag("weixin/city.png", :class => "address_image") %>
+	<input type="text" id="city" class="input_style" placeholder="城市" value="<%= @address["city"] %>"/>
+</div>
+
+<div class="address_li_last">
+	<%= image_tag("weixin/address.png", :class => "address_image") %>
+	<input type="text" id="detail_address" class = "input_style" placeholder="详细地址" value="<%= @address["detail_address"] %>"/>
+</div>
+
+<div class="bottom-bar">
+	<div class="bottom-text">
+	您的订单将于三个工作日内包邮寄出。<br>
+	请注意：微米印目前仅支持邮寄中国大陆！
+	</div>
+</div>
+
+<script>
+$(function(){
+	$("#confirm").click(function(){
+		var address = {recipient: $("#recipient").val(),
+		telephone: $("#telephone").val(),
+		city: $("#city").val(),
+		detail_address: $("#detail_address").val()
+	};
+
+	complete_order("<%= params[:user_name] %>", address, function(user_name, order_id){
+		goto_confirm_page(user_name, order_id);
+	});
+});
+})
+</script>

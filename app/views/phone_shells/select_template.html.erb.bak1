@@ -1,0 +1,19 @@
+  <!-- SlidesJS Required: Start Slides -->
+  <meta name="description" content="SlidesJS is a simple slideshow plugin for jQuery. Packed with a useful set of features to help novice and advanced developers alike create elegant and user-friendly slideshows.">
+  <meta name="author" content="Nathan Searles">
+  <meta name="viewport" content="width=device-width">
+
+	<p class="header">选择模版</p>
+
+<div class="bxslider">
+    <div><%= image_tag('weixin/photo.png', style:'left:0; top:0; z-index:-1') %> <%= image_tag('weixin/template1.png', id: "t1", class: "t", style:'left:0; top:0; z-index:0') %></div>
+    <div><%= image_tag('weixin/template2.png', id: "t1", class: "t") %></div>
+    <div><%= image_tag('weixin/template3.png', id: "t1", class: "t") %></div>
+</div>
+
+<script>
+    $(function() {
+				$('.bxslider').bxSlider();
+		});
+</script>
+

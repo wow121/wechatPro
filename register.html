@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="utf-8" />
+	<title>注册</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.css" />
+	<script src="http://code.jquery.com/jquery-1.7.1.min.js"></script>
+	<script src="http://code.jquery.com/mobile/1.1.1/jquery.mobile-1.1.1.min.js"></script>
+	<script src="./jquery.validate.js"></script>
+    <script src="./application_validate.js"></script>
+    <script src="./location.js"></script>
+    <script type="text/javascript">
+    	$(function(){
+    		$("#loc").LocationSelect();
+    	});
+    </script>
+	<style>
+		img.fullscreen {
+			max-height: 100%;
+			max-width: 100%;
+		}
+	</style>
+</head>
+
+<body>
+ <div data-role="page" id="step1">
+  	<form id="form1">
+	  	<input data-role="none" type="text" id="telephone" name="telephone" placeholder="请输入手机号码" data-clear-btn="true"/>
+	  	<input type="password" id="password" name="password" placeholder="请输入密码" data-clear-btn="true"/>
+	  	<input type="text" id="nickname" name="nickname" placeholder="请输入昵称" data-clear-btn="true"/>
+	  	<label><input type="radio" name="gender" value="male"/>男</label>
+	  	<label><input type="radio" name="gender" value="female"/>女</label>
+	  	<button id="step1_submit">提交</button>
+  	</form>
+  </div>
+  
+
+  <div data-role="page" id="step2">
+  	<form id="form2">
+  		<label>验证码已发送到您手机上</label>
+  		<input type="text" id="check_code" name="check_code" placeholder="请输入手机验证码" data-clear-btn="true"/>
+  		<button id="step2_submit">提交</button>
+  	</form>
+  </div>
+
+
+  <div data-role="page" id="step3">
+  	<form id="form3">
+  		<input type="text" id="age" name="age" placeholder="年龄" data-clear-btn="true"/>
+  	    <input type="text" id="height" name="height" placeholder="身高" data-clear-btn="true"/>
+  	    <label>(厘米)</label>
+  	    <input type="text" id="weight" name="weight" placeholder="体重" data-clear-btn="true"/>
+  	    <label>(公斤)</label>
+  	    <div id="loc"></div>
+  	    <!--<input type="text" id="city" name="city" placeholder="城市" data-clear-btn="true"/>-->
+  	    <input type="text" id="job" name="job" placeholder="职业" data-clear-btn="true"/>
+        <input type="text" id="education" name="education" placeholder="学历" data-clear-btn="true"/>
+        <input type="text" id="salary" name="salary" placeholder="月收入" data-clear-btn="true"/>
+        <input type="text" id="self_description" name="self_description" placeholder="个人自述" data-clear-btn="true"/>
+  		<button id="step3_submit">提交</button>
+  	</form>
+  </div> 
+
+</body> 
+
+<script>
+	$("#step1_submit").click(function(){
+		/*$("#form1").validate(
+			{
+				rules:{
+					telephone: {
+						required: true,
+						isTel: true
+					},
+					password: {
+						required: true,
+						maxlength: 15
+					},
+					nickname: {
+						required: true
+					},
+					gender: {
+						required: true
+					}
+
+				},
+				messages: {
+					telephone: {
+						required: '手机号不能为空',
+						isTel: '手机号格式不正确'
+					},
+					password: {
+						required: '密码不能为空',
+						maxlength: '最长15位'
+					},
+					nickname: {
+						required: '昵称不能为空'
+					},
+					gender: {
+						required: '请选择性别'
+					}
+				}
+			});
+		var check = $("#form1").valid();
+		alert(check);
+		if(check == false) return; */
+        
+		$("#step1").hide();
+		$("#step2").show();
+		//location.href = "#step2"
+		//alert("abc");
+	});
+
+	$("#step2_submit").click(function(){
+		var telephone = $("#telephone").val();
+		var check_code = $("#check_code").val();
+
+		$("#step2").hide();
+		$("#step3").show();
+		//location.href = "#step2"
+	});
+
+	$("#step3_submit").click(function(){
+		/*$("#form3").validate(
+			{
+				rules:{
+					age: {
+						required: true,
+						range: [18,100]
+					},
+					height: {
+						required: true,
+						range: [100,250]
+					},
+					weight: {
+						required: true,
+						range: [10,150]
+					},
+
+				},
+				messages: {
+					age: {
+						required: '年龄不能为空',
+						range: '请输入正确的年龄'
+					},
+					height: {
+						required: '身高不能为空',
+						range: '请输入正确的身高'
+					},
+					weight: {
+						required: '体重不能为空',
+						range: '请输入正确的体重'
+					},
+				}
+			});
+		var check = $("#form3").valid();
+		alert(check);
+		if(check == false) return; */
+
+	   addressInfo = $("#loc").getLocation();
+	   if(addressInfo.province == "" || addressInfo.city == "")
+	   {
+	   	 alert("地址不能为空！");
+	   	 return;
+	   }
+
+       var user = {
+       	telephone:$("#telephone").val(),
+       	check_code: $("#check_code").val(),
+       	password: $("#password").val(),
+       	name: $("#nickname").val(),
+       	gender: $("input[@name=gender]:checked").val(),
+       	age: $("#age").val(),
+       	height: $("#height").val(),
+       	weight: $("#weight").val(),
+       	city: addressInfo.province,
+       	district: addressInfo.district,
+       	education: $("#education").val(),
+       	job: $("#job").val(),
+       	salary: $("#salary").val(),
+       	self_description: $("#self_description").val()
+       };
+       
+       alert(JSON.stringify(user));
+
+        $.getJSON( "http://localhost:3000/users/register.json" , {"user":user} ,
+			function( data ) {
+				if ( data .result == 0 )
+				{
+					location.href = "main.html" ;
+				} else
+				{
+                    alert(data.error_msg);
+                }
+			});
+	});
+</script>
+
+</html>

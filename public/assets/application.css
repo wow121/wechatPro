@@ -1,0 +1,767 @@
+/*
+ * This is a manifest file that'll be compiled into application.css, which will include all the files
+ * listed below.
+ *
+ * Any CSS and SCSS file within this directory, lib/assets/stylesheets, vendor/assets/stylesheets,
+ * or vendor/assets/stylesheets of plugins, if any, can be referenced here using a relative path.
+ *
+ * You're free to add application-wide styles to this file and they'll appear at the top of the
+ * compiled file, but it's generally better to create a new file per style scope.
+ *
+
+
+
+ */
+
+/* line 5, ../../app/assets/stylesheets/weixin.css.scss.erb */
+body {
+  background-color: #EDE6E2;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 12, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.clearfix:before,
+.clearfix:after {
+  display: table;
+  content: " ";
+}
+
+/* line 17, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.clearfix:after {
+  clear: both;
+}
+
+/* line 21, ../../app/assets/stylesheets/weixin.css.scss.erb */
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* line 27, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.header {
+  height: 48px;
+  background-color: #FFFFFF;
+  text-align: center;
+  line-height: 48px;
+  font-size: 18px;
+  margin: 0px;
+  color: #4D4D4D;
+  font-weight: bold;
+}
+
+/* line 38, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn {
+  position: absolute;
+  right: 0.6em;
+  color: #F7625E;
+  background: none;
+  border: none;
+  font-size: 18px;
+  padding: 0;
+  margin: 0;
+  line-height: 48px;
+}
+/* line 49, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn.history {
+  left: 1em;
+  width: 30px;
+}
+
+/* line 55, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.hide {
+  display: none;
+}
+
+/* line 59, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.icon-history {
+  display: inline-block;
+  width: 30px;
+  height: 30px;
+  line-height: normal;
+  vertical-align: baseline;
+  background-image: none;
+  background-position: 0% center;
+  background-repeat: no-repeat;
+  margin-top: 0;
+  background-image: url(/assets/weixin/history_arrow.png);
+}
+
+/* line 72, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.tips {
+  text-align: center;
+  font-size: 16px;
+  margin-bottom: 18px;
+  margin-top: 30px;
+  color: #2B2B2B;
+}
+
+/* line 80, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_image {
+  float: left;
+  width: 36px;
+  margin: 25px 0 0 16px;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-image: url(/assets/weixin/step-icon.png);
+  height: 220px;
+}
+/* line 89, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_image.step1 {
+  background-position: -45px 0;
+}
+/* line 92, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_image.step2 {
+  background-position: -90px 0;
+}
+/* line 95, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_image.step3 {
+  background-position: -135px 0;
+}
+
+/* line 101, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_nav {
+  background: #B9B2AA no-repeat 98% center;
+  margin-left: 60px;
+  margin-bottom: 13px;
+  font-size: 18px;
+  padding-left: 1em;
+  color: #FFFFFF;
+  line-height: 80px;
+}
+
+/* line 111, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_undo {
+  background-color: #B9B2AA;
+  line-height: 80px;
+  background-image: none;
+}
+
+/* line 117, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_done {
+  background-color: #B9B2AA;
+  color: #FFFFFF;
+  height: 80px;
+  line-height: inherit;
+  background-image: none;
+}
+
+/* line 125, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_do {
+  background-color: #A5D864;
+  background-image: url(/assets/weixin/step_arrow.png);
+}
+
+/* line 130, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_edit {
+  float: right;
+  width: auto;
+  color: #FFFFFF;
+  background-color: #A5D864;
+  line-height: 80px;
+  text-align: center;
+  padding: 0 5px;
+}
+
+/* line 140, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_title {
+  padding-top: 10px;
+  line-height: 1.5;
+}
+
+/* line 145, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.step_text {
+  margin: 10px 20px 0 1em;
+  font-size: 14px;
+  height: 1.5em;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* line 154, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.select_machine_li {
+  margin-bottom: 6px;
+  padding-left: 1em;
+  line-height: 60px;
+  font-size: 18px;
+  color: #FFFFFF;
+  background-position: 98% center;
+  background-image: url(/assets/weixin/step_arrow.png);
+  background-repeat: no-repeat;
+}
+/* line 164, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.select_machine_li a {
+  display: block;
+}
+
+/* line 169, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#li_0_0 {
+  background-color: #EDD83B;
+}
+
+/* line 172, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#li_0_1 {
+  background-color: #EDB63B;
+}
+
+/* line 175, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#li_1_0 {
+  background-color: #EF943A;
+}
+
+/* line 178, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#li_1_1 {
+  background-color: #ED6E3B;
+}
+
+/* line 181, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#li_1_2 {
+  background-color: #ED503B;
+}
+
+/* line 185, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.address_li {
+  background-color: #FFFFFF;
+  border-width: 1px 1px 0;
+  border-style: solid;
+  border-color: #F5F2F0;
+  line-height: 48px;
+  vertical-align: middle;
+}
+/* line 193, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.address_li input {
+  text-overflow: ellipsis;
+}
+
+/* line 199, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.address_li_last {
+  background-color: #FFFFFF;
+  border-width: 1px;
+  border-style: solid;
+  border-color: #F5F2F0;
+  line-height: 48px;
+  margin-bottom: 60px;
+  vertical-align: middle;
+}
+/* line 208, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.address_li_last input {
+  text-overflow: ellipsis;
+}
+
+/* line 213, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.input_style {
+  font-size: 18px;
+  height: 48px;
+  padding: 10px 5px;
+  margin-left: 0.5em;
+  width: 80%;
+  border: none;
+}
+
+/* line 222, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.address_image {
+  width: 16px;
+  margin-left: 0.5em;
+}
+
+/* line 227, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.order_content {
+  background-color: #FFFFFF;
+  border-width: 1px 1px 0;
+  border-style: solid;
+  border-color: #F5F2F0;
+  font-size: 18px;
+  padding: 1em;
+  color: #4D4D4D;
+}
+/* line 236, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.order_content label {
+  color: #B9B2AA;
+  display: inline-block;
+  width: 120px;
+  float: left;
+}
+/* line 246, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.order_content .order_content_line {
+  line-height: 1.5;
+  word-wrap: break-word;
+}
+
+/* line 252, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.div_coupon {
+  background-color: #FFFFFF;
+  line-height: 44px;
+  font-size: 18px;
+  margin-bottom: 100px;
+}
+
+/* line 259, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#coupon {
+  width: 80px;
+  font-size: 16px;
+  height: 1.428571429;
+  padding: 2px 4px;
+  font-size: 14px;
+  line-height: 1.428571429;
+  color: #555555;
+  vertical-align: middle;
+  background-color: #ffffff;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075);
+  -webkit-transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+  transition: border-color ease-in-out 0.15s, box-shadow ease-in-out 0.15s;
+}
+
+/* line 277, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#btnUseCoupon {
+  font-size: 16px;
+  color: #333333;
+  background-color: #ffffff;
+  display: inline-block;
+  padding: 2px 4px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: normal;
+  line-height: 1.428571429;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+  background-image: none;
+}
+
+/* line 301, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.div_price {
+  height: 48px;
+  background: #000000;
+  color: #B3B3B3;
+  line-height: 48px;
+  font-size: 16px;
+  overflow: hidden;
+}
+
+/* line 310, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.div_pay {
+  background: #f7625e url(/assets/weixin/step_arrow_s_s.png) no-repeat 98% center;
+  height: 48px;
+  padding: 0 4em 0 1em;
+}
+/* line 315, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.div_pay .title {
+  font-size: 16px;
+  line-height: 1.5em;
+  padding-top: 5px;
+  color: #FFFFFF;
+}
+/* line 321, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.div_pay .text {
+  font-size: 14px;
+  color: #FFFFFF;
+}
+/* line 326, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.div_pay .click-pay {
+  line-height: 48px;
+  float: right;
+  color: #FCF990;
+  font-size: 24px;
+}
+
+/* line 335, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.div_query_order {
+  background: #29abe2 url(/assets/weixin/step_arrow.png) no-repeat 98% center;
+  height: 48px;
+  color: #FFFFFF;
+  line-height: 48px;
+  padding-left: 1em;
+  font-size: 18px;
+}
+
+/* line 344, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#prev {
+  position: absolute;
+  left: 20px;
+  top: 100px;
+}
+
+/* line 350, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#next {
+  position: absolute;
+  right: 20px;
+  top: 100px;
+}
+
+/* line 355, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.cycle-slideshow img {
+  position: absolute;
+  left: 0px;
+  top: 0px;
+  width: 100%;
+  height: 100%;
+}
+
+/* line 363, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.bottom-bar {
+  position: fixed;
+  bottom: 0;
+  width: 100%;
+  z-index: 100;
+  padding: 0.3em 0;
+  background: #F7625E;
+  vertical-align: middle;
+  color: #FFFFFF;
+}
+/* line 373, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.bottom-bar.blue {
+  background: #29ABE2;
+}
+/* line 377, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.bottom-bar .bottom-text {
+  padding-left: 15px;
+  font-size: 16px;
+  line-height: 1.3;
+}
+
+/* line 384, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn-tpl {
+  width: 33.3%;
+  border: none;
+  border-left: 1px solid #FFFFFF;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  line-height: 48px;
+  font-weight: normal;
+  color: #FFFFFF;
+  background: #F7625E;
+}
+/* line 397, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn-tpl.active {
+  background: #F49090;
+}
+
+/* line 402, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn-nav {
+  width: 33.3%;
+  border: none;
+  background: none;
+  padding: 0;
+  margin: 0;
+  font-size: 18px;
+  vertical-align: middle;
+  font-weight: normal;
+  color: #FFFFFF;
+  line-height: 40px;
+}
+
+/* line 415, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.tpl-selector {
+  height: 64px;
+  background-color: #FFFFFF;
+  margin-top: 1px;
+  overflow: auto;
+  -webkit-tap-highlight-color: transparent;
+}
+/* line 422, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.tpl-selector ul {
+  width: 430px;
+  height: 100%;
+}
+/* line 427, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.tpl-selector li {
+  float: left;
+  margin: 0 10px;
+  position: relative;
+}
+/* line 432, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.tpl-selector li img {
+  margin-top: 16px;
+  float: left;
+}
+/* line 438, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.tpl-selector li .active-tpl {
+  margin: 0;
+  position: absolute;
+  border: none;
+  bottom: -12px;
+  right: -12px;
+}
+
+/* line 449, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#photo_container {
+  position: relative;
+  z-index: 1;
+  margin: 0 auto 60px;
+  overflow: hidden;
+}
+
+/* line 456, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.select-shell {
+  background: #f7625e url(/assets/weixin/step_arrow_s_s.png) no-repeat 98% center;
+  height: 40px;
+  color: #FFFFFF;
+  line-height: 40px;
+  padding-left: 1em;
+  font-size: 18px;
+  width: 100%;
+  border: none;
+}
+
+/* line 468, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.shell-list li {
+  height: 90px;
+  line-height: 90px;
+  padding-left: 1em;
+  margin-top: 1px;
+  color: #4D4D4D;
+  font-size: 18px;
+}
+/* line 476, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.shell-list li .shell-selected {
+  float: right;
+  width: 36px;
+  height: 100%;
+  text-align: center;
+  background: #f7625e url(/assets/weixin/active-tpl.png) no-repeat center center;
+}
+/* line 484, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.shell-list li.shell-black {
+  background: white url(/assets/weixin/shell-1.jpg) no-repeat 100% bottom;
+}
+/* line 487, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.shell-list li.shell-white {
+  background: white url(/assets/weixin/shell-2.jpg) no-repeat 100% bottom;
+}
+/* line 490, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.shell-list li.shell-3d {
+  background: white url(/assets/weixin/shell-3.jpg) no-repeat 100% bottom;
+}
+
+/* line 496, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.orginal-pic {
+  position: absolute;
+  top: 2.5%;
+  z-index: 1;
+}
+
+/* line 506, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.shell-more {
+  background: #F7625E;
+  color: #FFFFFF;
+  line-height: 1.3;
+  font-size: 18px;
+  width: 100%;
+  border: none;
+  position: absolute;
+  top: 240px;
+  z-index: 3;
+}
+/* line 517, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.shell-more .shell-more-text {
+  padding: 0.5em 1em;
+  text-align: center;
+}
+
+/* line 523, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn-zhifu, .btn-express {
+  float: right;
+  background: #f7625e url(/assets/weixin/step_arrow_s_s.png) no-repeat 95% center;
+  height: 36px;
+  color: #FFFFFF;
+  line-height: 36px;
+  padding: 0 1em 0 0;
+  font-size: 18px;
+  width: 124px;
+  border: none;
+}
+
+/* line 535, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.pay-price-label {
+  float: right;
+}
+
+/* line 539, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.pay-price {
+  float: right;
+  margin-right: 15px;
+  font-size: 24px;
+  color: #F7625E;
+}
+
+/* line 547, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.alipay_text {
+  display: block;
+  margin: 10px 15px;
+  text-align: center;
+  color: #ff8150;
+  font-size: 22px;
+  font-weight: bold;
+  line-height: 44px;
+  min-height: 44px;
+}
+
+/* line 558, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.callback-ct {
+  font-size: 18px;
+  margin: 0 2em;
+  text-align: center;
+}
+
+/* line 564, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn-cb {
+  display: block;
+  margin: 0 auto;
+  max-width: 300px;
+  padding: 1.2em 0;
+  color: #FFFFFF;
+  text-decoration: none;
+}
+/* line 572, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn-cb.btn-green {
+  background: #A5D864;
+}
+/* line 576, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.btn-cb.btn-red {
+  background: #F7625E;
+}
+
+/* line 582, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.cb-tips {
+  color: #B9B2AA;
+  line-height: 1.2;
+}
+
+/* line 587, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.p-ct {
+  position: relative;
+}
+/* line 590, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.p-ct #photo_container {
+  margin-bottom: 0;
+}
+
+/* line 595, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#mask-ct {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+}
+/* line 599, ../../app/assets/stylesheets/weixin.css.scss.erb */
+#mask-ct img {
+  width: 100%;
+  position: absolute;
+  bottom: 20px;
+  z-index: 4;
+}
+
+/* line 607, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.bottom-ct {
+  font-size: 14px;
+  position: absolute;
+  top: 180px;
+  width: 100%;
+  box-sizing: border-box;
+  z-index: 5;
+}
+/* line 615, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.bottom-ct img {
+  width: 100%;
+  max-width: 400px;
+  margin: 0 auto;
+  display: block;
+}
+
+/* line 623, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content {
+  background-color: #EDE6E2;
+  border-width: 1px 1px 0;
+  border-style: solid;
+  border-color: #F5F2F0;
+  font-size: 18px;
+  color: #4D4D4D;
+}
+/* line 631, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_info {
+  background-color: #FFFFFF;
+  padding: 10px 0;
+}
+/* line 635, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_info img {
+  float: left;
+  margin-left: 10px;
+}
+/* line 639, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_info .express_info_inner {
+  margin-left: 10px;
+  float: left;
+  line-height: 1em;
+}
+/* line 646, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_cname {
+  color: #4D4D4D;
+  font-size: 14px;
+}
+/* line 651, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_code {
+  color: #B9B2AA;
+  font-size: 12px;
+}
+/* line 656, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .sub-title {
+  color: #B9B2AA;
+  font-size: 14px;
+  line-height: 35px;
+  padding-left: 18px;
+}
+/* line 663, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express-errcode {
+  color: #F7625E;
+  font-size: 14px;
+  line-height: 35px;
+  text-align: center;
+}
+/* line 671, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_content_line {
+  color: #B9B2AA;
+  font-size: 14px;
+  line-height: 1.5;
+  word-wrap: break-word;
+  padding: 5px 10px 5px 50px;
+  margin-bottom: 1px;
+  background: url(/assets/weixin/express_step.png) 16px -48px no-repeat white;
+}
+/* line 680, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_content_line.first {
+  background-position: 16px 18px;
+  color: #EA7154;
+}
+/* line 685, ../../app/assets/stylesheets/weixin.css.scss.erb */
+.express_content .express_content_line.last {
+  background-position: 16px -112px;
+}
+.swipe {
+  overflow: hidden;
+  visibility: show;
+  position: relative;
+}
+.swipe-wrap {
+  overflow: hidden;
+  position: relative;
+}
+.swipe-wrap > div {
+  float:left;
+  width:100%;
+  position: relative;
+}
+

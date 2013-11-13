@@ -1,0 +1,20 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header">选择机型</div>
+
+<ul >
+  <li class = "select_machine_li" id = "li_0_0" data-name="iPhone 5">苹果 iPhone5/5s</li>
+  <li class = "select_machine_li" id = "li_0_1" data-name="iPhone 4/4S">苹果 iPhone4/4s</li>
+  <li class = "select_machine_li" id = "li_1_0" data-name="Galaxy S3">三星 Galaxy S3(i9300)</li>
+  <li class = "select_machine_li" id = "li_1_1" data-name="Galaxy S4">三星 Galaxy S4(i9500)</li>
+  <li class = "select_machine_li" id = "li_1_2" data-name="Galaxy Note2">三星 Note2(N7100)</li>
+</ul>
+
+<script>
+   $(function(){
+     $(".select_machine_li").click(function(){
+         save_current_page_state("<%= params[:user_name] %>", {"machine": $(this).attr("id"), "display_name": $(this).data("name")}, goto_template_page);
+       });
+	 })
+</script>

@@ -1,0 +1,19 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header">选择边框</div>
+<div class="shell-list">
+	<ul>
+		<li class="shell-item shell-black" data-border="black"><%= shell_is_selected("black", @session_info) %>大气黑（TPU软边）</li>
+		<!--
+		<li class="shell-item shell-white" data-border="white"><%= shell_is_selected("white", @session_info) %>优雅白（TPU软边）</li>
+		-->
+		<li class="shell-item shell-3d" data-border="3d"><%= shell_is_selected("3d", @session_info) %>全彩（硬边）</li>
+	</ul>
+</div>
+<script type="text/javascript">
+$(".shell-item").click(function(){
+	$(this).append($(".shell-selected"));
+	save_current_page_state("<%= params[:user_name] %>", {"border": $(this).data("border")}, goto_template_page);
+});
+</script>

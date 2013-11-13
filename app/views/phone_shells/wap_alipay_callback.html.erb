@@ -1,0 +1,25 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header">支付完成</div>
+
+<div class="callback-ct">
+	<% if params[:result] == "success" %>
+	<a href="share.html?order_id=<%= @order_id %>" class="btn-cb btn-green" style="margin-top: 3em;">支付成功，去晒单</a><br>
+	<div class="cb-tips">
+		【感恩回馈】将您独特的手机壳晒到朋友圈，即可获得85折优惠券！
+	</div>
+	<% else %>
+	<a href="#" class="btn-cb btn-red" style="margin-top: 3em;">支付失败，再试一次</a><br>
+	<div class="cb-tips">
+		任何问题请通过微信联系微米印微笑客服
+	</div>
+	<% end %>
+</div>
+<script>
+$(function(){
+	$(".btn-red").click(function(){
+		goto_pay_page(<%= @order_id %>);
+	});
+})
+</script>

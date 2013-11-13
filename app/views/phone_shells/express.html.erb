@@ -1,0 +1,25 @@
+<% content_for :title do %>
+  微米印
+<% end %>
+<div class="header">物流详情</div>
+
+<div class="express_content">
+	<% if @express["errCode"] == "0" %>
+		<div class="express_info clearfix">
+			<%= image_tag("weixin/tpl.png") %>
+			<div class="express_info_inner">
+				<div class="express_cname"><%= @express["expTextName"]%></div>
+				<div class="express_code">物流单号：<%= @express["mailNo"] %></div>
+			</div>
+		</div>
+		<div class="sub-title">
+			物流跟踪
+		</div>
+		<% @express["data"].each_with_index do |item, i| %>
+		<div class="express_content_line clearfix<%= i == 0 ? " first" : "" %><%= i == @express["data"].length - 1 ? " last" : ""%>">
+			<span><%= item["context"] %><br><%= item["time"] %></span>
+		</div>
+		<% end %>
+	<% end %>
+	<%= express_err_code @express %>
+</div>
