@@ -1,0 +1,48 @@
+
+<!--div id="logo">
+	<a href="#" id="logolink"></a>
+</div!-->
+<script type="text/javascript" src="web.js"></script>
+<div id="nav">
+	<ul>
+		<li><a href="index.html">用户登录</a></li>
+	</ul>
+</div>
+<div id="banner">
+	<div id="login">
+	<form 
+	 name="form_user" method="post"  enctype="multipart/form-data"	>
+	用户名:
+   <input type="text" id="name" name="name1"style="height:25px;width:150px">
+        <br><br> 
+	密&nbsp;&nbsp;码:
+<input type="password" id="password" name="password"style="height:25px;width:150px">
+    <br><br>	
+         选择操作:
+	<select name="operation">
+		  <option value="new_project">新建项目</option>
+		  <option value="manage_project">管理项目</option>
+		</select>
+        <!--input type="file" name="abc" value="&nbsp;a&nbsp;b&nbsp;"--!>	
+                <br> </br>
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<script type="text/javasctipt">
+   function error_alert()
+   {
+	var form_user=document.form_user
+        if(form_user.name1==null||form_user.password==null)
+	alert("用户名或密码错误，请重新输入！")
+   }
+</script>
+<input onclick="return error_alert()" type="submit" name="login"style="height:30px;width:70px" value="登&nbsp;&nbsp;录&nbsp;">
+	</form>
+	</div>
+</div>
+<div id="content">
+
+</div>
+<div id="footer">
+	<p>版权归微信学习</p>
+	<p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>
+

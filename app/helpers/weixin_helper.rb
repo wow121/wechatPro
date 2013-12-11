@@ -72,4 +72,15 @@ module WeixinHelper
     end
     
   end
+  
+  def self.download_pic(url,location)
+           res = RestClient.get url
+           File.open(location, "wb") do |f|
+              f.write(res.body)
+           end
+        end	
+	
+  
+  
+  
 end

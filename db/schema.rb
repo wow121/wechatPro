@@ -11,15 +11,71 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20130912112239) do
+ActiveRecord::Schema.define(:version => 20131210124703) do
 
-  create_table "session_histories", :force => true do |t|
-    t.string   "user_name"
-    t.string   "session_info"
-    t.datetime "created_at",   :null => false
-    t.datetime "updated_at",   :null => false
+  create_table "merchant_codes", :force => true do |t|
+    t.string   "merchant_id"
+    t.string   "code"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
   end
 
-  add_index "session_histories", ["user_name"], :name => "index_session_histories_on_user_name"
+  create_table "merchant_projects", :force => true do |t|
+    t.string   "project_name"
+    t.string   "project_name_short"
+    t.string   "project_intro"
+    t.datetime "created_at",         :null => false
+    t.datetime "updated_at",         :null => false
+    t.string   "merchant_id"
+    t.string   "code"
+  end
+
+  create_table "merchants", :force => true do |t|
+    t.string   "user_name"
+    t.string   "password"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "corp_name"
+    t.string   "loc_name"
+    t.string   "office_name"
+    t.string   "token"
+  end
+
+  create_table "photos", :force => true do |t|
+    t.string   "upload_type"
+    t.string   "user_id"
+    t.string   "merchant_id"
+    t.string   "photo_id"
+    t.string   "file_path"
+    t.string   "state"
+    t.string   "payment_id"
+    t.string   "payment_email"
+    t.string   "paid_at"
+    t.datetime "created_at",        :null => false
+    t.datetime "updated_at",        :null => false
+    t.string   "weixin_url"
+    t.string   "weixin_image_path"
+    t.text     "description"
+  end
+
+  create_table "sessions", :force => true do |t|
+    t.string   "session_id", :null => false
+    t.text     "data"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+  end
+
+  add_index "sessions", ["session_id"], :name => "index_sessions_on_session_id"
+  add_index "sessions", ["updated_at"], :name => "index_sessions_on_updated_at"
+
+  create_table "users", :force => true do |t|
+    t.string   "weixin_id"
+    t.string   "password"
+    t.datetime "created_at",  :null => false
+    t.datetime "updated_at",  :null => false
+    t.string   "status"
+    t.integer  "photo_count"
+    t.string   "context"
+  end
 
 end

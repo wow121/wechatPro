@@ -1,0 +1,40 @@
+<div id="user">
+	<label><%= session[:merchant_id] %></label>
+	<form action="logout" method="get">
+ 	 <button type="submit"><b>退出登录</b>
+ 	 </button>
+	</form>
+</div>
+<div id="nav">
+	<ul>
+		<li><a href="new_project">新建项目</a></li>
+		<li><a href="manage_project">管理项目</a></li>
+	</ul>
+</div>
+<div id="banner-new">	
+	<div id="content">
+		<div id="list"><br><br>
+                <% project_name=@project %>
+                <label>项目名称：<%= project_name.project_name %></label>
+		<form><% @pictures.each do |p| %> 
+		<%= p.file_path %>
+	<img src=<%= p.file_path %>>&nbsp;&nbsp;<a href="delete_pic?pic_id=<%= p.id%>">删除</a>|<a href="#">修改</a><br>
+	        <% end %>
+		</form>
+		
+		<fieldset style="margin-top:50px">
+		<form action="upload" method="post" enctype="multipart/form-date">照片上传<br><br>
+		<input type="file" name="pic" value="&nbsp;上传照片&nbsp;">
+		<input type="submit" name="upload" value="开始上传">
+		</form>
+		</fieldset>
+		</div>
+	</div>
+</div>
+<div id="content">
+
+</div>
+<div id="footer">
+	<p>版权归微信学习</p>
+	<p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>

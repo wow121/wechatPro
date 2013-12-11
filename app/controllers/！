@@ -1,0 +1,95 @@
+#encoding: utf-8
+class AdminController < ApplicationController
+   def upload
+    file_name = Rails.root.to_s + "/" + params[:pic].original_filename
+    File.open(file_name ,"wb+") do |f|
+      f.write(params[:pic].read)
+    end
+    end
+
+    def login
+     ope_type = params[:operation]
+
+     if params[:name].blank? or params[:password].blank?
+       flash[:notice] = "用户名或密码为空!" 
+       redirect_to :back 
+       return  
+     end
+     
+     @merchant = Merchant.where(user_name: params[:name]).where(password: params[:password]).first 
+
+     if @merchant == nil
+       flash[:notice] = "用户名或密码错误!" 
+       redirect_to :back
+       return
+     else
+      session[:merchant_id] = @merchant.user_name
+      Rails.logger.info "xxxxxxxxx"
+      Rails.logger.info session[:merchant_id]
+     end
+      if ope_type == "new_project"
+         redirect_to action: 'new_project' 
+      else
+         redirect_to action: 'manage_project'
+      end
+   end
+   def new_project
+       @current_user = Merchant.where(user_name: session[:merchant_id])
+   end
+   def manage
+       @project_id = params[:project_id]
+       @current_user = Merchant.where(user_name: session[:merchant_id])
+       redirect_to action 'manage_in'
+   end
+   def manage_in
+       
+   end
+
+   def manage_project
+       @current_user = Merchant.where(user_name: session[:merchant_id])
+       @projects = MerchantProject.where(merchant_id: session[:merchant_id])
+   end
+
+   def delete_project
+     id = params[:project_id]
+     p = MerchantProject.find_by_id(id)
+     merchant_id = p.merchant_id
+     p.delete
+     flash[:notice]="删除成功"
+     redirect_to action: 'manage_project'
+   end
+
+   def logout
+     
+     #merchant_id = session[:merchant_id]
+     
+     #@merchant = Merchant.find(merchant_id)
+     
+     session[:merchant_id] = nil
+     render "index.html.erb"
+   end
+
+   def save
+      Rails.logger.info "xxxxxxxxxxxxxxxx"
+      merchant_id = params[:current_name] 
+      Rails.logger.info merchant_id
+      #session[:merchant_is] = merchant_id
+      project_name = params[:project_name]
+      short_name = params[:short_name]
+      intro = params[:extra]
+      
+     if project_name==nil or short_name==nil
+        flash[:alert] = "请填写项目信息"
+        redirect_to action: 'new_project'
+     else
+      mp = MerchantProject.new
+      mp.merchant_id = merchant_id
+      mp.project_name = project_name
+      mp.project_name_short = short_name
+      mp.project_intro = intro
+      mp.save
+      flash[:notice] = "项目保存成功"
+      redirect_to action: 'manage_project' 
+      end
+  end
+end

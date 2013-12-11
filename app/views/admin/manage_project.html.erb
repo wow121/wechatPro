@@ -1,0 +1,29 @@
+<div id="user">
+	<% u=@current_user.first %>
+	<label><%= u.user_name %></label>
+<form action="logout" method="get">
+  <button type="submit"><b>退出登录</b> </button>
+</form>
+</div>
+
+<div id="nav">
+	<ul>
+		<li><a href="new_project">新建项目</a></li>
+		<li><a href="manage_project">管理项目</a></li>
+	</ul>
+</div>
+<div id="banner-new">
+	<div id="content">
+		<div id="list"><br><br>
+		<form>项目列表<br><br>
+<% @projects.each do |p|  %>
+		<label id = <%= p.id %>>项目名称 ：<%= p.project_name %>&nbsp;&nbsp;&nbsp;项目授权码 ：<%= p.code %></label> <a href="manage_in?project_id=<%= p.id %>?merchant_id=<%= p.merchant_id %>">进入项目</a>|<a href="delete_project?project_id=<%= p.id %>">删除</a><br>
+<% end %>
+		</form>
+		</div>	
+	</div>
+</div>
+<div id="footer">
+	<p>版权归微信学习</p>
+	<p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>

@@ -1,0 +1,43 @@
+<div id="user">
+        <% u=@current_user.first %>
+	<label><%= u.user_name %></label>
+       <form action="logout" method="get" >
+            <button type="submit" ><b>退出登录</b></button>
+        </form>
+</div>
+<div id="nav">
+	<ul>
+
+		<li><a href="new_project">新建项目</a></li>
+		<li><a href="manage_project">管理项目</a></li>
+
+	</ul>
+</div>
+<div id="banner-new">
+	<div id="form">
+         <% u=@current_user.first %>
+	<form	name="form_new" method="post" action="save">
+		<!--onSubmit="return check()"--!>
+		项目名称(中文):&nbsp;<input type="text" id="project_name" name="project_name">
+		&nbsp;&nbsp;&nbsp;&nbsp;项目简称(4字节)：
+		<input type="text" id="short_name" name="short_name"><br>		
+		
+		<input type="button" name="code" style="margin-top:20px;margin-left:80px" value="&nbsp;生成授权码&nbsp;">
+		
+		<dt style="margin-left:350px">备&nbsp;&nbsp;注&nbsp;:</dt>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="extra" rows="10" cols="30" style="margin-left:350px"></textarea>
+		
+		<br><br><br>	
+		<input style="float:right;margin-right:100px" type="submit" name="save" value="&nbsp;保存项目&nbsp;">
+	<input type="hidden" name="current_name" value="<%= u.user_name %>">
+        </form>
+	</div>
+</div>
+<div id="content">
+
+</div>
+<div id="footer">
+	<p>版权归微信学习</p>
+	
+	<p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>

@@ -2,11 +2,11 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: weixin_development
+  database: weixin_development 
   pool: 5
-  username: root
-  password: ''
-  host: 127.0.0.1
+  username: weixin
+  password: 6yhnmju7
+  host: 115.29.36.94
   port: 3306
 
 
@@ -16,7 +16,7 @@ production:
   reconnect: false
   database: weixin_release
   pool: 5
-  username: vidaprint
-  password: vida_huxia001@
-  host: 42.121.111.102
+  username: weixin
+  password: 6yhnmju7
+  host: 115.29.36.94 
   port: 3306
