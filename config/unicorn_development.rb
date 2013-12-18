@@ -1,4 +1,4 @@
-APP_PATH = "/home/vidaprint/weixin_app/WeiXinApp"
+APP_PATH = "/home/weixin/wechatPro"
 
 worker_processes 1
 working_directory "#{APP_PATH}"
@@ -14,7 +14,7 @@ timeout 30
 # This is where we specify the socket.
 # We will point the upstream Nginx module to this socket later on
 #listen "/var/www/vida_api_v2/current/tmp/sockets/unicorn.sock", :backlog => 2048
-listen "0.0.0.0:4007"
+listen "0.0.0.0:3000"
 
 pid "#{APP_PATH}/tmp/pids/unicorn.pid"
 

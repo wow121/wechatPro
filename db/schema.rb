@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131210124703) do
+ActiveRecord::Schema.define(:version => 20131216115826) do
 
   create_table "merchant_codes", :force => true do |t|
     t.string   "merchant_id"
@@ -39,6 +39,25 @@ ActiveRecord::Schema.define(:version => 20131210124703) do
     t.string   "loc_name"
     t.string   "office_name"
     t.string   "token"
+    t.integer  "admin"
+  end
+
+  create_table "photo_logs", :force => true do |t|
+    t.string   "upload_type"
+    t.string   "user_id"
+    t.string   "merchant_id"
+    t.string   "photo_id"
+    t.string   "file_path"
+    t.string   "state"
+    t.string   "payment_id"
+    t.string   "payment_email"
+    t.string   "paid_at"
+    t.string   "weixin_url"
+    t.string   "weixin_image_path"
+    t.text     "description"
+    t.integer  "downloads",         :default => 0
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
   end
 
   create_table "photos", :force => true do |t|
@@ -51,11 +70,12 @@ ActiveRecord::Schema.define(:version => 20131210124703) do
     t.string   "payment_id"
     t.string   "payment_email"
     t.string   "paid_at"
-    t.datetime "created_at",        :null => false
-    t.datetime "updated_at",        :null => false
+    t.datetime "created_at",                       :null => false
+    t.datetime "updated_at",                       :null => false
     t.string   "weixin_url"
     t.string   "weixin_image_path"
     t.text     "description"
+    t.integer  "downloads",         :default => 0
   end
 
   create_table "sessions", :force => true do |t|

@@ -1,0 +1,29 @@
+<div id="nav" style="margin-top:50px">
+	<ul>
+		<li><a href="query">照片查询</a></li>
+	</ul>
+</div>
+<div id="banner">
+	<div id="login">
+	 <form action="find_pic" method="get" name="query">
+		<p>请输入照片code：</p><br>
+		<input type="text" style="height:25px;width:140px" id="code" name="code">
+		&nbsp;
+ <input type="submit" style="height:25px;width:60px" name="query" value="查询">
+      <br>
+      <br>
+      <center><p style="color:green"><%= flash[:notice] %></p></center>
+     <center><p style="color:red"><%= flash[:alert] %></p></center>
+	
+	</form>
+		
+	</div>
+</div>
+<div id="content">
+
+</div>
+<div id="footer">
+	<p>版权归微信学习</p>
+	<p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>
+

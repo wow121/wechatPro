@@ -83,17 +83,17 @@ class WeixinProcesser
 				photo=Photos.where("user_id"=>msg[:FromUserName],"merchant_id"=>nil)
 				for img in photo do
 					photo_name=m.user_name+m.loc_name+Time.at(time).strftime("%Y%m%d")+"01"+mkrandom(6).to_s+".jpg"
+					photo_name_small=photo_name[0,photo_name.length-4]+"_small.jpg"
 					img.file_path=photo_name
 					img.merchant_id=m.user_name
 					img.photo_id=content
 					img.save
-					WeixinHelper.download_pic(img.weixin_image_path,"/home/weixin/user_photos/"+img.file_path)
+					WeixinHelper.download_pic(img.weixin_image_path,"/home/weixin/user_photos/"+img.file_path,"/home/weixin/user_photos/"+photo_name_small)
 					end
 				user.status="normal"
 				user.photo_count=0
 				user.save	
-				return res = self.construct_text_response(msg, "所有照片上传成功!",
-											)
+				return res = self.construct_text_response(msg, "所有照片上传成功!")
 				end
 		end
 		return	res = self.construct_text_response(msg, "授权码错误\n请重新输入")
@@ -104,9 +104,10 @@ class WeixinProcesser
 			user.save
 			return	res = self.construct_text_response(msg, "您已退出全部图片查询模式")
 		elsif(content.to_i>=1 and content.to_i<=photo.length)
+			path=photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4]
 		return res = self.construct_image_response(msg, "第"+content+"张照片",
 						         "商户code为"+photo[content.to_i-1].merchant_id+"\n照片的唯一识别码为\n"+photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4],
-											photo[content.to_i-1].weixin_image_path,
+											"http://115.29.36.94:999/"+path+"_small.jpg",
 											"http://115.29.36.94:999/"+photo[content.to_i-1].file_path
 											)
 		else
@@ -154,9 +155,10 @@ class WeixinProcesser
 			user.save
 			return	res = self.construct_text_response(msg, "您已退出图片查询模式")
 		elsif(content.to_i>=1 and content.to_i<=photo.length)
+			path=photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4]
 		return res = self.construct_image_response(msg, "第"+content+"张照片",
 						         "商户code为"+photo[content.to_i-1].merchant_id+"\n照片的唯一识别码为\n"+photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4],
-											photo[content.to_i-1].weixin_image_path,
+											"http://115.29.36.94:999/"+path+"_small.jpg",
 											"http://115.29.36.94:999/"+photo[content.to_i-1].file_path
 											)
 		else
@@ -169,9 +171,10 @@ class WeixinProcesser
 			user.save
 			return	res = self.construct_text_response(msg, "您已退出图片查询模式")
 		elsif(content.to_i>=1 and content.to_i<=photo.length)
+			path=photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4]
 		return res = self.construct_image_response(msg, "第"+content+"张照片",
 						         "商户code为"+photo[content.to_i-1].merchant_id+"\n照片的唯一识别码为\n"+photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4],
-											photo[content.to_i-1].weixin_image_path,
+											"http://115.29.36.94:999/"+path+"_small.jpg",
 											"http://115.29.36.94:999/"+photo[content.to_i-1].file_path
 											)
 		else
@@ -283,7 +286,7 @@ class WeixinProcesser
 			  
 			  user.status="update_photo"
 			  user.save
-		    return res = self.construct_text_response(msg, "请发送一张照片 \n （小提示：\n用微信发送照片时最好发送原图噢！）")
+		    return res = self.construct_text_response(msg, "请发送一张照片 \n （小提示：\n如果需要精美的高分辨率照片，请发送原图哦~）")
 			
 		  when "key_b1"
 			 error_checking(msg[:FromUserName])

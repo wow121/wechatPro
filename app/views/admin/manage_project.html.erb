@@ -2,7 +2,7 @@
 	<% u=@current_user.first %>
 	<label><%= u.user_name %></label>
 <form action="logout" method="get">
-  <button type="submit"><b>退出登录</b> </button>
+  <button style="height:25px;width:80px" type="submit"><b>退出登录</b> </button>
 </form>
 </div>
 
@@ -10,17 +10,38 @@
 	<ul>
 		<li><a href="new_project">新建项目</a></li>
 		<li><a href="manage_project">管理项目</a></li>
+                <li><a href="manage_merchant">管理商户</a></li>
+		<li><a href="download">下载报表</a></li>
+                <li><a href="register">注册商户</a></li>
+		<li style="margin-left:150px"><a href="query">照片查询</a></li>
 	</ul>
 </div>
 <div id="banner-new">
-	<div id="content">
-		<div id="list"><br><br>
-		<form>项目列表<br><br>
-<% @projects.each do |p|  %>
-		<label id = <%= p.id %>>项目名称 ：<%= p.project_name %>&nbsp;&nbsp;&nbsp;项目授权码 ：<%= p.code %></label> <a href="manage_in?project_id=<%= p.id %>?merchant_id=<%= p.merchant_id %>">进入项目</a>|<a href="delete_project?project_id=<%= p.id %>">删除</a><br>
-<% end %>
+		<div id="list"><br>
+		<form><label style="margin-right:230px">项目名称</label>项目授权码<br><br>
+	<% @projects.each do |p| %>
+	<div id="list-item">
+		<div style="width:290px"  id = <%= p.id %>><%= p.project_name %></div>
+		<div style="width:250px" id = <%= p.id %>><%= p.code %></div>
+		<div style="width:200px">
+                <a href="manage?project_id=<%= p.id %>">进入项目</a>|
+		<a href="delete_project?project_id=<%= p.id %>">删除</a>|
+		<a href="#">下载</a><br><br>
+		</div>
+	</div>
+	<% end %>
+
 		</form>
 		</div>	
+	<div id="page">
+		<ul>
+        
+  <li class="page-first"><a href="manage_project" title="首页" class="active">首页</a></li>
+ <li class="page-pro"><a href="manage_project?current_page=<%= @current_page-1 %>" title="进入前一页" class="active">《</a></li>
+ <li><a href="#" title="当前页" ><%= @current_page %></a></li>
+ <li class="page-next"><a href="manage_project?current_page=<%= @current_page+1 %>" title="进入下一页" class="active">》</a></li>
+ <li class="page-item"><a href="manage_project?current_page=<%= @max_page %>" title="尾页" class="active">尾页</a></li>
+		<ul>
 	</div>
 </div>
 <div id="footer">

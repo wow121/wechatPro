@@ -2,39 +2,62 @@
         <% u=@current_user.first %>
 	<label><%= u.user_name %></label>
        <form action="logout" method="get" >
-            <button type="submit" ><b>退出登录</b></button>
+            <button style="height:25px;width:80px" type="submit" ><b>退出登录</b></button>
         </form>
 </div>
 <div id="nav">
 	<ul>
 
-		<li><a href="new_project">新建项目</a></li>
-		<li><a href="manage_project">管理项目</a></li>
+		<li><a href="new_project" onclick="javascript:a_click(this)">新建项目</a></li>
+		<li><a href="manage_project" onclick="javascript:a_click(this)">管理项目</a></li>
+                <li><a href="manage_merchant" onclick="javascript:a_click(this)">管理商户</a></li>
+		<li><a href="download">下载报表</a></li>
+                <li><a href="register">注册商户</a></li>
+		<li style="margin-left:150px"><a href="query">照片查询</a></li>
 
 	</ul>
+<script language="javascript">
+function a_click(o){
+	var as=o.parntNode.getElementsByTagName("A");
+	for(var i=0;i<as.length;i++){
+		as[i].style.backgroundColor='';
+		}
+	o.style.backgroundColor='#ff0000';
+}
+</script>
 </div>
 <div id="banner-new">
+  &nbsp;<center><p style="color:green"><%= flash[:notice] %></p></center>
+  &nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
 	<div id="form">
          <% u=@current_user.first %>
 	<form	name="form_new" method="post" action="save">
 		<!--onSubmit="return check()"--!>
-		项目名称(中文):&nbsp;<input type="text" id="project_name" name="project_name">
+		项目名称(中文):&nbsp;
+		<input type="text" id="project_name" style="height:25px;width:150px" name="project_name">
 		&nbsp;&nbsp;&nbsp;&nbsp;项目简称(4字节)：
-		<input type="text" id="short_name" name="short_name"><br>		
+		<input type="text" id="short_name" style="height:25px;width:150px" name="short_name"><br><br>	
 		
-		<input type="button" name="code" style="margin-top:20px;margin-left:80px" value="&nbsp;生成授权码&nbsp;">
+		 <% if @code != nil %>
+                 <label><%= @code %></label>
+                <% end %>	
 		
-		<dt style="margin-left:350px">备&nbsp;&nbsp;注&nbsp;:</dt>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<textarea name="extra" rows="10" cols="30" style="margin-left:350px"></textarea>
-		
-		<br><br><br>	
-		<input style="float:right;margin-right:100px" type="submit" name="save" value="&nbsp;保存项目&nbsp;">
-	<input type="hidden" name="current_name" value="<%= u.user_name %>">
+		<dt style="margin-left:325px">备&nbsp;&nbsp;注&nbsp;:</dt>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<textarea name="extra" rows="10" cols="30" style="margin-left:327px"></textarea>
+		<br><br><br>
+              
+	        <% if @code != nil %>
+                <input type="hidden" name="code" value=<%= @code %>>
+                <% end %>
+	        <input style="float:right;margin-right:100px;height:25px;width:80px" type="submit" name="save" value="保存项目">
         </form>
+	<form action="generate" method="post" name="code"> 
+   <input type="hidden" name="userid" value=<%= u.token %>>
+   <input type="submit" name="code" style="margin-top:20px;margin-left:80px;height:25px;width:90px" value="生成授权码"><br>
+   
+	</form>
 	</div>
-</div>
-<div id="content">
-
 </div>
 <div id="footer">
 	<p>版权归微信学习</p>

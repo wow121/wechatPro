@@ -59,7 +59,9 @@ module WeiXinApp
 
     # Enable the asset pipeline
     config.assets.enabled = true
-
+    # Set Time Zone
+    config.active_record.default_timezone = :local 
+    config.time_zone = 'Beijing'
     # Version of your assets, change this if you want to expire all your assets
     config.assets.version = '1.0'
 

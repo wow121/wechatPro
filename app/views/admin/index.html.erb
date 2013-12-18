@@ -5,7 +5,7 @@
 
 <div id="nav">
 	<ul>
-		<li><a href="index.html">用户登录</a></li>
+		<li><a href="index.html">管理员登录</a></li>
 	</ul>
 </div>
 
@@ -15,21 +15,23 @@
 	 name="form_user" method="post" action="login" enctype="multipart/form-data">
 	用户名:
    
-   <input type="text" id="name" name="name"style="height:25px;width:150px">
+   <input type="text" id="name" name="name"style="height:25px;width:130px">
         <br><br> 
 	密&nbsp;&nbsp;码:
-<input type="password" id="password" name="password"style="height:25px;width:150px">
-    <br><br>	
-         选择操作:
-	<select name="operation">
+<input type="password" id="password" name="password"style="height:25px;width:130px"> 
+   	<br>&nbsp;<center><p style="color:red"><%= flash[:alert]%></p></center>
+        <br>	
+         操&nbsp;&nbsp;作:
+	<select style="height:25px;width:130px" name="operation">
 		  <option value="new_project">新建项目</option>
 		  <option value="manage_project">管理项目</option>
 		</select>
         <!--input type="file" name="abc" value="&nbsp;a&nbsp;b&nbsp;"--!>	
-                <br> </br>
+                <br><br><br>
 	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-<input id="btn_submit" type="submit" name="login"style="height:30px;width:70px" value="登&nbsp;&nbsp;录&nbsp;">
+<input id="btn_submit" type="submit" name="login"style="height:25px;width:70px" value="登&nbsp;&nbsp;录&nbsp;">
 	</form>
+        
 	</div>
 </div>
 

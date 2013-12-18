@@ -46,3 +46,6 @@ gem 'therubyracer'
 #gem 'qrscanner'
 gem 'less-rails'
 gem 'twitter-bootstrap-rails'
+gem 'fastercsv'
+gem 'log4r'
+

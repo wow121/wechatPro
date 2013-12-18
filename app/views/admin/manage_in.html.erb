@@ -1,38 +1,66 @@
-<div id="user">
-	<label><%= session[:merchant_id] %></label>
+<% u=@current_user.first %>
+<div id="user">      
+	<label><%= u.user_name %></label>
 	<form action="logout" method="get">
- 	 <button type="submit"><b>退出登录</b>
- 	 </button>
+ 		<button type="submit"><b>退出登录</b>
+ 		</button>
 	</form>
 </div>
 <div id="nav">
 	<ul>
 		<li><a href="new_project">新建项目</a></li>
 		<li><a href="manage_project">管理项目</a></li>
+                <li><a href="manage_merchant">管理商户</a></li>
+		<li><a href="download">下载报表</a></li>
+                 <li><a href="register">注册商户</a></li>
+		<li style="margin-left:150px"><a href="query">照片查询</a></li>
 	</ul>
 </div>
-<div id="banner-new">	
+<div id="banner-in">	
 	<div id="content">
-		<div id="list"><br><br>
-                <% project_name=@project %>
-                <label>项目名称：<%= project_name.project_name %></label>
-		<form><% @pictures.each do |p| %> 
-		<%= p.file_path %>
-	<img src=<%= p.file_path %>>&nbsp;&nbsp;<a href="delete_pic?pic_id=<%= p.id%>">删除</a>|<a href="#">修改</a><br>
-	        <% end %>
+	     <div id="list-photo"><br>
+                <% project=@project.first %>
+                <label>项目名称：<%= project.project_name %></label><br><br>
+		<label style="margin-right:190px;margin-left:65px">照片</label>照片描述<br><br>
+		<% @pictures.each do |p| %>
+		<form action="change_info?pic_id=<%= p.id %>" method="post">
+		<div id="list-item">
+                <div style="width:290px">&nbsp;&nbsp; 
+			<img src=<%= "http://115.29.36.94:999/" + p.file_path %> width="40%" height="40%"/> &nbsp;
+			<%= p.file_path[0,21] %>
+       			</div>
+			<div style="width:200px"><%= p.description %>&nbsp;</div>
+       			<div style="width:250px">
+			<textarea name="pic_info" cols="15" rows="6"></textarea>
+			<input type="submit" name="change_info" value="修改">
+        		|<a href="delete_pic?pic_id=<%= p.id %>">删除</a></div>
+		</div><br>
 		</form>
-		
+ 		<% end %>
+  	     </div>
+	<div id="page">
+      	 	<ul>
+	 	<li class="page-first"><a href="mange_in" title="首页" class="active">首页</a></li>
+	 	<li class="page-pro"><a href="manage_in?current_page=<%= @current_page-1 %>" title="进入前一页" class="active">《</a></li>
+	 	<li><a href="#" title="当前页" ><%= @current_page %></a></li>
+	 	<li class="page-next"><a href="manage_in?current_page=<%= @current_page+1 %>" title="进入下一页" class="active">》</a></li>
+	 	<li class="page-item"><a href="manage_in?current_page=<%= @max_page %>" title="尾页" class="active">尾页</a></li>
+	 	</ul>
+	</div>
+	<div id="upload">	
 		<fieldset style="margin-top:50px">
-		<form action="upload" method="post" enctype="multipart/form-date">照片上传<br><br>
-		<input type="file" name="pic" value="&nbsp;上传照片&nbsp;">
+       		<form action="upload" method="post" enctype="multipart/form-data">
+         	上传照片到该项目<label style="margin-left:120px">照片描述</label>
+     		&nbsp;<center><p style="color:green"><%= flash[:notice] %></p></center>
+     		&nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
+		<input type="hidden" name="userid" value=<%= u.token %>>
+                <input type="hidden" name="code" value=<%= project.code %>>
+	        <input type="file" name="pic" value="&nbsp;上传照片&nbsp;"><textarea name="extra" rows="5" cols="40"></textarea>
 		<input type="submit" name="upload" value="开始上传">
 		</form>
 		</fieldset>
-		</div>
 	</div>
-</div>
-<div id="content">
-
+	</div>
 </div>
 <div id="footer">
 	<p>版权归微信学习</p>

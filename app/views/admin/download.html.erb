@@ -1,31 +1,38 @@
 <div id="user">
+ <% u=@current_user.first %>
+        <label><%= u.user_name %></label>
+
 <form action="logout" method="get">
-  <button type="submit"><b>退出登录</b>
+  <button style="width:80px;height:25px" type="submit"><b>退出登录</b>
 </button>
 </form>
 </div>
 
 <div id="nav">
 	<ul>
-		<li><a href="new_project.html">新建项目</a></li>
-		<li><a href="manage_project.html">管理项目</a></li>
-		<li><a href="#">微信报</a></li>
-		<li><a href="download.html">下载</a></li>
+		<li><a href="new_project">新建项目</a></li>
+		<li><a href="manage_project">管理项目</a></li>
+                <li><a href="manage_merchant">管理商户</a></li>
+		<li><a href="download">下载报表</a></li>
+                <li><a href="register">注册商户</a></li>
+		<li style="margin-left:150px"><a href="query">照片查询</a></li>
 	</ul>
 </div>
-<div id="banner">
-	<div id="login">
-	<form>
-		<p>请输入提取密码:</p><br>
-		<input type="text" id="name" name="name">
-		&nbsp;
-		<input type="button" name="submit" value="&nbsp;提取文件&nbsp;">	
+<div id="banner-new">
+	<div id="form">
+	 <form action="download_xls" method="get"  >
+		起始时间
+	 <input type="text" style="height:25px;width:150px" id="begin-time" name="begin_time">&nbsp;&nbsp;&nbsp;&nbsp;
+		结束时间
+	 <input type="text" style="height:25px;width:150px" id="finish-time" name="finisht_time">&nbsp;&nbsp;例:2013-12-17 00:00:00<br><br>
+         <input type="hidden" name="userid" value=<%= u.token %>>
+		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+		<input type="submit" style="height:25px;width:80px" name="download" value="下载报表"><br><br><br><hr><br>
+		用户操作记录：
+	<label></label>
 	</form>
 		
 	</div>
-</div>
-<div id="content">
-
 </div>
 <div id="footer">
 	<p>版权归微信学习</p>

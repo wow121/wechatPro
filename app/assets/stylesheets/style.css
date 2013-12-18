@@ -1,6 +1,6 @@
 body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;padding:0;}
 /*主页*/
-#logo,#user,#nav,#banner,#content,#footer,#banner-new{width:900px;margin:0 auto;}
+#logo,#user,#nav,#banner,#content,#footer,#banner-new,#banner-in{width:900px;margin:0 auto;}
 #logo{
 	height:102px;
 	}
@@ -75,6 +75,7 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	font-family:Arial,Helvetica,sans-serif;
 	color:#fff;
 	line-height:20px;
+	margin-bottom:30px;
 	}
 /*新建项目*/
 #banner-new{
@@ -89,13 +90,55 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	float:left;
 	}
 /*管理项目*/
+#banner-in{
+	height:1000px;
+	width:900px;
+	background:#e1e5e1;
+	}
 #list{
 	width:700px;
+	height:420px;
 	margin:0 auto;
 	}
-#list form{
-	margin-left:20px;
+#list-photo{
+	width:700px;
+	height:700px;
+	margin:0 auto;
 	}
-.clear {
-  clear: both;
-  }
+#upload{
+	width:700px;
+	height:200px;
+	margin:0 auto;
+	}
+#list-item{
+	display:box;
+	display:-moz-box;
+	display:-webkit-box;
+	width:100%;
+	text-align:left;
+	}
+#list-item div{
+	box-sizing:border-box;
+	-moz-box-sizing:border-box;
+	}
+#page{height:20px;}
+#page ul{
+	height:20px;
+	list-style:none;
+	margin:0 355px;
+	}
+#page ul li{
+	height:20px;
+	margin-left:10px;
+	float:left;
+	}
+#page ul li a{
+	display:block;
+	height:20px;
+	color:#000;
+	padding:0 3px;
+	line-height:20px;
+	text-decoration:none;
+	float:left;
+	}
+#page ul li a:hover{color:#0000ff}

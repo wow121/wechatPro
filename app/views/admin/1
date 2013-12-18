@@ -1,0 +1,49 @@
+<div id="user">
+        <% u=@current_user.first %>
+        <label><%= u.user_name %></label>
+<form action="logout" method="get">
+  <button style="height:25px;width:80px" type="submit"><b>退出登录</b> </button>
+</form>
+</div>
+
+<div id="nav">
+        <ul>
+                <li><a href="new_project">新建项目</a></li>
+                <li><a href="manage_project">管理项目</a></li>
+                <li><a href="manage_merchant">管理商户</a></li>
+                <li><a href="download">下载报表</a></li>
+                <li><a href="register">注册商户</a></li>
+                <li style="margin-left:150px"><a href="query">照片查询</a></li>
+        </ul>
+</div>
+<div id="banner-new">
+
+    <div id="list"><br>
+    	<form>用户名&nbsp;密码&nbsp;地点码&nbsp;商户店名&nbsp;公司名称&nbsp;
+    	<% @merchants.each do |m| %>
+	<div id="list-item">
+		<div style="width:100px"> <%= m.user_name %></div>
+		<div style="width:100px"> <%= m.password %></div>
+		<div style="width:100px"> <%= m.loc_name %></div>
+ 		<div style="width:100px"> <%= m.office_name %></div>
+ 		<div style="width:100px"> <%= m.corp_name %></div>
+	</div>
+        <% end %>
+	</form>
+    </div>
+	
+    <div id="page">
+	<ul>
+  		<li class="page-first"><a href="#" title="首页" class="active">首页</a></li>
+ 		<li class="page-pro"><a href="#" title="前一页" class="active">《</a></li>
+ 		<li><a href="#" title="当前页" >1</a></li>
+ 		<li class="page-next"><a href="#" title="下一页" class="active">》</a></li>
+ 		<li class="page-item"><a href="#" title="尾页" class="active">尾页</a></li>
+        <ul>
+    </div>
+</div>
+<div id="footer">
+        <p>版权归微信学习</p>
+ <p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>
+

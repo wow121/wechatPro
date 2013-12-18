@@ -40,6 +40,7 @@ GEM
     commonjs (0.2.7)
     erubis (2.7.0)
     execjs (2.0.2)
+    fastercsv (1.5.5)
     hike (1.2.3)
     i18n (0.6.5)
     journey (1.0.4)
@@ -54,6 +55,7 @@ GEM
       actionpack (>= 3.1)
       less (~> 2.4.0)
     libv8 (3.16.14.3)
+    log4r (1.1.10)
     mail (2.4.4)
       i18n (>= 0.4.0)
       mime-types (~> 1.16)
@@ -129,9 +131,11 @@ PLATFORMS
 
 DEPENDENCIES
   coffee-rails (~> 3.2.1)
+  fastercsv
   jquery-rails
   json
   less-rails
+  log4r
   mysql2
   rails (= 3.2.11)
   rb-readline (~> 0.4.2)
