@@ -1,42 +1,45 @@
 <% u=@current_user.first %>
 <div id="user">      
-	<label><%= u.user_name %></label>
 	<form action="logout" method="get">
- 		<button type="submit"><b>退出登录</b>
+ 		<button type="submit" style="height:25px;width:80px;float:right"><b>退出登录</b>
  		</button>
+	<label><%= u.user_name %></label>
 	</form>
 </div>
 <div id="nav">
 	<ul>
 		<li><a href="new_project">新建项目</a></li>
-		<li><a href="manage_project">管理项目</a></li>
+		<li><a href="manage_project" style="background:#68acd3">管理项目</a></li>
+                <% if @is_admin.to_i == 1 %>
                 <li><a href="manage_merchant">管理商户</a></li>
 		<li><a href="download">下载报表</a></li>
-                 <li><a href="register">注册商户</a></li>
-		<li style="margin-left:150px"><a href="query">照片查询</a></li>
+                <% end %>
+		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
 	</ul>
 </div>
 <div id="banner-in">	
-	<div id="content">
-	     <div id="list-photo"><br>
-                <% project=@project.first %>
-                <label>项目名称：<%= project.project_name %></label><br><br>
-		<label style="margin-right:190px;margin-left:65px">照片</label>照片描述<br><br>
-		<% @pictures.each do |p| %>
-		<form action="change_info?pic_id=<%= p.id %>" method="post">
-		<div id="list-item">
-                <div style="width:290px">&nbsp;&nbsp; 
-			<img src=<%= "http://115.29.36.94:999/" + p.file_path %> width="40%" height="40%"/> &nbsp;
-			<%= p.file_path[0,21] %>
-       			</div>
-			<div style="width:200px"><%= p.description %>&nbsp;</div>
-       			<div style="width:250px">
-			<textarea name="pic_info" cols="15" rows="6"></textarea>
-			<input type="submit" name="change_info" value="修改">
-        		|<a href="delete_pic?pic_id=<%= p.id %>">删除</a></div>
-		</div><br>
-		</form>
- 		<% end %>
+		<div id="list-photo">
+     		&nbsp;<center><p style="color:green"><%= flash[:notice] %></p></center>
+     		&nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
+               <% project=@project.first %><label>项目名称：<%= project.project_name %></label><br><br>
+		     <table><tr>
+			<th style="width:150px">照片</th>
+			<th style="width:138px">照片标题</th>
+			<th style="width:152px">照片描述</th>
+			<th style="width:184px">照片修改</th>
+			<th style="width:116px">操作</th></tr></table>
+	<% @pictures.each do |p| %>
+             <form    name="<%= p.id %>" action="change_info?pic_id=<%=p.id %>" method="post">
+		<table><tr>
+                <td style="width:160px;height:110px" id=<%= p.id %>>&nbsp;&nbsp;<img src=<%= "http://115.29.36.94:999/" + p.file_path %> width="60%" height="60%"/> &nbsp;</td>
+                <td style="width:140px"><p style="width:80px"><%= p.title %></p></td>
+		<td style="width:150px" id=<%= p.id %>><p style="width:140px"><%= p.description %></p></td>
+		<td style="width:180px" id=<%= p.id %>><textarea name="<%= p.id %>" style="width:176px;height:100px;background:#E1E5E1;border-color:#e1e5e1"></textarea></td>
+            <input type="hidden" name="pic_id<%= p.id %>" value="<%= p.id %>">
+		<td style="width:120px" id=<%= p.id %>><input style="height:23px;width:50px" type="submit" name="change_info" value="修&nbsp;改">|<a  href="delete_pic?pic_id=<%= p.id %>">删除</a></td>
+		</tr></table>
+        </form>
+ 	<% end %>
   	     </div>
 	<div id="page">
       	 	<ul>
@@ -48,19 +51,19 @@
 	 	</ul>
 	</div>
 	<div id="upload">	
-		<fieldset style="margin-top:50px">
+		<fieldset style="margin-top:30px">
        		<form action="upload" method="post" enctype="multipart/form-data">
-         	上传照片到该项目<label style="margin-left:120px">照片描述</label>
-     		&nbsp;<center><p style="color:green"><%= flash[:notice] %></p></center>
-     		&nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
+         	上传照片到该项目<label style="margin-left:120px">照片描述</label><br>
 		<input type="hidden" name="userid" value=<%= u.token %>>
                 <input type="hidden" name="code" value=<%= project.code %>>
-	        <input type="file" name="pic" value="&nbsp;上传照片&nbsp;"><textarea name="extra" rows="5" cols="40"></textarea>
+	        <input  type="file" name="pic" value="&nbsp;上传照片&nbsp;"><textarea name="extra" rows="5" cols="40"></textarea>
+      照片标题：
+    <textarea name="title" rows="2" cols="20"></textarea>
 		<input type="submit" name="upload" value="开始上传">
 		</form>
-		</fieldset>
+		</fieldset><br>
 	</div>
-	</div>
+	
 </div>
 <div id="footer">
 	<p>版权归微信学习</p>

@@ -1,42 +1,34 @@
 <div id="user">
         <% u=@current_user.first %>
-	<label><%= u.user_name %></label>
        <form action="logout" method="get" >
-            <button style="height:25px;width:80px" type="submit" ><b>退出登录</b></button>
+            <button style="height:25px;width:80px;float:right" type="submit" ><b>退出登录</b></button>
+	<label><%= u.user_name %></label>
         </form>
 </div>
 <div id="nav">
 	<ul>
 
-		<li><a href="new_project" onclick="javascript:a_click(this)">新建项目</a></li>
-		<li><a href="manage_project" onclick="javascript:a_click(this)">管理项目</a></li>
-                <li><a href="manage_merchant" onclick="javascript:a_click(this)">管理商户</a></li>
+		<li><a href="new_project" style="background:#68acd3">新建项目</a></li>
+		<li><a href="manage_project">管理项目</a></li>
+                <% if @is_admin.to_i == 1 %>
+                <li><a href="manage_merchant">管理商户</a></li>
 		<li><a href="download">下载报表</a></li>
-                <li><a href="register">注册商户</a></li>
-		<li style="margin-left:150px"><a href="query">照片查询</a></li>
+                <% end %>
+		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
 
 	</ul>
-<script language="javascript">
-function a_click(o){
-	var as=o.parntNode.getElementsByTagName("A");
-	for(var i=0;i<as.length;i++){
-		as[i].style.backgroundColor='';
-		}
-	o.style.backgroundColor='#ff0000';
-}
-</script>
 </div>
 <div id="banner-new">
   &nbsp;<center><p style="color:green"><%= flash[:notice] %></p></center>
   &nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
 	<div id="form">
          <% u=@current_user.first %>
-	<form	name="form_new" method="post" action="save">
+	<form	style="margin-left:20px" name="form_new" method="post" action="save">
 		<!--onSubmit="return check()"--!>
 		项目名称(中文):&nbsp;
-		<input type="text" id="project_name" style="height:25px;width:150px" name="project_name">
+		<input type="text" id="project_name" style="height:25px;width:150px" name="project_name" value=<%= @pro_name %>>
 		&nbsp;&nbsp;&nbsp;&nbsp;项目简称(4字节)：
-		<input type="text" id="short_name" style="height:25px;width:150px" name="short_name"><br><br>	
+		<input type="text" id="short_name" style="height:25px;width:150px" name="short_name" value=<%= @short_name %>><br><br>	
 		
 		 <% if @code != nil %>
                  <label><%= @code %></label>
@@ -44,15 +36,17 @@ function a_click(o){
 		
 		<dt style="margin-left:325px">备&nbsp;&nbsp;注&nbsp;:</dt>
 		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<textarea name="extra" rows="10" cols="30" style="margin-left:327px"></textarea>
+		<textarea name="extra" style="margin-left:327px;height:150px;width:225px"><%= @intro %></textarea>
 		<br><br><br>
-              
+                <label style="margin-left:48px;color:#f00000">*请先点击生成授权码</label>
 	        <% if @code != nil %>
                 <input type="hidden" name="code" value=<%= @code %>>
-                <% end %>
+           
 	        <input style="float:right;margin-right:100px;height:25px;width:80px" type="submit" name="save" value="保存项目">
+        <% end %>
         </form>
 	<form action="generate" method="post" name="code"> 
+   
    <input type="hidden" name="userid" value=<%= u.token %>>
    <input type="submit" name="code" style="margin-top:20px;margin-left:80px;height:25px;width:90px" value="生成授权码"><br>
    

@@ -73,14 +73,7 @@ module WeixinHelper
     
   end
   
-  def self.getcode
-	s=rand(99999999999999999999)
-	if s<10000000000000000000
-		s=s+100000000000000000000
-		end
-	return s.to_s
   
-  end
   
   def self.download_pic(url,location,location1)
            res = RestClient.get url
@@ -90,8 +83,8 @@ module WeixinHelper
 		   system 'convert '+location+' -resize 30% '+location1
      end	
 
-  def self.mkexecl(label,context)
-    time=Time.now.strftime("%Y%m%d%H%M%S").to_s
+  def self.mkexecl(label,context,name)
+    time=Time.now.strftime("%Y_%m_%d").to_s+name
 	File.open("/home/weixin/excel/"+time+".xls","w+") do |file|
 		file.puts "<html>"
 		file.puts "<body>"
@@ -125,16 +118,12 @@ module WeixinHelper
 	else
 		time=Time.now.to_i.to_s
 		name = "/home/weixin/merchant_qrcode/" + m.user_name+time + ".jpg"
-		code=getcode
-		File.open("/home/weixin/merchant_qrcode/context","w") do |file|
-			file.puts  code
-			file.puts  name
-			end
-		status=`java -classpath /home/weixin/myjava QRCodeEncoderHandler`
+		code=WeixinProcesser.mkrandom(10)
+		system 'java -classpath /home/weixin/myjava QRCodeEncoderHandler '+name+' '+code
 		MerchantCode.create(:merchant_id=>m.user_name,:code=>code)
 		str={"success"=>200,
 				"code"=>code,
-				"url"=>"http://115.29.36.94:888/"+m.user_name+time+".jpg"}
+				"url"=>SERVER_QRCODE+m.user_name+time+".jpg"}
 		end
 	
 		return str
@@ -194,4 +183,6 @@ module WeixinHelper
 			end
 		end
 	end
+	
+
 end

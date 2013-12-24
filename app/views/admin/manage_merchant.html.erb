@@ -1,8 +1,8 @@
 <div id="user">
         <% u=@current_user.first %>
-        <label><%= u.user_name %></label>
 <form action="logout" method="get">
-  <button style="height:25px;width:80px" type="submit"><b>退出登录</b> </button>
+  <button style="height:25px;width:80px;float:right" type="submit"><b>退出登录</b> </button>
+        <label><%= u.user_name %></label>
 </form>
 </div>
 
@@ -10,45 +10,43 @@
         <ul>
                 <li><a href="new_project">新建项目</a></li>
                 <li><a href="manage_project">管理项目</a></li>
-                <li><a href="manage_merchant">管理商户</a></li>
+                <li><a href="manage_merchant" style="background:#68acd3">管理商户</a></li>
                 <li><a href="download">下载报表</a></li>
-                <li><a href="register">注册商户</a></li>
-                <li style="margin-left:150px"><a href="query">照片查询</a></li>
+                <li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
         </ul>
 </div>
 <div id="banner-new">
 
-    <div id="list"><br>
+    <div id="list">
         <center><p style="color:green"><%= flash[:notice] %></p></center>  
         <center><p style="color:red"><%= flash[:alert] %></p></center>
+	<br>
+	<form><table><tr><th style="width:70px">用户权限</th><th style="width:110px">用户名</th><th style="width:60px">地点码</th><th style="width:130px">商户店名</th><th style="width:150px">公司名称</th><th style="width:160px">操作</th></tr>
+       </table> 
+    	<% @merchants.each do |m| %> 
+ 	 <table><tr>
+         <% if m.admin == 0 %>
+         <td style="width:70px" >项目经理</td>
+          <% else %>
+          <td style="width:70px" >普通商户</td>
+         <% end %>
+	 <td style="width:110px" id=<%= m.id %>><%= m.user_name %></td>
+	 <td style="width:60px" id=<%= m.id %>><%= m.loc_name %></td>
+ 	 <td style="width:130px" id=<%= m.id %>><%= m.office_name %></td>
+       	 <td style="width:150px" id=<%= m.id %>><%= m.corp_name %></td>
+         <td style="width:160px"><a href="change_merchant?mer_id=<%= m.id %>" target="_blank">修改</a>|<a href="delete_merchant?mer_id=<%= m.id %>">删除</a>|<a href="resetpassword?mer_id=<%= m.id %>">重置密码</a>	
+	</td></tr></table>
 
-    	<form>用户名<label style="margin-left:100px;margin-right:105px">地点码</label>商户店名<label style="margin-left:85px">公司名称</label>
-        <br>
-        <br>   
-    	<% @merchants.each do |m| %>
-        <form action="chang_merchant?mer_id=<%= m.id %>" method="post"> 
-    
-	<div id="list-item">
-	 <div style="width:150px"><%= m.user_name %></div>
-	 <div style="width:150px"><%= m.loc_name %></div>
- 	 <div style="width:150px"><%= m.office_name %></div>
-       	 <div style="width:170px"><%= m.corp_name %></div>
-         <a href="change_merchant?mer_id=<%= m.id %>" target="_blank">修改</a>&nbsp;|
-         <a href="delete_merchant?mer_id=<%= m.id %>">删除</a>
-	
-	<br><br>
-	</div>
         <% end %>
 	</form>
-    </div>
-	
+    </div>	
     <div id="page">
 	<ul>
-  	 <li class="page-first"><a href="manage_merchant" title="首页" class="active">1</a></li>
+  	 <li class="page-first"><a href="manage_merchant" title="首页" class="active">首页</a></li>
  	 <li class="page-pro"><a href="manage_merchant?current_page=<%= @current_page-1 %>" title="前一页" class="active">《</a></li>
  	 <li><a href="#" title="当前页" ><%= @current_page %></a></li>
  	 <li class="page-next"><a href="manage_merchant?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a></li>
- 	<li class="page-item"><a href="manage_merchant?current_page=<%= @max_page %>" title="最后一页" class="active"><%= @max_page %></a></li>
+ 	<li class="page-item"><a href="manage_merchant?current_page=<%= @max_page %>" title="最后一页" class="active">尾页</a></li>
         <ul>
     </div>
 </div>

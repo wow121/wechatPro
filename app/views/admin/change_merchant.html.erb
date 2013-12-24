@@ -1,18 +1,17 @@
 <div id="user">
 	<% u=@current_user.first %>
-	<label><%= u.user_name %></label>
 	<form action="logout" method="get" >
-		<button style="height:25px;width:80px" type="submit" ><b>退出登录</b></button>
+		<button style="height:25px;width:80px;float:right" type="submit" ><b>退出登录</b></button>
+	<label><%= u.user_name %></label>
 	</form>
 </div>
 <div id="nav">
 	<ul>
 		<li><a href="new_project">新建项目</a></li>
 		<li><a href="manage_project">管理项目</a></li>
- 		<li><a href="manage_merchant">管理商户</a></li>
+ 		<li><a href="manage_merchant" style="background:#68acd3">管理商户</a></li>
 		<li><a href="download">下载报表</a></li>
-		<li><a href="register">商户注册</a></li>
-		<li style="margin-left:150px"><a href="query">照片查询</a></li>
+		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
 
 	</ul>
 </div>
@@ -26,14 +25,12 @@
 	        用&nbsp;户&nbsp;名&nbsp;:
 		<input style="height:25px" type="text" id="username" name="username" value=<%= m.user_name %>>(必填) 
 		<label style="margin-left:50px">商户店名&nbsp;</label>
-		<input style="height:25px" type="text" id="name_store" name="office_name" value=<%= m.office_name %>><br><br><br> 
-	        密&nbsp;&nbsp;&nbsp;&nbsp;码&nbsp;:
-	  	<input style="height:25px" type="text" id="password" name="password">(必填) 
-	        <label style="margin-left:50px">公司名称&nbsp;:</label>
+		<input style="height:25px" type="text" id="name_store" name="office_name" value=<%= m.office_name %>><br><br><br>  
+	        地&nbsp;点&nbsp;码&nbsp;:
+                <input style="height:25px" type="text" id="code" name="loc_name" value=<%= m.loc_name %>>(必填)
+		<label style="margin-left:50px">公司名称&nbsp;:</label>
                 <input style="height:25px" type="text" id="name_company" name="corp_name" value=<%= m.corp_name %>><br><br><br>
-		地&nbsp;点&nbsp;码&nbsp;:
-		<input style="height:25px" type="text" id="code" name="loc_name" value=<%= m.loc_name %>>
-	        <input style="margin-left:185px;width:70px;height:30px" type="submit" name="register"  value="修&nbsp;&nbsp;改">
+	        <input style="margin-left:130px;width:70px;height:30px" type="submit" name="register"  value="修&nbsp;&nbsp;改">
 	</form>
 	</div>
 </div>

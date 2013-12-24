@@ -79,6 +79,9 @@ class WeixinProcesser
 		merchant=MerchantCode.all
 		for i in merchant do
 			if  i.code==content
+				if	(Time.now.to_i-i.created_at.to_i > 60*30)
+					return res = self.construct_text_response(msg, "您输入的授权码已过期!")
+				else
 				m=Merchant.where("user_name"=>i.merchant_id).first
 				photo=Photos.where("user_id"=>msg[:FromUserName],"merchant_id"=>nil)
 				for img in photo do
@@ -87,6 +90,7 @@ class WeixinProcesser
 					img.file_path=photo_name
 					img.merchant_id=m.user_name
 					img.photo_id=content
+					img.upload_type="1"
 					img.save
 					WeixinHelper.download_pic(img.weixin_image_path,"/home/weixin/user_photos/"+img.file_path,"/home/weixin/user_photos/"+photo_name_small)
 					end
@@ -95,21 +99,40 @@ class WeixinProcesser
 				user.save	
 				return res = self.construct_text_response(msg, "所有照片上传成功!")
 				end
+			end
 		end
 		return	res = self.construct_text_response(msg, "授权码错误\n请重新输入")
 	elsif user.status=="query_picture_all"
 		photo=Photos.where("user_id"=>msg[:FromUserName])
+		str={}
+		for i in photo do
+			str.update({i.photo_id=>i.created_at})
+		end
 		if content=="q" || content == "Q"
 			user.status="normal"
 			user.save
 			return	res = self.construct_text_response(msg, "您已退出全部图片查询模式")
-		elsif(content.to_i>=1 and content.to_i<=photo.length)
-			path=photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4]
-		return res = self.construct_image_response(msg, "第"+content+"张照片",
-						         "商户code为"+photo[content.to_i-1].merchant_id+"\n照片的唯一识别码为\n"+photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4],
-											"http://115.29.36.94:999/"+path+"_small.jpg",
-											"http://115.29.36.94:999/"+photo[content.to_i-1].file_path
-											)
+		elsif(content.to_i>=1 and content.to_i<=str.length)
+			photolist=Photos.where("photo_id"=>str.keys[content.to_i-1])
+			content_str=""
+			  index = 1
+			  for i in photolist do
+				mp=MerchantProject.where("code"=>i.photo_id).last
+				if(mp==nil)
+					string="微信上传"
+				else
+					string=mp.project_name
+				end
+				string+=" "+photolist[index-1].title.to_s
+			    str=photolist[index-1].created_at.strftime("%m-%d %H:%M").to_s
+				content_str += index.to_s + "。"+string+" "+str+"\n"
+				index+=1
+			  end
+			  user=User.where("weixin_id"=>msg[:FromUserName]).first
+			  user.status="query_picture_last"
+			  user.context=photolist.last.photo_id
+			  user.save
+			  return res = self.construct_text_response(msg, "您的的图片共"+photolist.length.to_s+"张:\n回复相应的序号查看图片\n回复两个序号可设定查询起止位置\n查看当中所有照片\n PS:最多同时显示5张，序号中用空格隔开\n回复 Q 退出查询模式\n"+content_str)
 		else
 			return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
 		end
@@ -121,7 +144,7 @@ class WeixinProcesser
 			return res = self.construct_text_response(msg,"您已退出照片上传模式！")
 			end
 		return res = self.construct_text_response(msg,"您现在处于照片上传模式噢！ \n 如果想要退出照片上传模式请回复 Q ")
-	elsif   user.status=="query_picture_id"	
+	elsif   user.status=="query_picture_code"	
 		if content == "Q" || content == "q"	
 			user.status="normal"
 			user.save
@@ -134,8 +157,15 @@ class WeixinProcesser
 			 content_str=""
 			 index = 1
 			 for i in photo do
-			    str=photo[index-1].updated_at.to_s
-				content_str += index.to_s + "。"+str[0,str.length-3]+"\n"
+			    mp=MerchantProject.where("code"=>i.photo_id).last
+				if(mp==nil)
+					string="微信上传"
+				else
+					string=mp.project_name
+				end
+				string+=" "+photo[index-1].title.to_s
+			    str=photo[index-1].updated_at.strftime("%m-%d %H:%M").to_s
+				content_str += index.to_s + "。"+string+" "+str+"\n"
 				index+=1
 				if i.user_id==nil
 					i.user_id=user.weixin_id
@@ -143,50 +173,95 @@ class WeixinProcesser
 				end
 			 end
 			 
-			user.status="query_picture_id_show"
+			user.status="query_picture_last"
 			user.context=content
 			user.save
-			return res = self.construct_text_response(msg, "您的的图片共"+photo.length.to_s+"张:\n回复响应的序号查看图片\n回复 Q 退出查询模式\n"+content_str)
+			return res = self.construct_text_response(msg, "您的的图片共"+photo.length.to_s+"张:\n回复响应的序号查看图片\n回复两个序号可设定查询起止位置\n查看当中所有照片\n PS:最多同时显示5张，序号中用空格隔开\n回复 Q 退出查询模式\n"+content_str)
 		end
-	elsif	user.status=="query_picture_id_show"
-		photo=Photos.where("photo_id"=>user.context)
-		if content=="q" || content == "Q"
-			user.status="normal"
-			user.save
-			return	res = self.construct_text_response(msg, "您已退出图片查询模式")
-		elsif(content.to_i>=1 and content.to_i<=photo.length)
-			path=photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4]
-		return res = self.construct_image_response(msg, "第"+content+"张照片",
-						         "商户code为"+photo[content.to_i-1].merchant_id+"\n照片的唯一识别码为\n"+photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4],
-											"http://115.29.36.94:999/"+path+"_small.jpg",
-											"http://115.29.36.94:999/"+photo[content.to_i-1].file_path
-											)
-		else
-			return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
-		end
+	
 	elsif	user.status=="query_picture_last"
 		photo=Photos.where("photo_id"=>user.context)
 		if content=="q" || content == "Q"
 			user.status="normal"
 			user.save
 			return	res = self.construct_text_response(msg, "您已退出图片查询模式")
-		elsif(content.to_i>=1 and content.to_i<=photo.length)
+		elsif(content.split.length==1)
+			if(content.to_i>=1 and content.to_i<=photo.length)
 			path=photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4]
-		return res = self.construct_image_response(msg, "第"+content+"张照片",
-						         "商户code为"+photo[content.to_i-1].merchant_id+"\n照片的唯一识别码为\n"+photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4],
-											"http://115.29.36.94:999/"+path+"_small.jpg",
-											"http://115.29.36.94:999/"+photo[content.to_i-1].file_path
+			mp=MerchantProject.where("code"=>photo[content.to_i-1].photo_id).last
+				if(mp==nil)
+					string="微信上传"
+				else
+					string=mp.project_name
+				end
+			string+=photo[content.to_i-1].title.to_s
+			return res = self.construct_image_response(msg, "第"+content+"张照片",
+						         string,
+											SERVER_IMG+path+"_small.jpg",
+											SERVER_IMG+photo[content.to_i-1].file_path
 											)
+			else
+				return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
+			end
+		elsif(content.split.length==2)
+			num1=content.split[0].to_i
+			num2=content.split[1].to_i
+			if(num1>=num2 or num2>photo.length)
+				return	res = self.construct_text_response(msg, "序号范围错误,请重新输入")
+			elsif(num2-num1>4)
+				return	res = self.construct_text_response(msg, "范围过大,最多只能同时显示5张图片,请重新输入")
+			else
+				title=[]
+				description=[]
+				pic_url=[]
+				url=[]
+				for num1 in num1..num2
+					title<<photo[num1-1].title.to_s+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]
+					pic_url<<SERVER_IMG+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]+"_small.jpg"
+					url<<SERVER_IMG+photo[num1-1].file_path
+				end
+				Rails.logger.info title.to_s
+				return res=self.construct_images_response(msg, title, description, pic_url, url)
+			end
 		else
-			return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
+			return	res = self.construct_text_response(msg, "序号格式错误,请重新输入")
 		end
+	elsif   user.status=="query_picture_id"	
+		if content == "Q" || content == "q"	
+			user.status="normal"
+			user.save
+			return res = self.construct_text_response(msg,"您已退出授权码查询模式！")
+		end
+		content=content+".jpg"
+		photo=Photos.where("file_path"=>content).first
+		if photo==nil
+			return res = self.construct_text_response(msg,"没有找到照片！\n请确定照片编码输入正确\n请重新输入\n回复Q可退出查询模式")
+		else
+			path=photo.file_path[0,photo.file_path.length-4]
+			mp=MerchantProject.where("code"=>photo.photo_id).last
+				if(mp==nil)
+					string="微信上传"
+				else
+					string=mp.project_name
+				end
+			string+=photo.title.to_s
+			return res = self.construct_image_response(msg,"照片编码为"+content[0,content.length-4],
+														string,
+														SERVER_IMG+path+"_small.jpg",
+														SERVER_IMG+photo.file_path)
+			end
 	
 	else
 		if @@auto_response[content] != nil
 		  res = self.construct_text_response(msg, @@auto_response[content])
 		else    
 			if content == "1"
-					return res = self.construct_text_response(msg, "1待编辑") 
+	#				return res = self.construct_text_response(msg, "1待编辑")
+					titles=["111111","222222222","3333333"]
+					des=["描述1","描述2","描述3"]
+					picurl=[SERVER_IMG+"hlg1hlg012013122301ZneczY.jpg",SERVER_IMG+"hlg1hlg012013122301DybC2t.jpg",SERVER_IMG+"hlg1hlg012013122301YTkUiU.jpg"]
+					url=[]
+					return res= self.construct_images_response(msg,titles,des,picurl,url)
 			elsif content == "2"
 					return res = self.construct_text_response(msg, "2待编辑") 
 			elsif content == "3"
@@ -221,13 +296,13 @@ class WeixinProcesser
 		user=User.where("weixin_id"=>username).first
 		
 		if user.status == "update_photo"
-			Photos.create({:user_id=>username,:weixin_image_path=>weixin_url,:upload_type=>"wait_download"})
+			Photos.create({:user_id=>username,:weixin_image_path=>weixin_url,:upload_type=>"-1"})
 			user.photo_count=1
 			user.status="update_succees_and_input_code"
 			user.save
 			res = self.construct_text_response(msg, "图片已上传\n您已上传1张照片\n可继续上传或输入授权码")
 		elsif  user.status == "update_succees_and_input_code"
-			Photos.create({:user_id=>username,:weixin_image_path=>weixin_url,:upload_type=>"wait_download"})
+			Photos.create({:user_id=>username,:weixin_image_path=>weixin_url,:upload_type=>"1"})
 			user.photo_count=user.photo_count+1
 			user.save
 			res = self.construct_text_response(msg, "图片已上传\n您已上传"+user.photo_count.to_s+"张照片\n可继续上传或输入授权码")
@@ -294,23 +369,32 @@ class WeixinProcesser
 			 if(photo.first==nil)
 				return res=self.construct_text_response(msg,"您没有可供查询的图片")
 			else
+			str={}
+			 for i in photo do
+			 str.update({i.photo_id=>i.created_at})
+			 end
 			 content=""
 			 index = 1
-			 for i in photo do
-			    str=photo[index-1].updated_at.to_s
-				content += index.to_s + "。"+str[0,str.length-3]+"\n"
+			 for i in str.keys do
+				mp=MerchantProject.where("code"=>i).last
+				if(mp==nil)
+					string="微信上传"
+				else
+					string=mp.project_name
+				end
+				
+			    str1=i+" "+str.values[index-1].strftime("%m-%d %H:%M").to_s
+				content += index.to_s + "。"+string+" "+str1+"\n"
 				index+=1
 			 end
 			 user=User.where("weixin_id"=>msg[:FromUserName]).first
 			 user.status="query_picture_all"
 			 user.save
-			 return res = self.construct_text_response(msg, "您的的图片共"+photo.length.to_s+"张:\n回复响应的序号查看图片\n回复 Q 退出查询模式\n"+content)
+			 return res = self.construct_text_response(msg, "共查找到"+photo.length.to_s+"个项目:\n回复响应的序号进入项目\n回复 Q 退出查询模式\n"+content)
 			end
-		  
 		  when "key_b2"
 			  error_checking(msg[:FromUserName])
 			  photo=Photos.where("user_id"=>msg[:FromUserName]).last
-			  
 			  if photo==nil
 				return res=self.construct_text_response(msg,"您没有可供查询的图片")
 			  else
@@ -318,25 +402,36 @@ class WeixinProcesser
 			  content_str=""
 			  index = 1
 			  for i in img do
-			    str=img[index-1].updated_at.to_s
-				content_str += index.to_s + "。"+str[0,str.length-3]+"\n"
+				mp=MerchantProject.where("code"=>i.photo_id).last
+				if(mp==nil)
+					string="微信上传"
+				else
+					string=mp.project_name
+				end
+				string+=" "+img[index-1].title.to_s
+			    str=img[index-1].created_at.strftime("%m-%d %H:%M").to_s
+				content_str += index.to_s + "。"+string+" "+str+"\n"
 				index+=1
 			  end
 			  user=User.where("weixin_id"=>msg[:FromUserName]).first
 			  user.status="query_picture_last"
 			  user.context=photo.photo_id
 			  user.save
-			  return res = self.construct_text_response(msg, "您的的图片共"+img.length.to_s+"张:\n回复响应的序号查看图片\n回复 Q 退出查询模式\n"+content_str)
-			end
-			
+			  return res = self.construct_text_response(msg, "您的的图片共"+img.length.to_s+"张:\n回复相应的序号查看图片\n回复两个序号可设定查询起止位置\n查看当中所有照片\n PS:最多同时显示5张，序号中用空格隔开\n回复 Q 退出查询模式\n"+content_str)
+			end		
 		when "key_b3"
+			  error_checking(msg[:FromUserName])
+			  user=User.where("weixin_id"=>msg[:FromUserName]).first
+			  user.status="query_picture_code"
+			  user.save
+			  return res=self.construct_text_response(msg,"请输入照片的授权码，回复Q退出查询模式")
+		when "key_b4"
 			  error_checking(msg[:FromUserName])
 			  user=User.where("weixin_id"=>msg[:FromUserName]).first
 			  user.status="query_picture_id"
 			  user.save
-			  return res=self.construct_text_response(msg,"请输入照片的授权码，回复Q退出查询模式")
-		 end
-		  
+			  return res=self.construct_text_response(msg,"请输入照片的编码，回复Q退出查询模式")
+		end
 	end
 
 	def self.construct_text_response(msg, content)
@@ -364,7 +459,7 @@ class WeixinProcesser
 
 
 	def self.construct_image_response(msg, title, description, pic_url, url)
-	  res_data = REXML::Document.new
+		res_data = REXML::Document.new
 		root = res_data.add_element("xml")
 
 		to_user_name_node = root.add_element("ToUserName")
@@ -444,16 +539,20 @@ class WeixinProcesser
 										  {\"name\" : \"查询\",
 											 \"sub_button\" : [
 											 {\"type\" : \"click\",
-												\"name\" : \"全部照片\",
+												\"name\" : \"注册项目查询\",
 												\"key\"  : \"key_b1\"
 											 },
 											 {\"type\" : \"click\",
-												\"name\" : \"最后上传照片\",
+												\"name\" : \"最后项目查询\",
 												\"key\"  : \"key_b2\"
 											 },
 											 {\"type\" : \"click\",
-												\"name\" : \"输入授权码查询\",
+												\"name\" : \"项目授权码输入\",
 												\"key\"  : \"key_b3\"
+											 },
+											 {\"type\" : \"click\",
+												\"name\" : \"照片下载\",
+												\"key\"  : \"key_b4\"
 											 }
 											 }]
                       }] 
@@ -517,6 +616,42 @@ class WeixinProcesser
 		newpass = ""
 		1.upto(len) { |i| newpass << chars[rand(chars.size-1)] }
 		return newpass
+	end
 	
+	def self.construct_images_response(msg, title, description, pic_url, url)
+		res_data = REXML::Document.new
+		root = res_data.add_element("xml")
+
+		to_user_name_node = root.add_element("ToUserName")
+		to_user_name_node.add_text(msg[:FromUserName])
+
+		from_user_name_node = root.add_element("FromUserName")
+		from_user_name_node.add_text(msg[:ToUserName])
+
+		create_time_node = root.add_element("CreateTime")
+		create_time_node.add_text(Time.now().to_s)
+
+		msg_type_node = root.add_element("MsgType")
+		msg_type_node.add_text("news")
+
+		article_count_node = root.add_element("ArticleCount")
+		article_count_node.add_text(title.length.to_s)
+		
+		articles = root.add_element("Articles")
+		
+		for i in 0..title.length-1
+			item_1_node = articles.add_element("item")
+			title_node = item_1_node.add_element("Title")
+			title_node.add_text(title[i])
+			description_node = item_1_node.add_element("Description")
+			description_node.add_text(description[i])
+			pic_url_node = item_1_node.add_element("PicUrl")
+			pic_url_node.add_text(pic_url[i])
+			url_node = item_1_node.add_element("Url")
+			url_node.add_text(url[i])
+		end
+		
+		Rails.logger.info res_data.to_s
+		res_data.to_s
 	end
 end

@@ -1,8 +1,4 @@
 
-<!--div id="logo">
-	<a href="#" id="logolink"></a>
-</div!-->
-
 <div id="nav">
 	<ul>
 		<li><a href="index.html">管理员登录</a></li>
@@ -17,20 +13,23 @@
    
    <input type="text" id="name" name="name"style="height:25px;width:130px">
         <br><br> 
-	密&nbsp;&nbsp;码:
+	密<label style="margin-left:16px">码:</label>
 <input type="password" id="password" name="password"style="height:25px;width:130px"> 
-   	<br>&nbsp;<center><p style="color:red"><%= flash[:alert]%></p></center>
-        <br>	
-         操&nbsp;&nbsp;作:
+      &nbsp;<center><p style="color:red"><%= flash[:alert]%></p></center>             &nbsp;<center><p style="color:green"><%= flash[:notice]%></p></center>	
+         操<label style="margin-left:16px">作:</label>
 	<select style="height:25px;width:130px" name="operation">
 		  <option value="new_project">新建项目</option>
 		  <option value="manage_project">管理项目</option>
 		</select>
         <!--input type="file" name="abc" value="&nbsp;a&nbsp;b&nbsp;"--!>	
                 <br><br><br>
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+	&nbsp;&nbsp;
 <input id="btn_submit" type="submit" name="login"style="height:25px;width:70px" value="登&nbsp;&nbsp;录&nbsp;">
+  <a href="register" target="_blank"><input type="button" style="height:25px;width:70px"  value="注&nbsp;&nbsp;册&nbsp;"></a>
+
 	</form>
+
+       
         
 	</div>
 </div>

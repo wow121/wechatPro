@@ -1,6 +1,6 @@
 body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;padding:0;}
 /*主页*/
-#logo,#user,#nav,#banner,#content,#footer,#banner-new,#banner-in{width:900px;margin:0 auto;}
+#logo,#user,#nav,#banner,#content,#footer,#banner-new,#banner-in,#user0{width:900px;margin:0 auto;}
 #logo{
 	height:102px;
 	}
@@ -14,16 +14,22 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 #user{height:10px;
 	margin-top:30px;}
 #user label{
-	width:50px;
-	margin-left:700px;
+	width:50;
+	margin-right:50px;
+	float:right;
 	}
-#user form{
-	display:block;
-	width:100px;
-	margin-right:30px;  
-	float:right;	
-	}
-
+#user0{height:30px;
+       margin-top:30px;}
+#user0 label{
+	width:50;
+        margin-left:700px;
+        }
+#user0 form{
+        display:block;
+        width:100px;
+        margin-right:30px;
+        float:right; 
+        }
 #nav{height:42px;}
 #nav ul{
 	height:42px;
@@ -79,13 +85,14 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	}
 /*新建项目*/
 #banner-new{
-	height:455px;
+	height:450px;
 	width:900px;
 	background:#E1E5E1;
 	}
+
 #form{
 	width:700px;
-	margin-top:50px;
+	margin-top:30px;
 	margin-left:100px;
 	float:left;
 	}
@@ -101,8 +108,8 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	margin:0 auto;
 	}
 #list-photo{
-	width:700px;
-	height:700px;
+	width:740px;
+	height:720px;
 	margin:0 auto;
 	}
 #upload{
@@ -110,22 +117,25 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	height:200px;
 	margin:0 auto;
 	}
-#list-item{
-	display:box;
-	display:-moz-box;
-	display:-webkit-box;
-	width:100%;
-	text-align:left;
+#list table{
+	border-collapse:collapse;
 	}
-#list-item div{
-	box-sizing:border-box;
-	-moz-box-sizing:border-box;
+#list table,td,th{
+	border:1px solid black;
+	height:30px;
+	}
+#list-photo table{
+	border-collapse:collapse;
+	}
+#list-photo table,td,th{
+	border:1px solid black;
+	height:30px;
 	}
 #page{height:20px;}
 #page ul{
 	height:20px;
 	list-style:none;
-	margin:0 355px;
+	margin:0 230px;
 	}
 #page ul li{
 	height:20px;

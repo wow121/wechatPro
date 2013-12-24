@@ -1,10 +1,9 @@
 <div id="user">
  <% u=@current_user.first %>
-        <label><%= u.user_name %></label>
-
 <form action="logout" method="get">
-  <button style="width:80px;height:25px" type="submit"><b>退出登录</b>
+  <button style="width:80px;height:25px;float:right" type="submit"><b>退出登录</b>
 </button>
+        <label><%= u.user_name %></label>
 </form>
 </div>
 
@@ -13,23 +12,33 @@
 		<li><a href="new_project">新建项目</a></li>
 		<li><a href="manage_project">管理项目</a></li>
                 <li><a href="manage_merchant">管理商户</a></li>
-		<li><a href="download">下载报表</a></li>
-                <li><a href="register">注册商户</a></li>
-		<li style="margin-left:150px"><a href="query">照片查询</a></li>
+		<li><a href="download" style="background:#68acd3">下载报表</a></li>
+		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
 	</ul>
 </div>
 <div id="banner-new">
 	<div id="form">
-	 <form action="download_xls" method="get"  >
-		起始时间
-	 <input type="text" style="height:25px;width:150px" id="begin-time" name="begin_time">&nbsp;&nbsp;&nbsp;&nbsp;
-		结束时间
-	 <input type="text" style="height:25px;width:150px" id="finish-time" name="finisht_time">&nbsp;&nbsp;例:2013-12-17 00:00:00<br><br>
+	 <form action="download_xls" method="get" >
+		起始时间:
+	年<input type="text" style="height:25px;width:40px" id="begin_year" name="begin_year" />月<input type="text" style="height:25px;width:40px" id="begin_month" name="begin_month" />日<input type="text" style="height:25px;width:40px" id="begin_day" name="begin_day" />
+		<label style="margin-left:25px">结束时间:</label>
+	年<input type="text" style="height:25px;width:40px" id="end_year" name="end_year" />月<input type="text" style="height:25px;width:40px" id="end_month" name="end_month" />日<input type="text" style="height:25px;width:40px" id="end_day" name="end_day" />&nbsp;&nbsp;例:2013-12-17<br><br>
+   <center><p style="color:green"><%= flash[:notice] %></p></center>
+   <center><p style="color:red"><%= flash[:alert] %></p></center>
+ 	 报表类型:	
+	 <select style="height:25px;width:165px;margin-left:15px" name="status">
+		<option value="projectlist">所有项目报表</option>
+		<option value="weixinuserlist">微信用户报表</option>
+		<option value="merchantlist">商户报表</option>
+		<option value="photolist">所有照片报表</option>
+	 </select>
+         <label style="margin-left:25px">或输入任意商户名:</label>
+         <input type="text"    style="height:20px;width:150px" name="merchantname" ><br><br>
          <input type="hidden" name="userid" value=<%= u.token %>>
-		&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-		<input type="submit" style="height:25px;width:80px" name="download" value="下载报表"><br><br><br><hr><br>
-		用户操作记录：
-	<label></label>
+	 <input type="submit" style="height:30px;width:80px;margin-left:290px" name="download" value="下载报表"><br><hr>
+           <% if @link != nil %>
+             <a href="<%= @link %>">点击下载</a>
+           <% end %>
 	</form>
 		
 	</div>

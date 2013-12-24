@@ -8,7 +8,8 @@ class MerchantController < ApplicationController
 	
 	def login
 	username=params[:username]
-	password=params[:password]
+	pw=params[:password]
+	password=Digest::MD5.hexdigest(pw)
 	str={"fail"=>"username or password wrong"}
 	m=Merchant.where("user_name"=>username,"password"=>password).first
 	if(m==nil)
@@ -21,10 +22,11 @@ class MerchantController < ApplicationController
 	
 	def register
 	username=params[:username]
-	password=params[:password]
+	pw=params[:password]
 	corpname=params[:corpname]
 	locname=params[:locname]
 	officename=params[:officename]
+	password=Digest::MD5.hexdigest(pw)
 	code=WeixinProcesser.mkrandom(12)
 	str=nil
 	m=Merchant.where("user_name"=>username).first
@@ -56,8 +58,8 @@ class MerchantController < ApplicationController
       f.write(photo.read)	
 	  end
 	system 'convert '+"/home/weixin/user_photos/"+photo_name+' -resize 30% '+"/home/weixin/user_photos/"+photo_name_small
-	Photos.create({:merchant_id=>i.user_name,:file_path=>photo_name,:photo_id=>code,:upload_type=>"isdownload"})
-	str={"success"=>200,"url"=>"http://115.29.36.94:999/"+photo_name,"s_url"=>"http://115.29.36.94:999/"+photo_name_small}
+	Photos.create({:merchant_id=>i.user_name,:file_path=>photo_name,:photo_id=>code,:upload_type=>"1"})
+	str={"success"=>200,"url"=>SERVER_IMG+photo_name,"s_url"=>SERVER_IMG+photo_name_small}
 	end
 	render:json=>str
 	end
@@ -82,16 +84,16 @@ class MerchantController < ApplicationController
 				if status==nil
 					path=i.file_path[0,i.file_path.length-4]
 					str<<{"success"=>200,
-						"photo"=>"http://115.29.36.94:999/"+i.file_path,
+						"photo"=>SERVER_IMG+i.file_path,
 						"code"=>i.photo_id,
-						"s_photo"=>"http://115.29.36.94:999/"+path+"_small.jpg"}
+						"s_photo"=>SERVER_IMG+path+"_small.jpg"}
 				else
 				   if i.upload_type==status
 						path=i.file_path[0,i.file_path.length-4]
 						str<<{"success"=>200,
-						"photo"=>"http://115.29.36.94:999/"+i.file_path,
+						"photo"=>SERVER_IMG+i.file_path,
 						"code"=>i.photo_id,
-						"s_photo"=>"http://115.29.36.94:999/"+path+"_small.jpg"}
+						"s_photo"=>SERVER_IMG+path+"_small.jpg"}
 						end
 					end
 				end
@@ -133,52 +135,7 @@ class MerchantController < ApplicationController
 	status=params[:status]
 	stime=params[:stime]
 	etime=params[:etime]
-	m=Merchant.where("token"=>username).first
-	str=nil
-	if(m==nil)
-		str={"fail"=>"user not found"}
-	else
-		if(status=="userlist")
-			photos=Photos.all
-			label=['商户id','微信id','授权码','文件名','下载记录','下载次数','创建时间','最后修改时间']
-				context=[]
-				for i in photos
-					con=[]
-					con<<i.merchant_id
-					con<<i.user_id
-					con<<i.photo_id
-					con<<i.file_path
-					con<<i.upload_type
-					con<<i.downloads
-					con<<i.created_at
-					con<<i.updated_at	
-					context<<con
-					end
-				str={"success"=>200,"url"=>"http://115.29.36.94:777/"+WeixinHelper.mkexecl(label,context)}
-		
-		else
-			photos=Photos.where("UNIX_TIMESTAMP(created_at) >= "+Time.at(stime.to_i).to_i.to_s).where("UNIX_TIMESTAMP(created_at)<="+Time.at(etime.to_i).to_i.to_s).where("merchant_id"=>m.user_name)
-			if(photos.first==nil)
-				str={"fail"=>"photo not found"}
-			else
-				label=['商户id','微信id','授权码','文件名','下载记录','下载次数','创建时间','最后修改时间']
-				context=[]
-				for i in photos
-					con=[]
-					con<<i.merchant_id
-					con<<i.user_id
-					con<<i.photo_id
-					con<<i.file_path
-					con<<i.upload_type
-					con<<i.downloads
-					con<<i.created_at
-					con<<i.updated_at	
-					context<<con
-					end
-				str={"success"=>200,"url"=>"http://115.29.36.94:777/"+WeixinHelper.mkexecl(label,context)}
-				end
-			end
-		end
+	str=MerchantHelper.getlog(username,status,stime,etime)
 	render:json=>str
 	end
 	

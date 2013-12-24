@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131216115826) do
+ActiveRecord::Schema.define(:version => 20131224060250) do
 
   create_table "merchant_codes", :force => true do |t|
     t.string   "merchant_id"
@@ -76,6 +76,7 @@ ActiveRecord::Schema.define(:version => 20131216115826) do
     t.string   "weixin_image_path"
     t.text     "description"
     t.integer  "downloads",         :default => 0
+    t.text     "title"
   end
 
   create_table "sessions", :force => true do |t|

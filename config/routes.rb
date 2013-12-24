@@ -1,6 +1,8 @@
 WeiXinApp::Application.routes.draw do
   get ':controller/:action'
 	post ':controller/:action'
+ 
+  #root to: "admin#index.html"
 
   # The priority is based upon order of creation:
   # first created -> highest priority.
