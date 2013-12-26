@@ -1,0 +1,57 @@
+<div id="user">
+        <% u=@current_user.first %>
+        <form action="logout" method="get">
+                <button style="height:25px;width:80px;float:right" type="submit"><b>退出登录</b> </button>
+        <label><%= u.user_name %></label>
+        </form>
+</div>
+<div id="nav">
+        <ul>
+	<li><a href="new_project">新建项目</a></li>
+                <li><a href="manage_project">管理项目</a></li>
+                
+                <li><a href="manage_merchant">管理商户</a></li>
+             <li><a href="register_merchant"  style="background:#68acd3">注册
+商户</a></li>
+
+                <li><a href="download">下载报表</a></li>
+                <li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
+
+	</ul>
+</div>
+<div id="banner-new">
+ 
+   <div id="form">
+        <form style="margin-top:30px;margin-left:30px"
+                name="register" method="post" action="merchant_register">
+             <center><p style="color:red"><%= flash[:alert]%></p></center>
+             <center><p style="color:green"><%= flash[:notice]%></p></center>
+ 
+                用<label style="margin-left:8px;margin-right:8px">户</label>名:
+                <input style="height:25px;width:150px" type="text" id="username" name="username" />(必填)
+		<label style="margin-left:65px">地点码:</label>
+		<input style="height:25px" type="text" id="loc_name" name="loc_name" />(必填)
+     	 <br><br>
+	
+              密<label style="margin-left:32px">码:</label>
+                <input style="height:25px;width:150px" type="password" id="password" name="password" />(必填)
+		<label style="margin-left:50px">公司名称:</label>
+		<input style="height:25px" type="text" id="corp_name" name="corp_name" />
+              <br>
+              <br>
+                确认密码:
+                <input style="height:25px;width:150px" type="password" id="repassword" name="repassword" />(必填)
+		<label style="margin-left:50px">商户店名:</label>
+		<input style="height:25px" type="text" id="office_name" name="office_name" />
+            <br>
+            <br>
+           <input style="margin-left:120px;width:70px;height:30px" type="submit" name="register"  value="注&nbsp;&nbsp;册" />
+        </form>
+        </div>
+
+</div>
+<div id="footer">
+	<p>版权归微信学习</p>
+	
+	<p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>
