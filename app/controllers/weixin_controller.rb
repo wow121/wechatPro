@@ -1,6 +1,8 @@
 class WeixinController < ApplicationController
   def gateway
+	#Rails.logger.info params.to_s
     if request.method == "GET"
+		
 		  result = WeixinProcesser.process_register(params) 
       render :text=> result	  	
 			return

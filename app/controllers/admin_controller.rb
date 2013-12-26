@@ -52,7 +52,7 @@ class AdminController < ApplicationController
    def manage_merchant
       
        @current_user = Merchant.where(user_name: cookies[:merchant_id])
-       count = Merchant.where(admin:0).size
+       count = Merchant.where("admin != ?",1).size
        @max_page = (count + 9)/10
        if params[:current_page].blank? or params[:current_page].to_i <= 0 or params[:current_page].to_i > @max_page
         @current_page = 1 
@@ -273,11 +273,12 @@ class AdminController < ApplicationController
       end
    end
 
-  #注册商户
+  #项目经理注册
   
- def register_merchant
+ def register_manager
+     
   if params[:username].blank? or params[:password].blank? 
-		flash[:alert] = "信息太少，无法注册商户？_ ？"
+		flash[:alert] = "信息太少，无法注册？_ ？"
 		redirect_to :back
        else
 		username = params[:username]
@@ -300,6 +301,47 @@ class AdminController < ApplicationController
 			redirect_to :back
 		end
       end
+  end
+
+  #商户注册
+  def register_merchant
+       @current_user = Merchant.where(user_name: cookies[:merchant_id])
+
+
+  end
+  def merchant_register
+
+        if params[:username].blank? or params[:password].blank? or params[:loc_name].blank?
+                flash[:alert] = "信息太少，无法注册商户？_ ？"
+                redirect_to :back
+       else
+                username = params[:username]
+                password = params[:password]
+ 		loc_name = params[:loc_name]
+                corp_name = params[:corp_name]
+                office_name = params[:office_name]
+                password_md5 = Digest::MD5.hexdigest(password)
+                repassword = params[:repassword]
+                BackendLog.log "password"+password
+                BackendLog.log "repassword"+repassword
+                if password == repassword
+                        m =Merchant.new()
+                        m.user_name = username
+                        m.password = password_md5
+                        m.loc_name = loc_name
+                        m.corp_name = corp_name
+                        m.office_name = office_name
+                        m.admin = -1
+                        m.token = WeixinProcesser.mkrandom(12)
+                        m.save
+                        flash[:notice] = "注册成功,又加一个新商户哟~——~"
+                        redirect_to action: 'manage_merchant'
+                else
+                        flash[:alert] = "密码不一致*_*!"
+                        redirect_to :back
+                end
+      end
+
   end
 
   

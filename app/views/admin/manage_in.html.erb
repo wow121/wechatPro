@@ -12,6 +12,7 @@
 		<li><a href="manage_project" style="background:#68acd3">管理项目</a></li>
                 <% if @is_admin.to_i == 1 %>
                 <li><a href="manage_merchant">管理商户</a></li>
+                 <li><a href="register_merchant">注册商户</a></li>
 		<li><a href="download">下载报表</a></li>
                 <% end %>
 		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
@@ -23,17 +24,17 @@
      		&nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
                <% project=@project.first %><label>项目名称：<%= project.project_name %></label><br><br>
 		     <table><tr>
-			<th style="width:150px">照片</th>
-			<th style="width:138px">照片标题</th>
-			<th style="width:152px">照片描述</th>
-			<th style="width:184px">照片修改</th>
-			<th style="width:116px">操作</th></tr></table>
+			<th style="width:157px">照片</th>
+			<th style="width:130px">照片标题</th>
+			<th style="width:153px">照片描述</th>
+			<th style="width:185px">照片修改</th>
+			<th style="width:120px">操作</th></tr></table>
 	<% @pictures.each do |p| %>
              <form    name="<%= p.id %>" action="change_info?pic_id=<%=p.id %>" method="post">
 		<table><tr>
-                <td style="width:160px;height:110px" id=<%= p.id %>>&nbsp;&nbsp;<img src=<%= "http://115.29.36.94:999/" + p.file_path %> width="60%" height="60%"/> &nbsp;</td>
-                <td style="width:140px"><p style="width:80px"><%= p.title %></p></td>
-		<td style="width:150px" id=<%= p.id %>><p style="width:140px"><%= p.description %></p></td>
+                <td style="width:160px;height:100px" id=<%= p.id %>><img src=<%= "http://115.29.36.94:999/" + p.file_path %> style="height:100%;width:100%"/></td>
+                <td style="width:130px" id=<%= p.id %>><%= p.title %></td>
+		<td style="width:150px" id=<%= p.id %>><div><%= p.description %></div></td>
 		<td style="width:180px" id=<%= p.id %>><textarea name="<%= p.id %>" style="width:176px;height:100px;background:#E1E5E1;border-color:#e1e5e1"></textarea></td>
             <input type="hidden" name="pic_id<%= p.id %>" value="<%= p.id %>">
 		<td style="width:120px" id=<%= p.id %>><input style="height:23px;width:50px" type="submit" name="change_info" value="修&nbsp;改">|<a  href="delete_pic?pic_id=<%= p.id %>">删除</a></td>
@@ -42,26 +43,39 @@
  	<% end %>
   	     </div>
 	<div id="page">
-      	 	<ul>
-	 	<li class="page-first"><a href="mange_in" title="首页" class="active">首页</a></li>
-	 	<li class="page-pro"><a href="manage_in?current_page=<%= @current_page-1 %>" title="进入前一页" class="active">《</a></li>
-	 	<li><a href="#" title="当前页" ><%= @current_page %></a></li>
-	 	<li class="page-next"><a href="manage_in?current_page=<%= @current_page+1 %>" title="进入下一页" class="active">》</a></li>
-	 	<li class="page-item"><a href="manage_in?current_page=<%= @max_page %>" title="尾页" class="active">尾页</a></li>
-	 	</ul>
+	 	<a href="manage_in" title="首页" class="active">首页</a>
+	 	<a href="manage_in?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
+                 <% if @max_page < 10 %>
+                <% upto = @max_page %>
+                <% else to_page = @current_page +9 %>
+                  <% if to_page <= @max_page %>
+                  <% upto = to_page %>
+                  <% else upto = @max_page %>
+                  <% end %>
+                <% end %>
+                <% i = @current_page %>
+                <% while i <= upto  do %>
+
+                <a href="manage_in?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a>
+                <% i=i+1 %>
+                <% end %>
+	 	<a href="manage_in?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a>
+	 	<a href="manage_in?current_page=<%= @max_page %>" title="尾页" class="active">尾页</a>
 	</div>
 	<div id="upload">	
-		<fieldset style="margin-top:30px">
+		<fieldset style="margin-top:25px">
        		<form action="upload" method="post" enctype="multipart/form-data">
-         	上传照片到该项目<label style="margin-left:120px">照片描述</label><br>
+         	选择文件:
+	        <input  type="file" name="pic" value="&nbsp;上传照片&nbsp;">
+		照片描述:<br><br>
+		照片标题:
+    		<input type="text"  name="title">
+		<textarea style="float:right" name="extra" rows="4" cols="50"></textarea>
 		<input type="hidden" name="userid" value=<%= u.token %>>
-                <input type="hidden" name="code" value=<%= project.code %>>
-	        <input  type="file" name="pic" value="&nbsp;上传照片&nbsp;"><textarea name="extra" rows="5" cols="40"></textarea>
-      照片标题：
-    <textarea name="title" rows="2" cols="20"></textarea>
-		<input type="submit" name="upload" value="开始上传">
+                <input type="hidden" name="code" value=<%= project.code %>><br><br>
+		<input style="margin-left:80px" type="submit" name="upload" value="开始上传">
 		</form>
-		</fieldset><br>
+		</fieldset>
 	</div>
 	
 </div>

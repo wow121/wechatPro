@@ -11,6 +11,7 @@
                 <li><a href="new_project">新建项目</a></li>
                 <li><a href="manage_project">管理项目</a></li>
                 <li><a href="manage_merchant" style="background:#68acd3">管理商户</a></li>
+         <li><a href="register_merchant">注册商户</a></li>
                 <li><a href="download">下载报表</a></li>
                 <li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
         </ul>
@@ -41,13 +42,25 @@
 	</form>
     </div>	
     <div id="page">
-	<ul>
-  	 <li class="page-first"><a href="manage_merchant" title="首页" class="active">首页</a></li>
- 	 <li class="page-pro"><a href="manage_merchant?current_page=<%= @current_page-1 %>" title="前一页" class="active">《</a></li>
- 	 <li><a href="#" title="当前页" ><%= @current_page %></a></li>
- 	 <li class="page-next"><a href="manage_merchant?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a></li>
- 	<li class="page-item"><a href="manage_merchant?current_page=<%= @max_page %>" title="最后一页" class="active">尾页</a></li>
-        <ul>
+  	 <a href="manage_merchant" title="首页" class="active">首页</a>
+ 	 <a href="manage_merchant?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
+                 <% if @max_page < 10 %>
+                <% upto = @max_page %>
+                <% else to_page = @current_page +9 %>
+                  <% if to_page <= @max_page %>
+                  <% upto = to_page %>
+                  <% else upto = @max_page %>
+                  <% end %>
+                <% end %>
+
+                <% i = @current_page %>
+                <% while i <= upto  do %>
+
+                <a href="manage_merchant?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a>
+                <% i=i+1 %>
+                <% end %>
+ 	<a href="manage_merchant?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a>
+ 	<a href="manage_merchant?current_page=<%= @max_page %>" title="最后一页" class="active">尾页</a>
     </div>
 </div>
 <div id="footer">
