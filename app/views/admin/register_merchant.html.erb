@@ -9,12 +9,9 @@
         <ul>
 	<li><a href="new_project">新建项目</a></li>
                 <li><a href="manage_project">管理项目</a></li>
-                
                 <li><a href="manage_merchant">管理商户</a></li>
-             <li><a href="register_merchant"  style="background:#68acd3">注册
-商户</a></li>
-
                 <li><a href="download">下载报表</a></li>
+                <li><a href="register_merchant"  style="background:#68acd3">注册</a></li>
                 <li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
 
 	</ul>
@@ -22,11 +19,9 @@
 <div id="banner-new">
  
    <div id="form">
-        <form style="margin-top:30px;margin-left:30px"
-                name="register" method="post" action="merchant_register">
+        <form style="margin-left:30px" name="register" method="post" action="merchant_register">
              <center><p style="color:red"><%= flash[:alert]%></p></center>
              <center><p style="color:green"><%= flash[:notice]%></p></center>
- 
                 用<label style="margin-left:8px;margin-right:8px">户</label>名:
                 <input style="height:25px;width:150px" type="text" id="username" name="username" />(必填)
 		<label style="margin-left:65px">地点码:</label>
@@ -45,8 +40,24 @@
 		<input style="height:25px" type="text" id="office_name" name="office_name" />
             <br>
             <br>
-           <input style="margin-left:120px;width:70px;height:30px" type="submit" name="register"  value="注&nbsp;&nbsp;册" />
+           <input style="margin-left:105px;width:100px;height:30px" type="submit" name="register"  value="注&nbsp;册&nbsp;商&nbsp;户" />
+        </form><br><hr>
+	 <form style="margin-top:30px;margin-left:30px" name="register" method="post" action="register_manager">
+             <center><p style="color:red"><%= flash[:alert]%></p></center>
+             <center><p style="color:green"><%= flash[:notice]%></p></center>
+                用<label style="margin-left:8px;margin-right:8px">户</label>名:
+                <input style="height:25px;width:150px" type="text" id="username" name="username" />(必填)
+              <label style="margin-left:50px">密</label><label style="margin-left:32px">码:</label>
+                <input style="height:25px;width:150px" type="password" id="password" name="password" />(必填)
+              <br>
+              <br>
+                确认密码:
+                <input style="height:25px;width:150px" type="password" id="repassword" name="repassword" />(必填）
+            <br>
+            <br>
+           <input style="margin-left:105px;width:100px;height:30px" type="submit" name="register"  value="注册项目经理" />
         </form>
+
         </div>
 
 </div>

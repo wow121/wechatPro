@@ -9,11 +9,11 @@
 <div id="nav">
 	<ul>
 		<li><a href="new_project">新建项目</a></li>
-		<li><a href="manage_project" style="background:#68acd3">管理项目</a></li>
+		<li><a href="manage_project">管理项目</a></li>
                 <% if @is_admin.to_i == 1 %>
                 <li><a href="manage_merchant">管理商户</a></li>
-                 <li><a href="register_merchant">注册商户</a></li>
 		<li><a href="download">下载报表</a></li>
+                <li><a href="register_merchant">注册</a></li>
                 <% end %>
 		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
 	</ul>
@@ -24,20 +24,17 @@
      		&nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
                <% project=@project.first %><label>项目名称：<%= project.project_name %></label><br><br>
 		     <table><tr>
-			<th style="width:157px">照片</th>
-			<th style="width:130px">照片标题</th>
-			<th style="width:153px">照片描述</th>
-			<th style="width:185px">照片修改</th>
-			<th style="width:120px">操作</th></tr></table>
+			<th style="width:200px">照片</th>
+			<th style="width:200px">照片标题</th>
+			<th style="width:200px">照片描述</th>
+			<th style="width:80px">操作</th></tr></table>
 	<% @pictures.each do |p| %>
-             <form    name="<%= p.id %>" action="change_info?pic_id=<%=p.id %>" method="post">
+             <form>
 		<table><tr>
-                <td style="width:160px;height:100px" id=<%= p.id %>><img src=<%= "http://115.29.36.94:999/" + p.file_path %> style="height:100%;width:100%"/></td>
-                <td style="width:130px" id=<%= p.id %>><%= p.title %></td>
-		<td style="width:150px" id=<%= p.id %>><div><%= p.description %></div></td>
-		<td style="width:180px" id=<%= p.id %>><textarea name="<%= p.id %>" style="width:176px;height:100px;background:#E1E5E1;border-color:#e1e5e1"></textarea></td>
-            <input type="hidden" name="pic_id<%= p.id %>" value="<%= p.id %>">
-		<td style="width:120px" id=<%= p.id %>><input style="height:23px;width:50px" type="submit" name="change_info" value="修&nbsp;改">|<a  href="delete_pic?pic_id=<%= p.id %>">删除</a></td>
+                <td style="width:200px;height:100px" id=<%= p.id %>><img src=<%= "http://115.29.36.94:999/" + p.file_path %> style="height:100%;width:100%"/></td>
+                <td style="width:200px" id=<%= p.id %>><div><%= p.title %></div></td>
+		<td style="width:200px" id=<%= p.id %>><div><%= p.description %></div></td> 
+		<td style="width:80px" id=<%= p.id %>><a target="_blank"  href="change_info?pic_id=<%=p.id %>">修改</a>|<a  href="delete_pic?pic_id=<%= p.id %>">删除</a></td>
 		</tr></table>
         </form>
  	<% end %>
@@ -45,18 +42,14 @@
 	<div id="page">
 	 	<a href="manage_in" title="首页" class="active">首页</a>
 	 	<a href="manage_in?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
-                 <% if @max_page < 10 %>
-                <% upto = @max_page %>
-                <% else to_page = @current_page +9 %>
-                  <% if to_page <= @max_page %>
-                  <% upto = to_page %>
-                  <% else upto = @max_page %>
-                  <% end %>
-                <% end %>
-                <% i = @current_page %>
-                <% while i <= upto  do %>
+                <% i = @beg %>
+                <% while i <= @end  do %>
+                <% if i== @current_page %>
+                 <a href="manage_in?current_page=<%=i%>" style="color:#0000ee;font-weight:bold" title="第<%= i %>页"><%= i %></a>
 
+                <% else %>
                 <a href="manage_in?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a>
+                 <% end %>
                 <% i=i+1 %>
                 <% end %>
 	 	<a href="manage_in?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a>

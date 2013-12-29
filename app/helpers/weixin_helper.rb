@@ -134,7 +134,7 @@ module WeixinHelper
 		photo=Photos.all
 		BackendLog.log "===============move================"
 		for i in photo do
-			if(time.to_i-i.created_at.to_i>=24*60*60*3)
+			if(time.to_i-i.created_at.to_i>=24*60*60*24)
 				BackendLog.log "move "+i.file_path
 				system 'mv /home/weixin/user_photos/'+i.file_path+' /home/weixin/old_photos/'
 				Photos.delete(i.id)

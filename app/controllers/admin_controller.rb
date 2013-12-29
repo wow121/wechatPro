@@ -1,6 +1,6 @@
 #encoding: utf-8
 class AdminController < ApplicationController
-   before_filter :check_login, :except => [:index, :login,:find_pic,:register,:register_merchant]
+   before_filter :check_login, :except => [:index, :login,:find_pic,:manage_image]
 
    #管理员登陆
    def login
@@ -50,17 +50,48 @@ class AdminController < ApplicationController
 
    #管理商户
    def manage_merchant
+      admin = params[:admin]
+      if admin =="项目经理"
+         u = 0
+      elsif admin == "普通商户"
+         u = -1
+       else 
+         u =1
+      end
+      @user_name = params[:user_name]
+      @office_name = params[:office_name]
+      @corp_name = params[:corp_name]
+      @user_name = {} if @user_name == nil
+      @office_name = {} if @office_name == nil
+      @corp_name = {} if @corp_name == nil
       
        @current_user = Merchant.where(user_name: cookies[:merchant_id])
+       if u == 1
        count = Merchant.where("admin != ?",1).size
+       else 
+        count = Merchant.where("admin=?",u).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).size
+       end
        @max_page = (count + 9)/10
        if params[:current_page].blank? or params[:current_page].to_i <= 0 or params[:current_page].to_i > @max_page
         @current_page = 1 
       else 
       @current_page = params[:current_page].to_i
       end
+      if u == 1
     @merchants = Merchant.where("admin != ? ",1).offset(10*(@current_page-1)).limit(10).order("created_at desc")
-    
+     else 
+    @merchants = Merchant.where("admin =? ",u).offset(10*(@current_page-1)).limit(10).order("created_at desc")
+     end
+     @beg = @current_page
+  @end = @current_page+10 -1
+  if @max_page <= @end
+     @end = @max_page
+     @beg = @end -10 +1
+    end
+  if @beg < 1
+    @beg =1
+  end
+
    end
 
    #项目内部照片管理
@@ -85,15 +116,35 @@ class AdminController < ApplicationController
        @current_page = params[:current_page].to_i
       end
  @pictures = Photos.where(photo_id: @pictures_code).offset(5*(@current_page -1)).limit(5).order("created_at desc")
+  @beg = @current_page
+  @end = @current_page+10 -1
+  if @max_page <= @end
+     @end = @max_page
+     @beg = @end -10 +1
     end
+  if @beg < 1
+    @beg =1
+  end
+ end
  
 
    #管理项目
    def manage_project
+      
+         @user_name = {} if params[:user_name].blank?
+         @project_name = {}if params[:project_name].blank?  
+         @code = {}if params[:code].blank?
+         Rails.logger.info @code 
+           Rails.logger.info @user_name 
           @is_admin = cookies[:admin]
-      count = MerchantProject.where(merchant_id: cookies[:merchant_id]).size()
-
-     @max_page = (count + 10 -1)/10
+          if @is_admin.to_i == 1
+             count = MerchantProject.where("merchant_id = ? AND project_name = ? AND code=?",@user_name,@project_name,@code).size()
+             Rails.logger.info count
+             Rails.logger.info "mnigdfgfdjgfdkjfkj"
+          else 
+      count = MerchantProject.where('merchant_id = ? and project_name = ? and code = ?',cookies[:merchant_id],@project_name,@code).size()
+          end
+     @max_page = (count + 10 -1)/10 
 
        if params[:current_page].blank? or params[:current_page].to_i <= 0 or params[:current_page].to_i > @max_page
        @current_page = 1
@@ -101,11 +152,22 @@ class AdminController < ApplicationController
 
        @current_page = params[:current_page].to_i
       end
-   @projects = MerchantProject.where(merchant_id: cookies[:merchant_id]).offset(10*(@current_page  - 1)).limit(10).order("created_at desc")
-
-      
-       @current_user = Merchant.where(user_name: cookies[:merchant_id])
-   end
+       if @is_admin.to_i == 0
+   @projects = MerchantProject.where('merchant_id = ? and project_name=? and code = ?',cookies[:merchant_id],@project_name,@code).offset(10*(@current_page  - 1)).limit(10).order("created_at desc")
+       else
+     @projects = MerchantProject.where('merchant_id = ? and project_name = ? and code = ?',@user_name,@project_name,@code).offset(10*(@current_page -1)).limit(10).order("created_at desc")
+      end
+     @current_user = Merchant.where(user_name: cookies[:merchant_id])
+     @beg = @current_page
+     @end = @current_page+10 -1
+  if @max_page <= @end
+     @end = @max_page
+     @beg = @end -10 +1
+    end
+  if @beg < 1
+    @beg =1
+  end
+  end
    
 
    #删除项目
@@ -168,19 +230,30 @@ class AdminController < ApplicationController
       end
   end
 
-
+  #修改照片信息界面
+   def change_info
+         @current_user = Merchant.where(user_name: cookies[:merchant_id])
+         @pic_id = params[:pic_id]
+         @picture = Photos.where(id: @pic_id).first
+         @is_admin = cookies[:admin]
+   end
   #修改照片描述信息
-  def change_info 
-    @id = params[:pic_id] 
-     
-     Rails.logger.info"touteng"
-     Rails.logger.info params[:pic_id]
-     Rails.logger.info params[@id]
+  def change_des
+     @id = params[:pic_id]
      p = Photos.where(id: params[:pic_id]).first
-     p.update_attributes(:description => params[@id])
+     p.update_attributes(:description => params[:des])
      flash[:notice] = "修改成功"
       redirect_to action: 'manage_in' 
   end
+ #修改照片标题
+ def change_title
+     @id = params[:pic_id]
+     p = Photos.where(id: params[:pic_id]).first
+     p.update_attributes(:title => params[:title])
+     flash[:notice] = "修改成功"
+      redirect_to action: 'manage_in'
+
+ end
 
   
    #生成授权码
@@ -294,8 +367,8 @@ class AdminController < ApplicationController
 			m.admin = 0
 			m.token = WeixinProcesser.mkrandom(12)
 			m.save
-			flash[:notice] = "注册成功,开始登陆吧~——~"
-			redirect_to "/admin/index.html"
+			flash[:notice] = "注册成功,又新增一个~——~"
+			redirect_to action: 'manage_merchant'
 		else
 			flash[:alert] = "密码不一致*_*!"
 			redirect_to :back
@@ -429,5 +502,10 @@ class AdminController < ApplicationController
 
 
  end
-
+#微信显示照片
+ def manage_image
+    path = params[:file_path]
+    @pic = Photos.where(file_path: path).first    
+    
+  end
 end

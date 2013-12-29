@@ -1,0 +1,60 @@
+<% u=@current_user.first %>
+<div id="user">      
+	<form action="logout" method="get">
+ 		<button type="submit" style="height:25px;width:80px;float:right"><b>退出登录</b>
+ 		</button>
+	<label><%= u.user_name %></label>
+	</form>
+</div>
+<div id="nav">
+	<ul>
+		<li><a href="new_project">新建项目</a></li>
+		<li><a href="manage_project">管理项目</a></li>
+                <% if @is_admin.to_i == 1 %>
+                <li><a href="manage_merchant">管理商户</a></li>
+		<li><a href="download">下载报表</a></li>
+                 <li><a href="register_merchant">注册</a></li>
+                <% end %>
+		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
+	</ul>
+</div>
+<div id="banner-in">	
+		<div id="list-photo">
+     		&nbsp;<center><p style="color:green"><%= flash[:notice] %></p></center>
+     		&nbsp;<center><p style="color:red"><%= flash[:alert] %></p></center>
+               <label>修改照片标题和描述</label>
+               <br><br><br>		
+               <table>
+		<tr>
+			<th style="width:220px">照片</th>
+			<th style="width:220px">照片标题</th>
+			<th style="width:230px">照片描述</th>
+                </tr>
+		</table>
+	<% p =@picture %>
+             
+		<table><tr>
+                <td style="width:220px;height:200px"><img src=<%= "http://115.29.36.94:999/" + p.file_path %> style="height:100%;width:100%"/></td>
+                <td style="width:220px;height:200px">
+             <form name="title" action="change_title?pic_id=<%=p.id %>" method="post">
+		<textarea   style="width:215px;height:160px;background:#e1e5e1;border-color:#e1e5e1" name="title"><%= p.title %></textarea>
+                <br>
+                <input type="submit" style="height:25px;width:70px;margin-left:70px;" value="修改标题">
+             </form>
+                </td>
+		<td style="width:230px" >
+             <form name="des" action="change_des?pic_id=<%=p.id%>"method="post">
+      		<textarea style="width:225px;height:160px;background:#e1e5e1;border-color:#e1e5e1"name="des"><%= p.description %></textarea>
+  		<br>
+  		<input type="submit" style="height:25px;width:70px;margin-left:75px" value="修改描述">           
+	     </form>    
+  		</td>
+            </table>
+       
+  	     
+</div>
+	
+<div id="footer">
+	<p>版权归微信学习</p>
+	<p>微信信息：关于我们、关于产品、我们的服务</p>
+</div>

@@ -115,24 +115,28 @@ class WeixinProcesser
 		elsif(content.to_i>=1 and content.to_i<=str.length)
 			photolist=Photos.where("photo_id"=>str.keys[content.to_i-1])
 			content_str=""
+			mp=MerchantProject.where("code"=>i.photo_id).last
+				if(mp==nil)
+					title="微信上传"
+				else
+					title=mp.project_name
+				end
 			  index = 1
 			  for i in photolist do
-				mp=MerchantProject.where("code"=>i.photo_id).last
-				if(mp==nil)
-					string="微信上传"
-				else
-					string=mp.project_name
-				end
-				string+=" "+photolist[index-1].title.to_s
-			    str=photolist[index-1].created_at.strftime("%m-%d %H:%M").to_s
-				content_str += index.to_s + "。"+string+" "+str+"\n"
+				
+				string=""+photolist[index-1].title.to_s
+				 if(string.length==0)
+					str="未命名"
+					string+=str
+			     end
+				content_str += index.to_s + "。"+string+"\n"
 				index+=1
 			  end
 			  user=User.where("weixin_id"=>msg[:FromUserName]).first
 			  user.status="query_picture_last"
 			  user.context=photolist.last.photo_id
 			  user.save
-			  return res = self.construct_text_response(msg, "您的的图片共"+photolist.length.to_s+"张:\n回复相应的序号查看图片\n回复两个序号可设定查询起止位置\n查看当中所有照片\n PS:最多同时显示5张，序号中用空格隔开\n回复 Q 退出查询模式\n"+content_str)
+			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photolist.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。（最多连续显示5页）\n回复 Q 退出查询模式\n"+content_str)
 		else
 			return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
 		end
@@ -156,16 +160,20 @@ class WeixinProcesser
 		else 
 			 content_str=""
 			 index = 1
-			 for i in photo do
-			    mp=MerchantProject.where("code"=>i.photo_id).last
+			 mp=MerchantProject.where("code"=>photo.first.photo_id).last
 				if(mp==nil)
-					string="微信上传"
+					title="微信上传"
 				else
-					string=mp.project_name
+					title=mp.project_name
 				end
-				string+=" "+photo[index-1].title.to_s
-			    str=photo[index-1].updated_at.strftime("%m-%d %H:%M").to_s
-				content_str += index.to_s + "。"+string+" "+str+"\n"
+			 for i in photo do
+			    
+				string=""+photo[index-1].title.to_s
+				 if(string.length==0)
+					str="未命名"
+					string+=str
+			     end
+				content_str += index.to_s + "。"+string+"\n"
 				index+=1
 				if i.user_id==nil
 					i.user_id=user.weixin_id
@@ -176,7 +184,7 @@ class WeixinProcesser
 			user.status="query_picture_last"
 			user.context=content
 			user.save
-			return res = self.construct_text_response(msg, "您的的图片共"+photo.length.to_s+"张:\n回复响应的序号查看图片\n回复两个序号可设定查询起止位置\n查看当中所有照片\n PS:最多同时显示5张，序号中用空格隔开\n回复 Q 退出查询模式\n"+content_str)
+			return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photo.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。（最多连续显示5页）\n回复 Q 退出查询模式\n"+content_str)
 		end
 	
 	elsif	user.status=="query_picture_last"
@@ -198,7 +206,7 @@ class WeixinProcesser
 			return res = self.construct_image_response(msg, "第"+content+"张照片",
 						         string,
 											SERVER_IMG+path+"_small.jpg",
-											SERVER_IMG+photo[content.to_i-1].file_path
+											"http://115.29.36.94:3000/admin/manage_image?file_path="+photo[content.to_i-1].file_path
 											)
 			else
 				return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
@@ -216,9 +224,13 @@ class WeixinProcesser
 				pic_url=[]
 				url=[]
 				for num1 in num1..num2
-					title<<photo[num1-1].title.to_s+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]
+					if(photo[num1-1].title==nil)
+						title<<"微信上传"
+					else
+						title<<photo[num1-1].title.to_s
+					end
 					pic_url<<SERVER_IMG+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]+"_small.jpg"
-					url<<SERVER_IMG+photo[num1-1].file_path
+					url<<"http://115.29.36.94:3000/admin/manage_image?file_path="+photo[num1-1].file_path
 				end
 				Rails.logger.info title.to_s
 				return res=self.construct_images_response(msg, title, description, pic_url, url)
@@ -248,7 +260,7 @@ class WeixinProcesser
 			return res = self.construct_image_response(msg,"照片编码为"+content[0,content.length-4],
 														string,
 														SERVER_IMG+path+"_small.jpg",
-														SERVER_IMG+photo.file_path)
+														"http://115.29.36.94:3000/admin/manage_image?file_path="+photo.file_path)
 			end
 	
 	else
@@ -383,14 +395,14 @@ class WeixinProcesser
 					string=mp.project_name
 				end
 				
-			    str1=i+" "+str.values[index-1].strftime("%m-%d %H:%M").to_s
-				content += index.to_s + "。"+string+" "+str1+"\n"
+			 #   str1=i+" "+str.values[index-1].strftime("%m-%d %H:%M").to_s
+				content += index.to_s + "。"+string+"\n"
 				index+=1
 			 end
 			 user=User.where("weixin_id"=>msg[:FromUserName]).first
 			 user.status="query_picture_all"
 			 user.save
-			 return res = self.construct_text_response(msg, "共查找到"+photo.length.to_s+"个项目:\n回复响应的序号进入项目\n回复 Q 退出查询模式\n"+content)
+			 return res = self.construct_text_response(msg, "共查找到"+str.length.to_s+"个项目:\n回复响应的序号进入项目\n回复 Q 退出查询模式\n"+content)
 			end
 		  when "key_b2"
 			  error_checking(msg[:FromUserName])
@@ -401,23 +413,28 @@ class WeixinProcesser
 			  img=Photos.where("photo_id"=>photo.photo_id)
 			  content_str=""
 			  index = 1
-			  for i in img do
-				mp=MerchantProject.where("code"=>i.photo_id).last
+			  mp=MerchantProject.where("code"=>img.first.photo_id).last
 				if(mp==nil)
-					string="微信上传"
+					title="微信上传"
 				else
-					string=mp.project_name
+					title=mp.project_name
 				end
-				string+=" "+img[index-1].title.to_s
-			    str=img[index-1].created_at.strftime("%m-%d %H:%M").to_s
-				content_str += index.to_s + "。"+string+" "+str+"\n"
+			  for i in img do
+				
+				 string=""+img[index-1].title.to_s
+				 if(string.length==0)
+					str="未命名"
+					string+=str
+			     end
+				content_str += index.to_s + "。"+string+"\n"
 				index+=1
 			  end
 			  user=User.where("weixin_id"=>msg[:FromUserName]).first
 			  user.status="query_picture_last"
 			  user.context=photo.photo_id
 			  user.save
-			  return res = self.construct_text_response(msg, "您的的图片共"+img.length.to_s+"张:\n回复相应的序号查看图片\n回复两个序号可设定查询起止位置\n查看当中所有照片\n PS:最多同时显示5张，序号中用空格隔开\n回复 Q 退出查询模式\n"+content_str)
+			  
+			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’ 一共"+img.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。（最多连续显示5页）\n回复 Q 退出查询模式\n"+content_str)
 			end		
 		when "key_b3"
 			  error_checking(msg[:FromUserName])

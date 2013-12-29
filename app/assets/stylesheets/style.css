@@ -12,7 +12,7 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	float:left;
 	}
 #user{height:10px;
-	margin-top:30px;}
+	margin-top:10px;}
 #user label{
 	width:50;
 	margin-right:50px;
@@ -85,26 +85,26 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	}
 /*新建项目*/
 #banner-new{
-	height:460px;
+	height:490px;
 	width:900px;
 	background:#E1E5E1;
 	}
 
 #form{
 	width:700px;
-	margin-top:30px;
+	margin-top:50px;
 	margin-left:100px;
 	float:left;
 	}
 /*管理项目*/
 #banner-in{
-	height:980px;
+	height:900px;
 	width:900px;
 	background:#e1e5e1;
 	}
 #list{
 	width:700px;
-	height:410px;
+	height:440px;
 	margin:0 auto;
 	}
 #upload{
@@ -121,8 +121,8 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	text-overflow:ellipsis;
 	}
 #list-photo{
-        width:740px;
-        height:700px;
+        width:700px;
+        height:660px;
         margin:0 auto;
 	overflow:auto;
         }
@@ -135,11 +135,9 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	height:100px;
 	word-break:break-all;
 	word:wrap:break-word;
-	overflow:auto;
 	}
 #list-photo table div{
 	height:100px;
-	width:150px;
 	overflow:auto;
 	}
 #list-photo table th{
@@ -162,3 +160,29 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 	text-decoration:none;
 	}
 #page a:hover{color:#0000ff}
+/*项目照片*/
+#image{
+	width:100%;
+	}
+#image table{
+	background:#fff;
+	}
+#image table p{
+	text-align:center;
+	font-weight:bold;
+	font-family:隶书;
+	font-size:23px;
+	margin-bottom:6px;
+	}
+#image table div{
+	width:94%;
+	margin-left:3%;
+	margin-right:3%;
+	margin-top:10px;
+	}
+#image table td{
+	width:315px;
+	height:120px;
+	color:#313b3f;
+	word-break:break-all;
+	}

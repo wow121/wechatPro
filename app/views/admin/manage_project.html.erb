@@ -11,48 +11,53 @@
 		<li><a href="manage_project" style="background:#68acd3">管理项目</a></li>
                	<% if @is_admin.to_i == 1 %>
                 <li><a href="manage_merchant">管理商户</a></li>
-                <li><a href="register_merchant">注册商户</a></li>
 		<li><a href="download">下载报表</a></li>
+                <li><a href="register_merchant">注册</a></li>
                 <% end %>   
 		<li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
 	</ul>
 </div>
 <div id="banner-new">
         <div id="list"><br>
-                <form>
+                <form action="manage_project" method="get"> 
+		<input type="text" id="screen" style="height:20px;width:135px" name="user_name" placeholder="创建人" onfocus="this.select()" />
+		<input type="text" id="screen" style="height:20px;width:252px" name="project_name" placeholder="项目名称" onfocus="this.select()">
+		<input type="text" id="screen" style="height:20px;width:170px;margin-right:20px" name="code" placeholder="项目授权码" onfocus="this.select()">
+		<input type="submit" id="screen" name="screen" style="width:50px;height:25px;margin-right:5px" value="筛&nbsp;选">
+</form> 
+<br>
 			<table>
 			<tr>
-                	<th style="width:260px">项目名称</th>
-			<th style="width:220px">项目授权码</th>
-			<th style="width:200px">操作</th>
+			<th style="width:135px">创建人</th>
+                	<th style="width:270px">项目名称</th>
+			<th style="width:170px">项目授权码</th>
+			<th style="width:105px">操作</th>
 			</tr>
 			</table>
         	<% @projects.each do |p| %>
         		<table>
 			<tr>
-                	<td style="width:260px" id = <%= p.id %>><%= p.project_name %></td>
-                	<td style="width:220px" id = <%= p.id %>><%= p.code %></td>
-                	<td style="width:200px">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<a href="manage?project_id=<%= p.id %>">进入项目</a>|<a href="delete_project?project_id=<%= p.id %>">删除</a></td></tr></table>
+			<td style="width:135px" id= <%= p.id %>><%= p.merchant_id %></td>
+                	<td style="width:270px" id = <%= p.id %>><%= p.project_name %></td>
+                	<td style="width:170px" id = <%= p.id %>><%= p.code %></td>
+                	<td style="width:105px"><a href="manage?project_id=<%= p.id %>">进入项目</a>|<a href="delete_project?project_id=<%= p.id %>">删除</a></td></tr></table>
         	<% end %>
-		</form>
+		
 	</div>	
 	<div id="page">
 	   
              	<a href="manage_project" title="首页" class="active">首页</a>
- 		<a href="manage_project?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
- <% if @max_page < 10 %>
-                <% upto = @max_page %>
-                <% else to_page = @current_page +9 %>
-                  <% if to_page <= @max_page %>
-                  <% upto = to_page %>
-                  <% else upto = @max_page %>
-                  <% end %>
-                <% end %>
-                <% i = @current_page %>
-                <% while i <= upto  do %> 
-                
+ <a href="manage_project?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
+                <% i = @beg %>
+                <% while i <= @end  do %> 
+                <% if i== @current_page %>
+               <a href="manage_project?current_page=<%=i%>" style="color:#0000ee;font-weight:bold" title="第<%= i %>页"><%= i %></a>
+
+                <% else %>
+
  		<a href="manage_project?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a>
-                <% i=i+1 %>
+                <% end %>
+		<% i=i+1 %>
                 <% end %>
  		<a href="manage_project?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a>
  		<a href="manage_project?current_page=<%= @max_page %>" title="尾页" class="active">尾页</a>

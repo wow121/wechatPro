@@ -11,8 +11,8 @@
                 <li><a href="new_project">新建项目</a></li>
                 <li><a href="manage_project">管理项目</a></li>
                 <li><a href="manage_merchant" style="background:#68acd3">管理商户</a></li>
-         <li><a href="register_merchant">注册商户</a></li>
                 <li><a href="download">下载报表</a></li>
+        	<li><a href="register_merchant">注册</a></li>
                 <li style="margin-left:150px"><a href="query" target=_blank>照片查询</a></li>
         </ul>
 </div>
@@ -22,7 +22,15 @@
         <center><p style="color:green"><%= flash[:notice] %></p></center>  
         <center><p style="color:red"><%= flash[:alert] %></p></center>
 	<br>
-	<form><table><tr><th style="width:70px">用户权限</th><th style="width:110px">用户名</th><th style="width:60px">地点码</th><th style="width:130px">商户店名</th><th style="width:150px">公司名称</th><th style="width:160px">操作</th></tr>
+	<form action="manage_merchant" method="get">
+	 <input type="text" id="screen" style="height:20px;width:130px" name="admin" placeholder="用户权限" onfocus="this.select()" />
+        <input type="text" id="screen" style="height:20px;width:98px" name="user_name" placeholder="用户名" onfocus="this.select()">
+        <input type="text" id="screen" style="height:20px;width:138px" name="office_name" placeholder="商户店名" onfocus="this.select()">
+        <input type="text" id="screen" style="height:20px;width:146px;margin-right:40px" name="corp_name" placeholder="公司名称" onfocus="this.select()">
+        <input type="submit" id="screen" name="screen" style="width:50px;height:25px" value="筛&nbsp;选">
+        </form>
+	<br>
+	<table><tr><th style="width:70px">用户权限</th><th style="width:60px">地点码</th> <th style="width:110px">用户名</th><th style="width:145px">商户店名</th><th style="width:150px">公司名称</th><th style="width:145px">操作</th></tr>
        </table> 
     	<% @merchants.each do |m| %> 
  	 <table><tr>
@@ -31,32 +39,27 @@
           <% else %>
           <td style="width:70px" >普通商户</td>
          <% end %>
-	 <td style="width:110px" id=<%= m.id %>><%= m.user_name %></td>
 	 <td style="width:60px" id=<%= m.id %>><%= m.loc_name %></td>
- 	 <td style="width:130px" id=<%= m.id %>><%= m.office_name %></td>
+	 <td style="width:110px" id=<%= m.id %>><%= m.user_name %></td>
+ 	 <td style="width:145px" id=<%= m.id %>><%= m.office_name %></td>
        	 <td style="width:150px" id=<%= m.id %>><%= m.corp_name %></td>
-         <td style="width:160px"><a href="change_merchant?mer_id=<%= m.id %>" target="_blank">修改</a>|<a href="delete_merchant?mer_id=<%= m.id %>">删除</a>|<a href="resetpassword?mer_id=<%= m.id %>">重置密码</a>	
+         <td style="width:145px"><a href="change_merchant?mer_id=<%= m.id %>" target="_blank">修改</a>|<a href="delete_merchant?mer_id=<%= m.id %>">删除</a>|<a href="resetpassword?mer_id=<%= m.id %>">重置密码</a>	
 	</td></tr></table>
 
         <% end %>
-	</form>
+	
     </div>	
     <div id="page">
   	 <a href="manage_merchant" title="首页" class="active">首页</a>
  	 <a href="manage_merchant?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
-                 <% if @max_page < 10 %>
-                <% upto = @max_page %>
-                <% else to_page = @current_page +9 %>
-                  <% if to_page <= @max_page %>
-                  <% upto = to_page %>
-                  <% else upto = @max_page %>
-                  <% end %>
+                 
+                <% i = @beg %>
+                <% while i <= @end  do %>
+                <% if i== @current_page %>
+                 <a href="manage_merchant?current_page=<%=i%>" style="font-weight:900;color:#0000ee" title="第<%= i %>页"><%= i %></a>
+                <% else %>
+                <a href="manage_merchant?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a> 
                 <% end %>
-
-                <% i = @current_page %>
-                <% while i <= upto  do %>
-
-                <a href="manage_merchant?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a>
                 <% i=i+1 %>
                 <% end %>
  	<a href="manage_merchant?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a>

@@ -1,0 +1,22 @@
+
+<div id="image">
+	<table>
+		<tr>
+		<td>
+		<div>
+                <% if @pic.title ==nil %>
+                <p>无标题</p>
+                 <% else %>
+		<p><%= @pic.title %></p>
+                 <% end %>
+     		<img src=<%="http://115.29.36.94:999/" +@pic.file_path %> style="width:100%;margin-bottom:6px"/><br>
+     		<% if @pic.description == nil %>
+		无描述
+		<% else %>
+		<%= @pic.description %>
+		<% end %>
+		<div>	
+		</td>
+		</tr>
+	</table>
+</div>
