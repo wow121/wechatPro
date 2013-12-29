@@ -5,7 +5,7 @@ module MerchantHelper
 		for i in photo do
 			photo_name=i.file_path
 			photo_name_small=i.file_path[0,photo_name.length-4]+"_small.jpg"
-			system 'convert '+"/home/weixin/user_photos/"+photo_name+' -resize 30% '+"/home/weixin/user_photos/"+photo_name_small
+			system 'convert '+IMG_PATH+photo_name+' -resize 30% '+IMG_PATH+photo_name_small
 			end
 	end
 	

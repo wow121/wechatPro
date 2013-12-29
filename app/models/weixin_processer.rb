@@ -92,7 +92,7 @@ class WeixinProcesser
 					img.photo_id=content
 					img.upload_type="1"
 					img.save
-					WeixinHelper.download_pic(img.weixin_image_path,"/home/weixin/user_photos/"+img.file_path,"/home/weixin/user_photos/"+photo_name_small)
+					WeixinHelper.download_pic(img.weixin_image_path,IMG_PATH+img.file_path,IMG_PATH+photo_name_small)
 					end
 				user.status="normal"
 				user.photo_count=0
@@ -206,7 +206,7 @@ class WeixinProcesser
 			return res = self.construct_image_response(msg, "第"+content+"张照片",
 						         string,
 											SERVER_IMG+path+"_small.jpg",
-											"http://115.29.36.94:3000/admin/manage_image?file_path="+photo[content.to_i-1].file_path
+											SERVER_IP+"/admin/manage_image?file_path="+photo[content.to_i-1].file_path
 											)
 			else
 				return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
@@ -230,7 +230,7 @@ class WeixinProcesser
 						title<<photo[num1-1].title.to_s
 					end
 					pic_url<<SERVER_IMG+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]+"_small.jpg"
-					url<<"http://115.29.36.94:3000/admin/manage_image?file_path="+photo[num1-1].file_path
+					url<<SERVER_IP+"/admin/manage_image?file_path="+photo[num1-1].file_path
 				end
 				Rails.logger.info title.to_s
 				return res=self.construct_images_response(msg, title, description, pic_url, url)
@@ -260,7 +260,7 @@ class WeixinProcesser
 			return res = self.construct_image_response(msg,"照片编码为"+content[0,content.length-4],
 														string,
 														SERVER_IMG+path+"_small.jpg",
-														"http://115.29.36.94:3000/admin/manage_image?file_path="+photo.file_path)
+														SERVER_IP+"/admin/manage_image?file_path="+photo.file_path)
 			end
 	
 	else

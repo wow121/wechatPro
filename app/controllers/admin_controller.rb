@@ -58,16 +58,27 @@ class AdminController < ApplicationController
        else 
          u =1
       end
-      @user_name = params[:user_name]
-      @office_name = params[:office_name]
-      @corp_name = params[:corp_name]
-      @user_name = {} if @user_name == nil
-      @office_name = {} if @office_name == nil
-      @corp_name = {} if @corp_name == nil
+
+        if  params[:user_name].blank?
+            @user_name = {}
+        else 
+          @user_name = params[:user_name]
+       end 
+         if  params[:office_name].blank?
+            @office_name = {}
+        else
+          @office_name = params[:office_name]
+       end
+       if  params[:corp_name].blank?
+            @corp_name = {}
+        else
+          @corp_name = params[:corp_name]
+       end
+
       
        @current_user = Merchant.where(user_name: cookies[:merchant_id])
        if u == 1
-       count = Merchant.where("admin != ?",1).size
+       count = Merchant.where("admin != ?",1).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).size
        else 
         count = Merchant.where("admin=?",u).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).size
        end
@@ -78,9 +89,9 @@ class AdminController < ApplicationController
       @current_page = params[:current_page].to_i
       end
       if u == 1
-    @merchants = Merchant.where("admin != ? ",1).offset(10*(@current_page-1)).limit(10).order("created_at desc")
+    @merchants = Merchant.where("admin != ? ",1).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).offset(10*(@current_page-1)).limit(10).order("created_at desc")
      else 
-    @merchants = Merchant.where("admin =? ",u).offset(10*(@current_page-1)).limit(10).order("created_at desc")
+    @merchants = Merchant.where("admin =? ",u).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).offset(10*(@current_page-1)).limit(10).order("created_at desc")
      end
      @beg = @current_page
   @end = @current_page+10 -1
@@ -131,14 +142,26 @@ class AdminController < ApplicationController
    #管理项目
    def manage_project
       
-         @user_name = {} if params[:user_name].blank?
-         @project_name = {}if params[:project_name].blank?  
-         @code = {}if params[:code].blank?
+          if params[:user_name].blank? 
+          @user_name = {}
+          else 
+          @user_name = params[:user_name]
+           end
+         if params[:project_name].blank?
+             @project_name = {}
+          else 
+            @project_name = params[:project_name]
+          end   
+         if params[:code].blank?
+               @code = {}
+                else 
+               @code = params[:code]
+          end 
          Rails.logger.info @code 
            Rails.logger.info @user_name 
           @is_admin = cookies[:admin]
           if @is_admin.to_i == 1
-             count = MerchantProject.where("merchant_id = ? AND project_name = ? AND code=?",@user_name,@project_name,@code).size()
+             count = MerchantProject.where(:merchant_id => @user_name).where(:project_name => @project_name).where(:code=> @code).size()
              Rails.logger.info count
              Rails.logger.info "mnigdfgfdjgfdkjfkj"
           else 

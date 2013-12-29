@@ -54,10 +54,10 @@ class MerchantController < ApplicationController
 	else
 	photo_name=i.user_name+i.loc_name+Time.now.strftime("%Y%m%d")+"01"+WeixinProcesser.mkrandom(6).to_s+".jpg"
 	photo_name_small=photo_name[0,photo_name.length-4]+"_small.jpg"
-    File.open("/home/weixin/user_photos/"+photo_name,"wb+") do |f|
+    File.open(IMG_PATH+photo_name,"wb+") do |f|
       f.write(photo.read)	
 	  end
-	system 'convert '+"/home/weixin/user_photos/"+photo_name+' -resize 30% '+"/home/weixin/user_photos/"+photo_name_small
+	system 'convert '+IMG_PATH+photo_name+' -resize 30% '+IMG_PATH+photo_name_small
 	Photos.create({:merchant_id=>i.user_name,:file_path=>photo_name,:photo_id=>code,:upload_type=>"1"})
 	str={"success"=>200,"url"=>SERVER_IMG+photo_name,"s_url"=>SERVER_IMG+photo_name_small}
 	end

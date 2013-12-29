@@ -85,7 +85,7 @@ module WeixinHelper
 
   def self.mkexecl(label,context,name)
     time=Time.now.strftime("%Y_%m_%d").to_s+name
-	File.open("/home/weixin/excel/"+time+".xls","w+") do |file|
+	File.open(LOG_PATH+time+".xls","w+") do |file|
 		file.puts "<html>"
 		file.puts "<body>"
 		file.puts "<table>"
@@ -117,9 +117,9 @@ module WeixinHelper
 		str={"fail"=>"user not found"}
 	else
 		time=Time.now.to_i.to_s
-		name = "/home/weixin/merchant_qrcode/" + m.user_name+time + ".jpg"
+		name = QRCODE_PATH + m.user_name+time + ".jpg"
 		code=WeixinProcesser.mkrandom(10)
-		system 'java -classpath /home/weixin/myjava QRCodeEncoderHandler '+name+' '+code
+		system 'java -classpath '+JAVA_CLASS_PATH+' QRCodeEncoderHandler '+name+' '+code
 		MerchantCode.create(:merchant_id=>m.user_name,:code=>code)
 		str={"success"=>200,
 				"code"=>code,
@@ -136,7 +136,7 @@ module WeixinHelper
 		for i in photo do
 			if(time.to_i-i.created_at.to_i>=24*60*60*24)
 				BackendLog.log "move "+i.file_path
-				system 'mv /home/weixin/user_photos/'+i.file_path+' /home/weixin/old_photos/'
+				system 'mv '+IMG_PATH+i.file_path+' '+OLD_IMG_PATH
 				Photos.delete(i.id)
 				end
 		end
