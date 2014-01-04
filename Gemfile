@@ -48,4 +48,4 @@ gem 'less-rails'
 gem 'twitter-bootstrap-rails'
 gem 'fastercsv'
 gem 'log4r'
-
+gem 'turbolinks'

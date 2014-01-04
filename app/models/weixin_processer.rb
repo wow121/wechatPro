@@ -136,7 +136,7 @@ class WeixinProcesser
 			  user.status="query_picture_last"
 			  user.context=photolist.last.photo_id
 			  user.save
-			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photolist.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。（最多连续显示5页）\n回复 Q 退出查询模式\n"+content_str)
+			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photolist.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。\n回复 Q 退出查询模式\n"+content_str)
 		else
 			return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
 		end
@@ -184,7 +184,7 @@ class WeixinProcesser
 			user.status="query_picture_last"
 			user.context=content
 			user.save
-			return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photo.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。（最多连续显示5页）\n回复 Q 退出查询模式\n"+content_str)
+			return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photo.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。\n回复 Q 退出查询模式\n"+content_str)
 		end
 	
 	elsif	user.status=="query_picture_last"
@@ -217,7 +217,10 @@ class WeixinProcesser
 			if(num1>=num2 or num2>photo.length)
 				return	res = self.construct_text_response(msg, "序号范围错误,请重新输入")
 			elsif(num2-num1>4)
-				return	res = self.construct_text_response(msg, "范围过大,最多只能同时显示5张图片,请重新输入")
+				return res = self.construct_image_response(msg,"第"+num1.to_s+"页至第"+num2.to_s+"页",
+														"当前显示第"+num1.to_s+"页,点击查看全部\n",
+														SERVER_IMG+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]+"_small.jpg",
+														SERVER_IP+"/admin/manage_image?num1="+num1.to_s+"&num2="+num2.to_s+"&context="+user.context)
 			else
 				title=[]
 				description=[]
@@ -434,7 +437,7 @@ class WeixinProcesser
 			  user.context=photo.photo_id
 			  user.save
 			  
-			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’ 一共"+img.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。（最多连续显示5页）\n回复 Q 退出查询模式\n"+content_str)
+			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’ 一共"+img.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。\n回复 Q 退出查询模式\n"+content_str)
 			end		
 		when "key_b3"
 			  error_checking(msg[:FromUserName])

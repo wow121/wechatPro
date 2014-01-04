@@ -20,9 +20,9 @@
 <div id="banner-new">
         <div id="list"><br>
                 <form action="manage_project" method="get"> 
-		<input type="text" id="screen" style="height:20px;width:135px" name="user_name" placeholder="创建人" onfocus="this.select()" />
-		<input type="text" id="screen" style="height:20px;width:252px" name="project_name" placeholder="项目名称" onfocus="this.select()">
-		<input type="text" id="screen" style="height:20px;width:170px;margin-right:20px" name="code" placeholder="项目授权码" onfocus="this.select()">
+		<input type="text" id="screen" style="height:20px;width:135px" name="user_name" placeholder="创建人"  />
+		<input type="text" id="screen" style="height:20px;width:252px" name="project_name" placeholder="项目名称" >
+		<input type="text" id="screen" style="height:20px;width:170px;margin-right:20px" name="code" placeholder="项目授权码">
 		<input type="submit" id="screen" name="screen" style="width:50px;height:25px;margin-right:5px" value="筛&nbsp;选">
 </form> 
 <br>
@@ -46,21 +46,21 @@
 	</div>	
 	<div id="page">
 	   
-             	<a href="manage_project" title="首页" class="active">首页</a>
- <a href="manage_project?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
+             	<a href="manage_project?user_name=<%= @u %>&&project_name=<%= @pro %>&&code=<%= @cod %>" title="首页" class="active">首页</a>
+ <a href="manage_project?current_page=<%= @current_page-1 %>&&user_name=<%= @u %>&&project_name=<%= @pro %>&&code=<%= @cod %>" title="上一页" class="active">《</a>
                 <% i = @beg %>
                 <% while i <= @end  do %> 
                 <% if i== @current_page %>
-               <a href="manage_project?current_page=<%=i%>" style="color:#0000ee;font-weight:bold" title="第<%= i %>页"><%= i %></a>
+               <a href="manage_project?current_page=<%=i%>&&user_name=<%= @u %>&&project_name=<%= @pro %>&&code=<%= @cod %>" style="color:#0000ee;font-weight:bold" title="第<%= i %>页"><%= i %></a>
 
                 <% else %>
 
- 		<a href="manage_project?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a>
+ 		<a href="manage_project?current_page=<%=i%>&&user_name=<%= @u %>&&project_name=<%= @pro %>&&code=<%= @cod %>" title="第<%= i %>页"><%= i %></a>
                 <% end %>
 		<% i=i+1 %>
                 <% end %>
- 		<a href="manage_project?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a>
- 		<a href="manage_project?current_page=<%= @max_page %>" title="尾页" class="active">尾页</a>
+ 		<a href="manage_project?current_page=<%= @current_page+1 %>&&user_name=<%= @u %>&&project_name=<%= @pro %>&&code=<%= @cod %>" title="下一页" class="active">》</a>
+ 		<a href="manage_project?current_page=<%= @max_page %>&&user_name=<%= @u %>&&project_name=<%= @pro %>&&code=<%= @cod %>" title="尾页" class="active">尾页</a>
                 <br><br>
 	</div>
 </div>

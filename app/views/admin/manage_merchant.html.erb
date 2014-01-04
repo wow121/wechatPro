@@ -24,7 +24,7 @@
 	<br>
 	<form action="manage_merchant" method="get">
 	 <input type="text" id="screen" style="height:20px;width:130px" name="admin" placeholder="用户权限" onfocus="this.select()" />
-        <input type="text" id="screen" style="height:20px;width:98px" name="user_name" placeholder="用户名" onfocus="this.select()">
+        <input type="text" id="screen" style="height:20px;width:98px" name="user_name" placeholder="用户名" >
         <input type="text" id="screen" style="height:20px;width:138px" name="office_name" placeholder="商户店名" onfocus="this.select()">
         <input type="text" id="screen" style="height:20px;width:146px;margin-right:40px" name="corp_name" placeholder="公司名称" onfocus="this.select()">
         <input type="submit" id="screen" name="screen" style="width:50px;height:25px" value="筛&nbsp;选">
@@ -50,20 +50,20 @@
 	
     </div>	
     <div id="page">
-  	 <a href="manage_merchant" title="首页" class="active">首页</a>
- 	 <a href="manage_merchant?current_page=<%= @current_page-1 %>" title="上一页" class="active">《</a>
+  	 <a href="manage_merchant?user_name=<%= @u%>&&admin=<%= @admin%>&&office_name=<%= @off %>&&corp_name=<%= @corp %>" title="首页" class="active">首页</a>
+ 	 <a href="manage_merchant?current_page=<%= @current_page-1 %>>&&user_name=<%=@u%>&&admin=<%= @admin%>&&office_name=<%= @off %>&&corp_name=<%= @corp %>" title="上一页" class="active">《</a>
                  
                 <% i = @beg %>
                 <% while i <= @end  do %>
                 <% if i== @current_page %>
-                 <a href="manage_merchant?current_page=<%=i%>" style="font-weight:900;color:#0000ee" title="第<%= i %>页"><%= i %></a>
+                 <a href="manage_merchant?current_page=<%=i%>>&&user_name=<%=@u%>&&admin=<%= @admin%>&&office_name=<%= @off %>&&corp_name=<%= @corp %>" style="font-weight:900;color:#0000ee" title="第<%= i %>页"><%= i %></a>
                 <% else %>
-                <a href="manage_merchant?current_page=<%=i%>" title="第<%= i %>页"><%= i %></a> 
+                <a href="manage_merchant?current_page=<%=i%>>&&user_name=<%=@u%>&&admin=<%= @admin%>&&office_name=<%= @off %>&&corp_name=<%= @corp %>" title="第<%= i %>页"><%= i %></a> 
                 <% end %>
                 <% i=i+1 %>
                 <% end %>
- 	<a href="manage_merchant?current_page=<%= @current_page+1 %>" title="下一页" class="active">》</a>
- 	<a href="manage_merchant?current_page=<%= @max_page %>" title="最后一页" class="active">尾页</a>
+ 	<a href="manage_merchant?current_page=<%= @current_page+1 %>&&user_name=<%=@u%>&&admin=<%= @admin%>&&office_name=<%= @off %>&&corp_name=<%= @corp %>" title="下一页" class="active">》</a>
+ 	<a href="manage_merchant?current_page=<%= @max_page %>>&&user_name=<%=@u%>&&admin=<%= @admin%>&&office_name=<%= @off %>&&corp_name=<%= @corp %>" title="最后一页" class="active">尾页</a>
     </div>
 </div>
 <div id="footer">

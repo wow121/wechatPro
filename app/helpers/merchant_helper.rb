@@ -135,4 +135,10 @@ module MerchantHelper
 		return str
 	end
 	
+	
+	def self.register(username,pw,corpname,locname,officename,admin)
+		password=Digest::MD5.hexdigest(pw)
+		code=WeixinProcesser.mkrandom(12)
+		Merchant.create({:user_name=>username,:password=>password,:corp_name=>corpname,:loc_name=>locname,:office_name=>officename,:token=>code,:admin=>admin})
+	end
 end

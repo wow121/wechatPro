@@ -49,38 +49,47 @@ class AdminController < ApplicationController
 
 
    #管理商户
-   def manage_merchant
-      admin = params[:admin]
-      if admin =="项目经理"
+   def manage_merchant   
+      @admin = params[:admin]
+      if @admin =="项目经理"
          u = 0
-      elsif admin == "普通商户"
+      elsif @admin == "普通商户"
          u = -1
        else 
          u =1
+        
       end
 
         if  params[:user_name].blank?
-            @user_name = {}
+            @user_name = ""
+            @u = ""
         else 
-          @user_name = params[:user_name]
+          
+         @user_name = "user_name='#{params[:user_name]}'"
+         @u = URI.encode(params[:user_name])
+          
        end 
          if  params[:office_name].blank?
-            @office_name = {}
+            @office_name = ""
+            @off = ""
         else
-          @office_name = params[:office_name]
+          @office_name ="office_name= '#{params[:office_name]}'"
+          @off =URI.encode(params[:office_name])
        end
        if  params[:corp_name].blank?
-            @corp_name = {}
+            @corp_name = ""
+            @corp = ""
         else
-          @corp_name = params[:corp_name]
+          @corp_name = "corp_name= '#{params[:corp_name]}'"
+          @corp = URI.encode(params[:corp_name])
        end
 
       
        @current_user = Merchant.where(user_name: cookies[:merchant_id])
        if u == 1
-       count = Merchant.where("admin != ?",1).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).size
+       count = Merchant.where("admin != ?",1).where(@user_name).where(@office_name).where(@corp_name).size
        else 
-        count = Merchant.where("admin=?",u).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).size
+        count = Merchant.where("admin=?",u).where( @user_name).where(@office_name).where(@corp_name).size
        end
        @max_page = (count + 9)/10
        if params[:current_page].blank? or params[:current_page].to_i <= 0 or params[:current_page].to_i > @max_page
@@ -89,9 +98,9 @@ class AdminController < ApplicationController
       @current_page = params[:current_page].to_i
       end
       if u == 1
-    @merchants = Merchant.where("admin != ? ",1).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).offset(10*(@current_page-1)).limit(10).order("created_at desc")
+    @merchants = Merchant.where("admin != ? ",1).where(@user_name).where(@office_name).where(@corp_name).offset(10*(@current_page-1)).limit(10).order("created_at desc")
      else 
-    @merchants = Merchant.where("admin =? ",u).where(user_name: @user_name).where(office_name: @office_name).where(corp_name: @corp_name).offset(10*(@current_page-1)).limit(10).order("created_at desc")
+    @merchants = Merchant.where("admin =? ",u).where(@user_name).where(@office_name).where(@corp_name).offset(10*(@current_page-1)).limit(10).order("created_at desc")
      end
      @beg = @current_page
   @end = @current_page+10 -1
@@ -143,29 +152,35 @@ class AdminController < ApplicationController
    def manage_project
       
           if params[:user_name].blank? 
-          @user_name = {}
+          @user_name = ""
+          @u = ""
           else 
-          @user_name = params[:user_name]
+          @user_name ="merchant_id='#{params[:user_name]}'"
+          @u = URI.encode(params[:user_name])
            end
          if params[:project_name].blank?
-             @project_name = {}
+             @project_name = ""
+             @pro = ""
           else 
-            @project_name = params[:project_name]
+            @project_name ="project_name= '#{params[:project_name]}'"
+             @pro = URI.encode(params[:project_name])
           end   
          if params[:code].blank?
-               @code = {}
+               @code = ""
+               @cod = ""
                 else 
-               @code = params[:code]
+               @code ="code='#{params[:code]}'"
+               @cod = URI.encode(params[:code])
           end 
          Rails.logger.info @code 
            Rails.logger.info @user_name 
           @is_admin = cookies[:admin]
           if @is_admin.to_i == 1
-             count = MerchantProject.where(:merchant_id => @user_name).where(:project_name => @project_name).where(:code=> @code).size()
+             count = MerchantProject.where(@user_name).where(@project_name).where(@code).size()
              Rails.logger.info count
              Rails.logger.info "mnigdfgfdjgfdkjfkj"
           else 
-      count = MerchantProject.where('merchant_id = ? and project_name = ? and code = ?',cookies[:merchant_id],@project_name,@code).size()
+      count = MerchantProject.where(merchant_id: cookies[:merchant_id]).where(@project_name).where(@code).size()
           end
      @max_page = (count + 10 -1)/10 
 
@@ -176,9 +191,9 @@ class AdminController < ApplicationController
        @current_page = params[:current_page].to_i
       end
        if @is_admin.to_i == 0
-   @projects = MerchantProject.where('merchant_id = ? and project_name=? and code = ?',cookies[:merchant_id],@project_name,@code).offset(10*(@current_page  - 1)).limit(10).order("created_at desc")
+   @projects = MerchantProject.where(merchant_id: cookies[:merchant_id]).where(@project_name).where(@code).offset(10*(@current_page  - 1)).limit(10).order("created_at desc")
        else
-     @projects = MerchantProject.where('merchant_id = ? and project_name = ? and code = ?',@user_name,@project_name,@code).offset(10*(@current_page -1)).limit(10).order("created_at desc")
+     @projects = MerchantProject.where(@user_name).where(@project_name).where(@code).offset(10*(@current_page -1)).limit(10).order("created_at desc")
       end
      @current_user = Merchant.where(user_name: cookies[:merchant_id])
      @beg = @current_page
@@ -208,7 +223,7 @@ class AdminController < ApplicationController
        pic_id = params[:pic_id]
        p = Photos.find_by_id(pic_id)
        p.delete
-      flash[:notice] = "该照片已删除"   
+      flash[:notice] = "该照片已删除"  
       redirect_to action: 'manage_in'
    end
 
@@ -474,6 +489,12 @@ class AdminController < ApplicationController
   #删除商户
   def delete_merchant
      merchant = Merchant.where(id: params[:mer_id]).first
+=begin     projects = MerchantProject.where(code: merchant.token)
+     projects.each do |p|
+          p.delete
+     end
+=end
+      
      merchant.delete
      flash[:notice] = "已删除该商户，若后悔请重新注册^_^"
     redirect_to :back
@@ -527,8 +548,37 @@ class AdminController < ApplicationController
  end
 #微信显示照片
  def manage_image
-    path = params[:file_path]
-    @pic = Photos.where(file_path: path).first    
-    
+    @path = params[:file_path]
+	num1=params[:num1].to_i
+	num2=params[:num2].to_i
+	context=params[:context]
+	if @path==nil
+		photo=Photos.where("photo_id"=>context)
+		@title=[]
+		@description=[]
+		@pic_url=[]
+		for num1 in num1..num2
+			if(photo[num1-1].title==nil)
+				@title<<"未命名"
+			else
+				@title<<photo[num1-1].title.to_s
+			end
+			@pic_url<<SERVER_IMG+photo[num1-1].file_path
+			if(photo[num1-1].description==nil)
+				@description<<"没有描述"
+			else
+				@description<<photo[num1-1].description
+			end
+		end
+	else
+	@pic = Photos.where(file_path: @path).first    
+	end
   end
+  
+  
+  
+  
+  
+  
+  
 end

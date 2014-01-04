@@ -15,6 +15,6 @@
 //= require js/jquery.slides.min.js
 //= require jquery.cycle2
 //= require weixin
-//= require swipe/swipe.js
-//= require bxSlider/jquery.bxslider.min.js
 //= require jquery.hammer.js
+//= require turbolinks
+//= require_tree .

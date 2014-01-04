@@ -134,7 +134,7 @@ body,div,a,img,p,form,h1,h2,h3,h4,h5,h6,input,textarea,ul,li,dt,dd,dl{margin:0;p
 #list-photo table td{
 	height:100px;
 	word-break:break-all;
-	word:wrap:break-word;
+	word-wrap:break-word;
 	}
 #list-photo table div{
 	height:100px;
