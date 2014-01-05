@@ -1,9 +1,7 @@
 #encoding: utf-8
 
 class WeixinProcesser
-  @@token = "weixin_test"
-	@@appid = "wxae61f378f1c0978f"
-	@@appsecret = "d1381a12da5871b7099e3a5a7847db15"
+	
 
 	@@chat = "今天天气不错！您想聊些什么呢？
 	如果您想要上传照片，请点击菜单的上传按钮
@@ -25,27 +23,7 @@ class WeixinProcesser
 											"说说话"=> @@chat
 	                    }
 
-  def self.process_register(params)
-    a = []
-    a << params[:nonce]
-    a << params[:timestamp]
-    a << @@token
-    a.sort!
-
-    #sign_string = params[:nonce] + params[:timestamp] + @@token
-    sign_string = a[0] + a[1] + a[2]
-		signed_string = Digest::SHA1.hexdigest(sign_string)
-
-		 Rails.logger.info signed_string
-
-	  if signed_string == params[:signature]
-		  Rails.logger.info "======success!========"
-		  return params[:echostr]
-		else
-		  Rails.logger.info "======error!========"
-		  return "error"
-		end
-	end
+  
 
 	def self.process_msg(params)
 	  msg = params[:xml]
@@ -528,7 +506,7 @@ class WeixinProcesser
 	end
 
 	def self.get_access_token
-    res = RestClient.get "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=#{@@appid}&secret=#{@@appsecret}"
+    res = RestClient.get "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+APPID+"&secret="+APPSECRET
     access_token = JSON.parse(res)["access_token"]
 	end
 

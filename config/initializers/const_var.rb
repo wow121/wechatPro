@@ -7,4 +7,6 @@ OLD_IMG_PATH="/home/weixin/old_photos/"
 LOG_PATH="/home/weixin/excel/"
 QRCODE_PATH="/home/weixin/merchant_qrcode/"
 JAVA_CLASS_PATH="/home/weixin/myjava"
+APPID="wxae61f378f1c0978f"
+APPSECRET="d1381a12da5871b7099e3a5a7847db15"
 
