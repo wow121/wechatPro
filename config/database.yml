@@ -4,9 +4,9 @@ development:
   reconnect: false
   database: weixin_development 
   pool: 5
-  username: weixin
-  password: 6yhnmju7
-  host: 115.29.36.94
+  username: tiancheng
+  password: tiancheng
+  host: 211.144.76.98
   port: 3306
 
 
@@ -16,7 +16,7 @@ production:
   reconnect: false
   database: weixin_release
   pool: 5
-  username: weixin
-  password: 6yhnmju7
-  host: 115.29.36.94 
+  username: tiancheng
+  password: tiancheng
+  host: 211.144.76.98
   port: 3306

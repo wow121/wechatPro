@@ -24,7 +24,7 @@
                  <% else %>
 		<p><%= @pic.title %></p>
                  <% end %>
-     		<img src=<%="http://115.29.36.94:999/" +@pic.file_path %> style="width:100%;margin-bottom:6px"/><br>
+     		<img src=<%=SERVER_IMG+@pic.file_path %> style="width:100%;margin-bottom:6px"/><br>
      		<% if @pic.description == nil %>
 		无描述
 		<% else %>

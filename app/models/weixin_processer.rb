@@ -3,26 +3,36 @@
 class WeixinProcesser
 	
 
-	@@chat = "今天天气不错！您想聊些什么呢？
-	如果您想要上传照片，请点击菜单的上传按钮
-	如果您想要查看您的照片，请点击菜单上的查询按钮
-	如果需要帮助，您还可以试试——
-	回复【1】：待编辑
-	回复【2】：待编辑
-	回复【3】：待编辑
-	回复【4】：待编辑
-	回复【5】：待编辑
-	回复【6】：待编辑
-	"
+	
 
-   @@auto_response = {"介绍" => @@chat,
-	                    "是什么" => @@chat,
-	                    "聊天" => @@chat,
-		                  "聊聊"=> @@chat,
-		                  "聊一会儿"=> @@chat,
-											"说说话"=> @@chat
+   @@auto_response = {"介绍" => MSG_INTRODUCE,
+	                    "是什么" => MSG_INTRODUCE,
+	                    "聊天" => MSG_INTRODUCE,
+		                  "聊聊"=> MSG_INTRODUCE,
+		                  "聊一会儿"=> MSG_INTRODUCE,
+											"说说话"=> MSG_INTRODUCE
 	                    }
-
+	def self.process_register(params)
+     a = []
+    a << params[:nonce]
+     a << params[:timestamp]
+     a << "weixin_test"
+     a.sort!
+ 
+     #sign_string = params[:nonce] + params[:timestamp] + @@token
+     sign_string = a[0] + a[1] + a[2]
+     signed_string = Digest::SHA1.hexdigest(sign_string)
+ 
+      Rails.logger.info signed_string
+ 
+     if signed_string == params[:signature]
+       Rails.logger.info "======success!========"
+       return params[:echostr]
+     else
+       Rails.logger.info "======error!========"
+       return "error"
+    end
+   end
   
 
 	def self.process_msg(params)
@@ -249,31 +259,25 @@ class WeixinProcesser
 		  res = self.construct_text_response(msg, @@auto_response[content])
 		else    
 			if content == "1"
-	#				return res = self.construct_text_response(msg, "1待编辑")
-					titles=["111111","222222222","3333333"]
-					des=["描述1","描述2","描述3"]
-					picurl=[SERVER_IMG+"hlg1hlg012013122301ZneczY.jpg",SERVER_IMG+"hlg1hlg012013122301DybC2t.jpg",SERVER_IMG+"hlg1hlg012013122301YTkUiU.jpg"]
-					url=[]
-					return res= self.construct_images_response(msg,titles,des,picurl,url)
+					return res = self.construct_text_response(msg,MSG_1)
 			elsif content == "2"
-					return res = self.construct_text_response(msg, "2待编辑") 
+					return res = self.construct_text_response(msg,MSG_2) 
 			elsif content == "3"
-					return res = self.construct_text_response(msg, "3待编辑") 
+					return res = self.construct_text_response(msg,MSG_3) 
 			elsif content == "4"
-					return res = self.construct_text_response(msg, "4待编辑") 
+					return res = self.construct_text_response(msg,MSG_4) 
 			elsif content == "5"
-					return res = self.construct_text_response(msg, "5待编辑")
+					return res = self.construct_text_response(msg,MSG_5)
+			elsif content == "6"
+                                        return res = self.construct_text_response(msg,MSG_6)
+			elsif content == "7"
+                                        return res = self.construct_text_response(msg,MSG_7)
+			elsif content == "8"
+                                        return res = self.construct_text_response(msg,MSG_8)
+			elsif content == "9"
+                                        return res = self.construct_text_response(msg,MSG_9)
 			else
-					return res = self.construct_text_response(msg, "您在说神马？？？？
-如果您想要上传照片，请点击菜单的上传按钮
-如果您想要查看您的照片，请点击菜单上的查询按钮
-如果需要帮助，您还可以试试——
-回复【1】：待编辑
-回复【2】：待编辑
-回复【3】：待编辑
-回复【4】：待编辑
-回复【5】：待编辑
-回复【6】：待编辑") 
+					return res = self.construct_text_response(msg,MSG_OTHER) 
 			end
 		end
 	end
@@ -337,7 +341,7 @@ class WeixinProcesser
 			
 		end
 
-		res = self.construct_text_response(msg, "感谢您关注我们！ 回复介绍可查看目录~~")
+		res = self.construct_text_response(msg,MSG_SUBSCRIBE)
 		
 	  return res
 	end

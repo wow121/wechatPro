@@ -405,7 +405,7 @@ class AdminController < ApplicationController
 			m.admin = 0
 			m.token = WeixinProcesser.mkrandom(12)
 			m.save
-			flash[:notice] = "注册成功,又新增一个~——~"
+			flash[:notice] = "注册成功,又新增一个新用户 *_*"
 			redirect_to action: 'manage_merchant'
 		else
 			flash[:alert] = "密码不一致*_*!"
@@ -445,7 +445,7 @@ class AdminController < ApplicationController
                         m.admin = -1
                         m.token = WeixinProcesser.mkrandom(12)
                         m.save
-                        flash[:notice] = "注册成功,又加一个新商户哟~——~"
+                        flash[:notice] = "注册成功,又加一个新商户哟 ~_~"
                         redirect_to action: 'manage_merchant'
                 else
                         flash[:alert] = "密码不一致*_*!"
