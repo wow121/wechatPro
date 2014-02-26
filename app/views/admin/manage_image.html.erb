@@ -9,8 +9,13 @@
                  <% else %>
 		<p><%= @name %></p>
                  <% end %>
+<<<<<<< HEAD
      		<img src=<%="http://203.156.196.150:999/" +@pic %> style="width:100%;margin-bottom:6px"/><br>
      		<% if @description == nil %>
+=======
+     		<img src=<%=SERVER_IMG+@pic.file_path %> style="width:100%;margin-bottom:6px"/><br>
+     		<% if @pic.description == nil %>
+>>>>>>> a30c35e50a90f11ba3b542dd4d683b389e4fb838
 		无描述
 		<% else %>
 		<%= @description %>

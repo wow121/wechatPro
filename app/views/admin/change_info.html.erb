@@ -34,7 +34,7 @@
 	<% p =@picture %>
              
 		<table><tr>
-                <td style="width:220px;height:200px"><img src=<%= "http://115.29.36.94:999/" + p.file_path %> style="height:100%;width:100%"/></td>
+                <td style="width:220px;height:200px"><img src=<%= SERVER_IMG + p.file_path %> style="height:100%;width:100%"/></td>
                 <td style="width:220px;height:200px">
              <form name="title" action="change_title?pic_id=<%=p.id %>" method="post">
 		<textarea   style="width:215px;height:160px;background:#e1e5e1;border-color:#e1e5e1" name="title"><%= p.title %></textarea>

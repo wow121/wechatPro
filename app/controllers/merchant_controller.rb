@@ -9,14 +9,16 @@ class MerchantController < ApplicationController
 	def login
 	username=params[:username]
 	pw=params[:password]
-	password=Digest::MD5.hexdigest(pw)
+	#password=Digest::MD5.hexdigest(pw)
 	str={"fail"=>"username or password wrong"}
-	m=Merchant.where("user_name"=>username,"password"=>password).first
+	Rails.logger.info pw.to_s
+	m=Merchant.where("user_name"=>username,"password"=>pw).first
 	if(m==nil)
 		{"fail"=>"username or password wrong"}
 	else
 		str={"userid"=>m.token,"success"=>200}
 		end
+	Rails.logger.info str
 	render:json=>str
 	end
 	
@@ -26,12 +28,13 @@ class MerchantController < ApplicationController
 	corpname=params[:corpname]
 	locname=params[:locname]
 	officename=params[:officename]
-	password=Digest::MD5.hexdigest(pw)
+	Rails.logger.info pw.to_s
+	#password=Digest::MD5.hexdigest(pw)
 	code=WeixinProcesser.mkrandom(12)
 	str=nil
 	m=Merchant.where("user_name"=>username).first
 	if(m==nil)
-		Merchant.create({:user_name=>username,:password=>password,:corp_name=>corpname,:loc_name=>locname,:office_name=>officename,:token=>code})
+		Merchant.create({:user_name=>username,:password=>pw,:corp_name=>corpname,:loc_name=>locname,:office_name=>officename,:token=>code})
 		str={"userid"=>code,"success"=>200}
 	else
 		str={"fail"=>"username is used"}
