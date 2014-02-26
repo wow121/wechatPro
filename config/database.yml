@@ -2,11 +2,11 @@ development:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: weixin_development 
+  database: demo_test 
   pool: 5
-  username: weixin
-  password: 6yhnmju7
-  host: 115.29.36.94
+  username: xianrui
+  password: xianrui123
+  host: 203.156.196.150
   port: 3306
 
 
@@ -14,9 +14,9 @@ production:
   adapter: mysql2
   encoding: utf8
   reconnect: false
-  database: weixin_release
+  database: demo_test
   pool: 5
-  username: weixin
-  password: 6yhnmju7
-  host: 115.29.36.94 
+  username: xianrui
+  password: xianrui123
+  host: 203.156.196.150
   port: 3306

@@ -34,4 +34,20 @@ WeiXinApp::Application.configure do
 
   # Expands the lines which load the assets
   config.assets.debug = true
+  
+
+
+  ActionMailer::Base.delivery_method = :smtp
+  config.action_mailer.perform_deliveries = true
+  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.default :charset => "utf-8"
+  config.action_mailer.default_url_options = { :host => 'localhost:3000' }
+  ActionMailer::Base.smtp_settings = {  
+    :address => "smtp.163.com",
+    :port => 25,
+    :domain => "163.com",
+    :authentication => :login,
+    :user_name => "m13162506113@163.com",
+    :password => "xianrui123"
+  }
 end

@@ -1,9 +1,7 @@
 class UsersController < ApplicationController
-   def photos
-    
-     name = params[:name]
-
-     render:file=>name
+   def test
+    render:json=>{"xxx"=>"z123"}
+     
    end
 
    
