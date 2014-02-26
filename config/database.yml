@@ -4,15 +4,9 @@ development:
   reconnect: false
   database: demo_test 
   pool: 5
-<<<<<<< HEAD
   username: xianrui
   password: xianrui123
   host: 203.156.196.150
-=======
-  username: tiancheng
-  password: tiancheng
-  host: 211.144.76.98
->>>>>>> a30c35e50a90f11ba3b542dd4d683b389e4fb838
   port: 3306
 
 
@@ -22,13 +16,7 @@ production:
   reconnect: false
   database: demo_test
   pool: 5
-<<<<<<< HEAD
   username: xianrui
   password: xianrui123
   host: 203.156.196.150
-=======
-  username: tiancheng
-  password: tiancheng
-  host: 211.144.76.98
->>>>>>> a30c35e50a90f11ba3b542dd4d683b389e4fb838
   port: 3306

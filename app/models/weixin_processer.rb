@@ -2,56 +2,15 @@
 
 class WeixinProcesser
 	
-
-<<<<<<< HEAD
-	@@chat = "今天天气不错！您想聊些什么呢？
-	如果您想要上传照片，请点击菜单的上传按钮
-	如果您想要查看您的照片，请点击菜单上的查询按钮
-	如果需要帮助，您还可以试试——
-	回复【1】：待编辑
-	回复【2】：待编辑
-	回复【3】：待编辑
-	回复【4】：待编辑
-	回复【5】：待编辑
-	回复【6】：待编辑
-	"
-	@@token = "weixin_test"
- 	@@appid = "wxae61f378f1c0978f"
- 	@@appsecret = "d1381a12da5871b7099e3a5a7847db15"
- 	
-   @@auto_response = {"介绍" => @@chat,
-	                    "是什么" => @@chat,
-	                    "聊天" => @@chat,
-		                  "聊聊"=> @@chat,
-		                  "聊一会儿"=> @@chat,
-											"说说话"=> @@chat
-	                    }
-	def self.process_register(params)
-     a = []
-     a << params[:nonce]
-     a << params[:timestamp]
-     a << @@token
-=======
-	
-
-   @@auto_response = {"介绍" => MSG_INTRODUCE,
-	                    "是什么" => MSG_INTRODUCE,
-	                    "聊天" => MSG_INTRODUCE,
-		                  "聊聊"=> MSG_INTRODUCE,
-		                  "聊一会儿"=> MSG_INTRODUCE,
-											"说说话"=> MSG_INTRODUCE
-	                    }
 	def self.process_register(params)
      a = []
     a << params[:nonce]
      a << params[:timestamp]
      a << "weixin_test"
->>>>>>> a30c35e50a90f11ba3b542dd4d683b389e4fb838
      a.sort!
- 
      #sign_string = params[:nonce] + params[:timestamp] + @@token
      sign_string = a[0] + a[1] + a[2]
-<<<<<<< HEAD
+
  		signed_string = Digest::SHA1.hexdigest(sign_string)
  
  		 Rails.logger.info signed_string
@@ -64,20 +23,7 @@ class WeixinProcesser
  		  return "error"
  		end
  	end
-=======
-     signed_string = Digest::SHA1.hexdigest(sign_string)
- 
-      Rails.logger.info signed_string
- 
-     if signed_string == params[:signature]
-       Rails.logger.info "======success!========"
-       return params[:echostr]
-     else
-       Rails.logger.info "======error!========"
-       return "error"
-    end
-   end
->>>>>>> a30c35e50a90f11ba3b542dd4d683b389e4fb838
+
   
 
 	def self.process_msg(params)
@@ -139,50 +85,7 @@ class WeixinProcesser
 		if(product==nil)
 			return res=self.construct_text_response(msg,"没有找到sku")
 		else
-<<<<<<< HEAD
-		return res=self.construct_image_response(msg, product.name.to_s,  product.description.to_s, "http://203.156.196.150:999/"+product.pic,"http://203.156.196.150/win/manage_image?sku="+product.sku.to_s+"&open_id="+msg[:FromUserName])
-		#	return res = self.construct_text_response(msg,product.name.to_s)
-=======
-			path=photo.file_path[0,photo.file_path.length-4]
-			mp=MerchantProject.where("code"=>photo.photo_id).last
-				if(mp==nil)
-					string="微信上传"
-				else
-					string=mp.project_name
-				end
-			string+=photo.title.to_s
-			return res = self.construct_image_response(msg,"照片编码为"+content[0,content.length-4],
-														string,
-														SERVER_IMG+path+"_small.jpg",
-														SERVER_IP+"/admin/manage_image?file_path="+photo.file_path)
-			end
-	
-	else
-		if @@auto_response[content] != nil
-		  res = self.construct_text_response(msg, @@auto_response[content])
-		else    
-			if content == "1"
-					return res = self.construct_text_response(msg,MSG_1)
-			elsif content == "2"
-					return res = self.construct_text_response(msg,MSG_2) 
-			elsif content == "3"
-					return res = self.construct_text_response(msg,MSG_3) 
-			elsif content == "4"
-					return res = self.construct_text_response(msg,MSG_4) 
-			elsif content == "5"
-					return res = self.construct_text_response(msg,MSG_5)
-			elsif content == "6"
-                                        return res = self.construct_text_response(msg,MSG_6)
-			elsif content == "7"
-                                        return res = self.construct_text_response(msg,MSG_7)
-			elsif content == "8"
-                                        return res = self.construct_text_response(msg,MSG_8)
-			elsif content == "9"
-                                        return res = self.construct_text_response(msg,MSG_9)
-			else
-					return res = self.construct_text_response(msg,MSG_OTHER) 
-			end
->>>>>>> a30c35e50a90f11ba3b542dd4d683b389e4fb838
+
 		end
 	end
 
@@ -365,20 +268,6 @@ class WeixinProcesser
     pic_url_node.add_text(pic_url)
 		url_node = item_1_node.add_element("Url")
     url_node.add_text(url)
-
-=begin
-		item_2_node = articles.add_element("item")
-		title_node = item_2_node.add_element("Title")
-		title_node.add_text("title")
-		description_node = item_2_node.add_element("Description")
-		description_node.add_text("description")
-		pic_url_node = item_2_node.add_element("PicUrl")
-		pic_url_node.add_text("")
-#pic_url_node.add_text("http://vimi.in/static/test.jpg")
-		url_node = item_2_node.add_element("Url")
-		url_node.add_text("http://vimi.in")
-#url_node.add_text("http://vimi.in")
-=end
 	  Rails.logger.info res_data.to_s
 	  res_data.to_s
 
