@@ -171,12 +171,46 @@ class WinController < ApplicationController
 	end
 	
 	def index
-	
+		@string=params[:string]
+		@email=params[:email]
+		@userid=params[:userid]
 	end
+
 	
 	def send_mail
-	string=	UserMailer.send_mail(nil).deliver
-
-		render:json=>{"message"=>string.to_s}
+		email=params[:email]
+		userid=params[:userid]
+		user=User.where("openid"=>userid).first
+		user.code=WeixinProcesser.mkrandom(6)
+		user.save
+		UserMailer.send_mail("绑定邮箱验证码",email,"您的验证码为:"+user.code).deliver
+#		render(:action=>"index",:string=>"已发送") 
+		redirect_to :action => "index", :string=>"已发送",:email=>email,:userid=>userid	
 	end
+
+	def verify_mail
+		code=params[:code]
+		userid=params[:userid]
+		email=[:email]
+		user=User.where("openid"=>userid).first
+		if code == user.code
+		user.email=email
+		user.save
+		redirect_to :action => "success"
+		else
+
+
+
+		end	
+
+
+	end
+
+	def success
+		
+
+
+	end
+
+		
 end

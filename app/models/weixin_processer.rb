@@ -158,7 +158,7 @@ class WeixinProcesser
 		end
 		
 
-		res = self.construct_text_response(msg,MSG_SUBSCRIBE)
+		res = self.construct_text_response(msg,"感谢您关注我们！")
 		
 	  return res
 	end
@@ -211,6 +211,8 @@ class WeixinProcesser
 				end
 			  end			  
 			  return res=self.construct_images_response(msg,name,description,pic_url,url)
+		  when "key_c1"
+			return res=self.construct_image_response(msg,"绑定邮箱","点击进入绑定邮箱",nil,"http://203.156.196.150/win/index?userid="+msg[:FromUserName])
 		end
 	end
 
@@ -274,7 +276,9 @@ class WeixinProcesser
 	end
 
 	def self.get_access_token
-    res = RestClient.get "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+APPID+"&secret="+APPSECRET
+	appid="wxc4b66bd289110ae8"
+ 	appsecret="a22967215b6bbc1111b2afb5d69365ec"
+    res = RestClient.get "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+appsecret
     access_token = JSON.parse(res)["access_token"]
 	end
 
@@ -304,26 +308,50 @@ class WeixinProcesser
 											 }
 											 ]
 											},
+										{\"name\" : \"预留\",
+                                             \"sub_button\" : [
+                                             {\"type\" : \"click\",
+                                         \"name\" : \"预留\",
+                                         \"key\"  : \"key_b1\"
+                                          },
+                                          {\"type\" : \"click\",
+                                             \"name\" : \"预留\",
+                                             \"key\"  : \"key_b2\"
+                                          },
+                                          {\"type\" : \"click\",
+                                          \"name\" : \"预留\",
+                                           \"key\"  : \"key_b3\"
+                                          },
+                                        {\"type\" : \"click\",
+                                         \"name\" : \"预留\",
+                                          \"key\"  : \"key_b4\"
+                                          },
+                                        {\"type\" : \"click\",
+                                          \"name\" : \"预留\",
+                                          \"key\"  : \"key_b5\"
+                                           }
+                                          ]
+                                        },
 										  {\"name\" : \"预留\",
 											 \"sub_button\" : [
 											 {\"type\" : \"click\",
-												\"name\" : \"预留1\",
-												\"key\"  : \"key_b1\"
+												\"name\" : \"绑定邮箱\",
+												\"key\"  : \"key_c1\"
 											 },
 											 {\"type\" : \"click\",
-												\"name\" : \"预留2\",
-												\"key\"  : \"key_b2\"
+												\"name\" : \"获取商品信息\",
+												\"key\"  : \"key_c2\"
 											 },
 											 {\"type\" : \"click\",
 												\"name\" : \"预留3\",
-												\"key\"  : \"key_b3\"
+												\"key\"  : \"key_c3\"
 											 },
 											 {\"type\" : \"click\",
 												\"name\" : \"预留4\",
-												\"key\"  : \"key_b4\"
+												\"key\"  : \"key_c4\"
 											 }
-											 }]
-                      }] 
+											 }
+                      ] 
 									}"
 	   access_token = self.get_access_token
      response =	RestClient.post "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=#{access_token}", string_menu   
