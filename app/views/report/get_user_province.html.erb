@@ -1,0 +1,81 @@
+	<head>
+		<meta charset="UTF-8" />
+		<title>ichartjs 示例</title>
+		<meta name="Description" content="The ichartjs's gallery center,ichartjs 示例中心" />
+		<meta name="Keywords" content="ichartjs demo,Html5 demo,ichartjs示例,ichartjs示例,Html5示例,Html5示例" />
+		<script type="text/javascript" src="http://www.ichartjs.com/ichart.latest.min.js"></script>
+		<script type="text/javascript">
+		$(function(){
+			json="<%= @data1 %>";
+			json=json.replace(/&quot;/g, "'")
+			ss = eval('('+json+')');
+			data=ss;
+					
+			var chart = new iChart.Pie3D({
+				render : 'canvasDiv',
+				data: data,
+				title : {
+					text : '用户省市分布',
+					height:50,
+					fontsize : 30,
+					color : '#282828'
+				},
+				footnote : {
+					text : ' ',
+					color : '#486c8f',
+					fontsize : 12,
+					padding : '0 38'
+				},
+				sub_option : {
+					mini_label_threshold_angle : 40,//迷你label的阀值,单位:角度
+					mini_label:{//迷你label配置项
+						fontsize:20,
+						fontweight:600,
+						color : '#ffffff'
+					},
+					label : {
+						background_color:null,
+						sign:false,//设置禁用label的小图标
+						padding:'0 4',
+						border:{
+							enable:false,
+							color:'#666666'
+						},
+						fontsize:11,
+						fontweight:600,
+						color : '#4572a7'
+					},
+					border : {
+						width : 2,
+						color : '#ffffff'
+					},
+					listeners:{
+						parseText:function(d, t){
+							return d.get('name')+""+d.get('value')+"人，占"+d.get('value')+"%";//自定义label文本
+						}
+					} 
+				},
+				 
+				shadow : true,
+				shadow_blur : 6,
+				shadow_color : '#aaaaaa',
+				shadow_offsetx : 0,
+				shadow_offsety : 0,
+				background_color:'#f1f1f1',
+				align:'center',//右对齐
+				offsetx:0,//设置向x轴负方向偏移位置60px
+				offset_angle:0,//逆时针偏移120度
+				width : 1000,
+				height : 600,
+				radius:150,
+				separate_angle:30
+			});
+			//利用自定义组件构造右侧说明文本
+			
+			chart.draw();
+		});
+		</script>
+	</head>
+	<body>
+	<div id='canvasDiv'></div>
+	</body>

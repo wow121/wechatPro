@@ -2,46 +2,40 @@
 
 class WeixinProcesser
 	
-
-	
-
-   @@auto_response = {"介绍" => MSG_INTRODUCE,
-	                    "是什么" => MSG_INTRODUCE,
-	                    "聊天" => MSG_INTRODUCE,
-		                  "聊聊"=> MSG_INTRODUCE,
-		                  "聊一会儿"=> MSG_INTRODUCE,
-											"说说话"=> MSG_INTRODUCE
-	                    }
 	def self.process_register(params)
      a = []
     a << params[:nonce]
      a << params[:timestamp]
      a << "weixin_test"
      a.sort!
- 
      #sign_string = params[:nonce] + params[:timestamp] + @@token
      sign_string = a[0] + a[1] + a[2]
-     signed_string = Digest::SHA1.hexdigest(sign_string)
+
+ 		signed_string = Digest::SHA1.hexdigest(sign_string)
  
-      Rails.logger.info signed_string
+ 		 Rails.logger.info signed_string
  
-     if signed_string == params[:signature]
-       Rails.logger.info "======success!========"
-       return params[:echostr]
-     else
-       Rails.logger.info "======error!========"
-       return "error"
-    end
-   end
+ 	  if signed_string == params[:signature]
+ 		  Rails.logger.info "======success!========"
+ 		  return params[:echostr]
+ 		else
+ 		  Rails.logger.info "======error!========"
+ 		  return "error"
+ 		end
+ 	end
+
   
 
 	def self.process_msg(params)
 	  msg = params[:xml]
+		Rails.logger.info msg[:MsgType]
 		case(msg[:MsgType])
 		  when "text"
         return self.process_text(msg) 
 			when "image"
         return self.process_image(msg)
+			when "voice"
+		return self.process_voice(msg)
 			when "location"
         return self.process_location(msg)
 			when "link"
@@ -50,185 +44,41 @@ class WeixinProcesser
 			  return self.process_event(msg)
 			else
 			  return "error" 
-	  end 	
+	  end
 	end
-
-	def self.process_text(msg)
-		content = msg[:Content]
-		content.strip!
-		user=User.where("weixin_id"=>msg[:FromUserName]).first
-		time=msg[:CreateTime].to_i
-	if user.status=="update_succees_and_input_code"
-		if content == "Q" || content == "q"
-			user.status="normal"
-			user.save
-			return res = self.construct_text_response(msg,"您已退出照片上传模式！")
-			end
-		merchant=MerchantCode.all
-		for i in merchant do
-			if  i.code==content
-				if	(Time.now.to_i-i.created_at.to_i > 60*30)
-					return res = self.construct_text_response(msg, "您输入的授权码已过期!")
-				else
-				m=Merchant.where("user_name"=>i.merchant_id).first
-				photo=Photos.where("user_id"=>msg[:FromUserName],"merchant_id"=>nil)
-				for img in photo do
-					photo_name=m.user_name+m.loc_name+Time.at(time).strftime("%Y%m%d")+"01"+mkrandom(6).to_s+".jpg"
-					photo_name_small=photo_name[0,photo_name.length-4]+"_small.jpg"
-					img.file_path=photo_name
-					img.merchant_id=m.user_name
-					img.photo_id=content
-					img.upload_type="1"
-					img.save
-					WeixinHelper.download_pic(img.weixin_image_path,IMG_PATH+img.file_path,IMG_PATH+photo_name_small)
-					end
-				user.status="normal"
-				user.photo_count=0
-				user.save	
-				return res = self.construct_text_response(msg, "所有照片上传成功!")
-				end
-			end
-		end
-		return	res = self.construct_text_response(msg, "授权码错误\n请重新输入")
-	elsif user.status=="query_picture_all"
-		photo=Photos.where("user_id"=>msg[:FromUserName])
-		str={}
-		for i in photo do
-			str.update({i.photo_id=>i.created_at})
-		end
-		if content=="q" || content == "Q"
-			user.status="normal"
-			user.save
-			return	res = self.construct_text_response(msg, "您已退出全部图片查询模式")
-		elsif(content.to_i>=1 and content.to_i<=str.length)
-			photolist=Photos.where("photo_id"=>str.keys[content.to_i-1])
-			content_str=""
-			mp=MerchantProject.where("code"=>i.photo_id).last
-				if(mp==nil)
-					title="微信上传"
-				else
-					title=mp.project_name
-				end
-			  index = 1
-			  for i in photolist do
-				
-				string=""+photolist[index-1].title.to_s
-				 if(string.length==0)
-					str="未命名"
-					string+=str
-			     end
-				content_str += index.to_s + "。"+string+"\n"
-				index+=1
-			  end
-			  user=User.where("weixin_id"=>msg[:FromUserName]).first
-			  user.status="query_picture_last"
-			  user.context=photolist.last.photo_id
-			  user.save
-			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photolist.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。\n回复 Q 退出查询模式\n"+content_str)
-		else
-			return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
-		end
-	elsif	user.status=="update_photo" 
-		
-		if content == "Q" || content == "q"
-			user.status="normal"
-			user.save
-			return res = self.construct_text_response(msg,"您已退出照片上传模式！")
-			end
-		return res = self.construct_text_response(msg,"您现在处于照片上传模式噢！ \n 如果想要退出照片上传模式请回复 Q ")
-	elsif   user.status=="query_picture_code"	
-		if content == "Q" || content == "q"	
-			user.status="normal"
-			user.save
-			return res = self.construct_text_response(msg,"您已退出授权码查询模式！")
-			end
-		photo=Photos.where("photo_id"=>content)
-		if photo.first==nil
-			return res = self.construct_text_response(msg,"没有找到授权码！\n请确定授权码输入正确\n请重新输入\n回复Q可退出查询模式")
-		else 
-			 content_str=""
-			 index = 1
-			 mp=MerchantProject.where("code"=>photo.first.photo_id).last
-				if(mp==nil)
-					title="微信上传"
-				else
-					title=mp.project_name
-				end
-			 for i in photo do
-			    
-				string=""+photo[index-1].title.to_s
-				 if(string.length==0)
-					str="未命名"
-					string+=str
-			     end
-				content_str += index.to_s + "。"+string+"\n"
-				index+=1
-				if i.user_id==nil
-					i.user_id=user.weixin_id
-					i.save
-				end
-			 end
-			 
-			user.status="query_picture_last"
-			user.context=content
-			user.save
-			return res = self.construct_text_response(msg, "您所查询的‘"+title+"’一共"+photo.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。\n回复 Q 退出查询模式\n"+content_str)
-		end
 	
-	elsif	user.status=="query_picture_last"
-		photo=Photos.where("photo_id"=>user.context)
-		if content=="q" || content == "Q"
-			user.status="normal"
-			user.save
-			return	res = self.construct_text_response(msg, "您已退出图片查询模式")
-		elsif(content.split.length==1)
-			if(content.to_i>=1 and content.to_i<=photo.length)
-			path=photo[content.to_i-1].file_path[0,photo[content.to_i-1].file_path.length-4]
-			mp=MerchantProject.where("code"=>photo[content.to_i-1].photo_id).last
-				if(mp==nil)
-					string="微信上传"
-				else
-					string=mp.project_name
-				end
-			string+=photo[content.to_i-1].title.to_s
-			return res = self.construct_image_response(msg, "第"+content+"张照片",
-						         string,
-											SERVER_IMG+path+"_small.jpg",
-											SERVER_IP+"/admin/manage_image?file_path="+photo[content.to_i-1].file_path
-											)
+	def self.process_voice(msg)
+		voice_msg=Message.where("key"=>msg[:Recognition].to_s).first
+		if voice_msg==nil
+			product=Product.where("sku"=>msg[:Recognition].to_s).first
+			if(product==nil)
+				return res=self.construct_text_response(msg,"语音识别结果为:\n  "+msg[:Recognition]+"\n对不起，没有找到您想要的产品，请重试")
 			else
-				return	res = self.construct_text_response(msg, "序号输入错误,请重新输入")
+			return res=self.construct_image_response(msg, product.name.to_s,  product.description.to_s, "http://203.156.196.150:999/"+product.pic,"http://203.156.196.150/win/manage_image?sku="+product.sku.to_s+"&open_id="+msg[:FromUserName])
+			#	return res = self.construct_text_response(msg,product.name.to_s)
 			end
-		elsif(content.split.length==2)
-			num1=content.split[0].to_i
-			num2=content.split[1].to_i
-			if(num1>=num2 or num2>photo.length)
-				return	res = self.construct_text_response(msg, "序号范围错误,请重新输入")
-			elsif(num2-num1>4)
-				return res = self.construct_image_response(msg,"第"+num1.to_s+"页至第"+num2.to_s+"页",
-														"当前显示第"+num1.to_s+"页,点击查看全部\n",
-														SERVER_IMG+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]+"_small.jpg",
-														SERVER_IP+"/admin/manage_image?num1="+num1.to_s+"&num2="+num2.to_s+"&context="+user.context)
-			else
-				title=[]
-				description=[]
-				pic_url=[]
-				url=[]
-				for num1 in num1..num2
-					if(photo[num1-1].title==nil)
-						title<<"微信上传"
-					else
-						title<<photo[num1-1].title.to_s
-					end
-					pic_url<<SERVER_IMG+photo[num1-1].file_path[0,photo[num1-1].file_path.length-4]+"_small.jpg"
-					url<<SERVER_IP+"/admin/manage_image?file_path="+photo[num1-1].file_path
-				end
-				Rails.logger.info title.to_s
-				return res=self.construct_images_response(msg, title, description, pic_url, url)
-			end
+		#return res = self.construct_text_response(msg,msg[:Recognition].to_s)
 		else
-			return	res = self.construct_text_response(msg, "序号格式错误,请重新输入")
+			  UserActivityLog.create({:open_id=>msg[:FromUserName],:event=>"key_word",:content=>msg[:Recognition]})
+			  voice_msg = JSON.parse voice_msg.value
+			  message=voice_msg["id"].to_s
+			  message=message.split(/,/)
+			  name=[]
+			  description=[]
+			  pic_url=[]
+			  url=[]
+			  for id in message
+				product=Product.where("id"=>id).first
+				if(product!=nil)
+					name<<product.name
+					description<<product.description
+					pic_url<<"http://203.156.196.150:999/"+product.pic
+					url<<"http://203.156.196.150/win/manage_image?sku="+product.sku.to_s+"&open_id="+msg[:FromUserName]	
+				end 
+			  end	
+			return res=self.construct_images_response(msg,name,description,pic_url,url)
 		end
+<<<<<<< HEAD
 	elsif   user.status=="query_picture_id"	
 		if content == "Q" || content == "q"	
 			user.status="normal"
@@ -261,9 +111,17 @@ class WeixinProcesser
 			return res = self.construct_text_response(msg,message.value.to_s)
 		else
 			return res = self.construct_text_response(msg,message.value.to_s)
-		end
+=======
 	end
-		return res
+
+	def self.process_text(msg)
+		product=Product.where("sku"=>msg[:Content]).first
+		if(product==nil)
+			return res=self.construct_text_response(msg,"没有找到sku")
+		else
+
+>>>>>>> e8a78ed63dfcec5335a2e33593aa1800ebef3dda
+		end
 	end
 
 	def self.process_image(msg)
@@ -315,15 +173,32 @@ class WeixinProcesser
 
 	def self.process_subscribe(msg)
 	  Rails.logger.info "==========process_subscribe====="
-		
-		username=msg[:FromUserName]
-		time=msg[:CreateTime]
-		if User.where("weixin_id"=>username).first== nil
-			User.create(:weixin_id=>username)
-			
+		user=User.where("openid"=>msg[:FromUserName]).first
+		if user==nil
+			access_token=self.get_access_token
+			inf = RestClient.get "https://api.weixin.qq.com/cgi-bin/user/info?access_token="+access_token+"&openid="+msg[:FromUserName]
+			inf = JSON.parse inf
+			User.create(
+			:subscribe=>inf["subscribe"].to_s,
+			:openid=>inf["openid"],
+			:nickname=>inf["nickname"],
+			:sex=>inf["sex"].to_s,
+			:language=>inf["language"],
+			:city=>inf["city"],
+			:province=>inf["province"],
+			:country=>inf["country"],
+			:headimgurl=>inf["headimgurl"],
+			:subscribe_time=>inf["subscribe_time"].to_s
+			)
 		end
+<<<<<<< HEAD
 		message=Message.where("key"=>"关注回复").first
 		res = self.construct_text_response(msg,message.value.to_s)
+=======
+		
+
+		res = self.construct_text_response(msg,"感谢您关注我们！")
+>>>>>>> e8a78ed63dfcec5335a2e33593aa1800ebef3dda
 		
 	  return res
 	end
@@ -334,87 +209,50 @@ class WeixinProcesser
 
 	def self.process_click(msg)
 	  Rails.logger.info "==========click==============="
-		user=User.where("weixin_id"=>msg[:FromUserName]).first
-		case msg[:EventKey]
+	  btn_msg=Message.where("key"=>"button_message").first
+	  Rails.logger.info btn_msg.value
+	  btn_msg = JSON.parse btn_msg.value
+	  
+		case msg[:EventKey]		  
+		  
 		  when "key_a1"
 			  
-			  user.status="update_photo"
-			  user.save
-		    return res = self.construct_text_response(msg, "请发送一张照片 \n （小提示：\n如果需要精美的高分辨率照片，请发送原图哦~）")
-			
-		  when "key_b1"
-			 error_checking(msg[:FromUserName])
-			 photo=Photos.where("user_id"=>msg[:FromUserName])
-			 if(photo.first==nil)
-				return res=self.construct_text_response(msg,"您没有可供查询的图片")
-			else
-			str={}
-			 for i in photo do
-			 str.update({i.photo_id=>i.created_at})
-			 end
-			 content=""
-			 index = 1
-			 for i in str.keys do
-				mp=MerchantProject.where("code"=>i).last
-				if(mp==nil)
-					string="微信上传"
-				else
-					string=mp.project_name
+			  message=btn_msg["key_a1"].to_s
+			  message=message.split(/,/)
+			  name=[]
+			  description=[]
+			  pic_url=[]
+			  url=[]
+			  for id in message
+				product=Product.where("id"=>id).first
+				if(product!=nil)
+					name<<product.name
+					description<<product.description+product.to_s
+					pic_url<<"http://203.156.196.150:999/"+product.pic
+					url<<"http://203.156.196.150/win/manage_image?sku="+product.sku.to_s+"&open_id="+msg[:FromUserName]
 				end
-				
-			 #   str1=i+" "+str.values[index-1].strftime("%m-%d %H:%M").to_s
-				content += index.to_s + "。"+string+"\n"
-				index+=1
-			 end
-			 user=User.where("weixin_id"=>msg[:FromUserName]).first
-			 user.status="query_picture_all"
-			 user.save
-			 return res = self.construct_text_response(msg, "共查找到"+str.length.to_s+"个项目:\n回复响应的序号进入项目\n回复 Q 退出查询模式\n"+content)
-			end
-		  when "key_b2"
-			  error_checking(msg[:FromUserName])
-			  photo=Photos.where("user_id"=>msg[:FromUserName]).last
-			  if photo==nil
-				return res=self.construct_text_response(msg,"您没有可供查询的图片")
-			  else
-			  img=Photos.where("photo_id"=>photo.photo_id)
-			  content_str=""
-			  index = 1
-			  mp=MerchantProject.where("code"=>img.first.photo_id).last
-				if(mp==nil)
-					title="微信上传"
-				else
-					title=mp.project_name
+			  end			  
+			  return res=self.construct_images_response(msg,name,description,pic_url,url)
+		  when "key_a2"
+			   message=btn_msg["key_a2"].to_s
+			  message=message.split(/,/)
+			  name=[]
+			  description=[]
+			  pic_url=[]
+			  url=[]
+			  for id in message
+				product=Product.where("id"=>id).first
+				if(product!=nil)
+					name<<product.name
+					description<<product.description+product.to_s
+					pic_url<<"http://203.156.196.150:999/"+product.pic
+					#url<<"http://203.156.196.150/win/manage_image?sku="+product.sku.to_s
+						url<<"http://203.156.196.150/win/hello"
 				end
-			  for i in img do
-				
-				 string=""+img[index-1].title.to_s
-				 if(string.length==0)
-					str="未命名"
-					string+=str
-			     end
-				content_str += index.to_s + "。"+string+"\n"
-				index+=1
-			  end
-			  user=User.where("weixin_id"=>msg[:FromUserName]).first
-			  user.status="query_picture_last"
-			  user.context=photo.photo_id
-			  user.save
-			  
-			  return res = self.construct_text_response(msg, "您所查询的‘"+title+"’ 一共"+img.length.to_s+"页:\n回复相应的页码进行查看\n回复“序号1 空格 序号2”可查看连续页面。\n回复 Q 退出查询模式\n"+content_str)
-			end		
-		when "key_b3"
-			  error_checking(msg[:FromUserName])
-			  user=User.where("weixin_id"=>msg[:FromUserName]).first
-			  user.status="query_picture_code"
-			  user.save
-			  return res=self.construct_text_response(msg,"请输入照片的授权码，回复Q退出查询模式")
-		when "key_b4"
-			  error_checking(msg[:FromUserName])
-			  user=User.where("weixin_id"=>msg[:FromUserName]).first
-			  user.status="query_picture_id"
-			  user.save
-			  return res=self.construct_text_response(msg,"请输入照片的编码，回复Q退出查询模式")
+			  end			  
+			  return res=self.construct_images_response(msg,name,description,pic_url,url)
+		  when "key_c1"
+			return res=self.construct_image_response(msg,"绑定邮箱","点击进入绑定邮箱",nil,"http://203.156.196.150/win/index?userid="+msg[:FromUserName])
 		end
 	end
 
@@ -472,109 +310,90 @@ class WeixinProcesser
     pic_url_node.add_text(pic_url)
 		url_node = item_1_node.add_element("Url")
     url_node.add_text(url)
-
-=begin
-		item_2_node = articles.add_element("item")
-		title_node = item_2_node.add_element("Title")
-		title_node.add_text("title")
-		description_node = item_2_node.add_element("Description")
-		description_node.add_text("description")
-		pic_url_node = item_2_node.add_element("PicUrl")
-		pic_url_node.add_text("")
-#pic_url_node.add_text("http://vimi.in/static/test.jpg")
-		url_node = item_2_node.add_element("Url")
-		url_node.add_text("http://vimi.in")
-#url_node.add_text("http://vimi.in")
-=end
 	  Rails.logger.info res_data.to_s
 	  res_data.to_s
 
 	end
 
 	def self.get_access_token
-    res = RestClient.get "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+APPID+"&secret="+APPSECRET
+	appid="wxc4b66bd289110ae8"
+ 	appsecret="a22967215b6bbc1111b2afb5d69365ec"
+    res = RestClient.get "https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid="+appid+"&secret="+appsecret
     access_token = JSON.parse(res)["access_token"]
 	end
 
 	def self.create_menu
-     menus = {"button" => [
-			             {"type" => "click",
-										"name" => "PhoneShell",
-									  "key" => "phone_shell"
-									 },
-									 {"type" => "view",
-										"name" => "Activity",
-										"url" => "http://vimi.in"},
-			             {"type" => "click",
-										"name" => "More",
-									  "key" => "more"}
-									 ]
-							}
-
      string_menu = "{\"button\" : [
-										  {\"name\" : \"上传\",
+										  {\"name\" : \"全部产品\",
 											 \"sub_button\" : [
 											 {\"type\" : \"click\",
-												\"name\" : \"上传照片\",
+												\"name\" : \"手套\",
 												\"key\"  : \"key_a1\"
+											 },
+											 {\"type\" : \"click\",
+												\"name\" : \"口罩\",
+												\"key\"  : \"key_a2\"
+											 },
+											 {\"type\" : \"click\",
+												\"name\" : \"眼镜\",
+												\"key\"  : \"key_a3\"
+											 },
+											 {\"type\" : \"click\",
+												\"name\" : \"防护服\",
+												\"key\"  : \"key_a4\"
+											 },
+											 {\"type\" : \"click\",
+												\"name\" : \"耳塞\",
+												\"key\"  : \"key_a5\"
 											 }
 											 ]
 											},
-										  {\"name\" : \"查询\",
+										{\"name\" : \"预留\",
+                                             \"sub_button\" : [
+                                             {\"type\" : \"click\",
+                                         \"name\" : \"预留\",
+                                         \"key\"  : \"key_b1\"
+                                          },
+                                          {\"type\" : \"click\",
+                                             \"name\" : \"预留\",
+                                             \"key\"  : \"key_b2\"
+                                          },
+                                          {\"type\" : \"click\",
+                                          \"name\" : \"预留\",
+                                           \"key\"  : \"key_b3\"
+                                          },
+                                        {\"type\" : \"click\",
+                                         \"name\" : \"预留\",
+                                          \"key\"  : \"key_b4\"
+                                          },
+                                        {\"type\" : \"click\",
+                                          \"name\" : \"预留\",
+                                          \"key\"  : \"key_b5\"
+                                           }
+                                          ]
+                                        },
+										  {\"name\" : \"预留\",
 											 \"sub_button\" : [
 											 {\"type\" : \"click\",
-												\"name\" : \"注册项目查询\",
-												\"key\"  : \"key_b1\"
+												\"name\" : \"绑定邮箱\",
+												\"key\"  : \"key_c1\"
 											 },
 											 {\"type\" : \"click\",
-												\"name\" : \"最后项目查询\",
-												\"key\"  : \"key_b2\"
+												\"name\" : \"获取商品信息\",
+												\"key\"  : \"key_c2\"
 											 },
 											 {\"type\" : \"click\",
-												\"name\" : \"项目授权码输入\",
-												\"key\"  : \"key_b3\"
+												\"name\" : \"预留3\",
+												\"key\"  : \"key_c3\"
 											 },
 											 {\"type\" : \"click\",
-												\"name\" : \"照片下载\",
-												\"key\"  : \"key_b4\"
+												\"name\" : \"预留4\",
+												\"key\"  : \"key_c4\"
 											 }
-											 }]
-                      }] 
+											 }
+                      ] 
 									}"
-
-
-=begin
-     string_menu = "{\"button\" : [
-		                  {\"type\" : \"click\",
-											 \"name\" : \"个性定制手机壳\",
-											 \"key\"  : \"phone_shell\"
-											},
-										  {\"name\" : \"更多\",
-											 \"sub_button\" : [
-											 {\"type\" : \"click\",
-												\"name\" : \"介绍\",
-												\"key\"  : \"introduction\"
-											 },
-											 {\"type\" : \"click\",
-												\"name\" : \"查询订单\",
-												\"key\"  : \"query\"
-											 }]
-											},
-										  {\"name\" : \"客服\",
-											 \"sub_button\" : [
-											 {\"type\" : \"click\",
-												\"name\" : \"介绍\",
-												\"key\"  : \"introduction\"
-											 },
-											 {\"type\" : \"click\",
-												\"name\" : \"查询订单\",
-												\"key\"  : \"query\"
-											 }]
-                      }] 
-									}"
-=end
 	   access_token = self.get_access_token
-
      response =	RestClient.post "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=#{access_token}", string_menu   
     # response =	RestClient.post "https://api.weixin.qq.com/cgi-bin/menu/create?access_token=#{access_token}", menus.to_json  
 
@@ -638,4 +457,7 @@ class WeixinProcesser
 		Rails.logger.info res_data.to_s
 		res_data.to_s
 	end
+	
+	
+	
 end
