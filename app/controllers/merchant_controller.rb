@@ -159,4 +159,57 @@ class MerchantController < ApplicationController
 			end
 		render:json=>str
 	end
+	
+	def setmessage
+		message=params[:message]
+		key=params[:key]
+		msg=Message.where("key"=>key.to_s).first
+		if(msg==nil)
+			Message.create(:key=>key.to_s,:value=>message)
+		else
+			msg.value=message
+			msg.save
+		end
+		str={"status"=>"200"}
+		render:json=>str
+	end
+	
+	def getmessage
+		msg=Message.all
+		content=[]
+		for i in msg do
+		str={"id"=>i.id.to_s,"key"=>i.key,"value"=>i.value}
+		content<<str
+		end
+		render:json=>content
+	end
+	
+	def removemessage
+		id=params[:id].to_i
+		msg=Message.where("id"=>id).first
+		if id==nil
+			str={"status"=>"100"}
+		else
+			Message.delete(id)
+			str={"status"=>"200"}
+		end
+		render:json=>str
+	end
+	
+	def adminlogin
+		username=params[:username]
+		pw=params[:password]
+		password=Digest::MD5.hexdigest(pw)
+		str={"fail"=>"username or password wrong"}
+		m=Merchant.where("user_name"=>username,"password"=>password).first
+		if(m==nil)
+			str={"status"=>"100"}
+		elsif(m.admin==-1)
+			str={"status"=>"101"}
+		else
+			str={"status"=>"200"}
+		end
+		render:json=>str
+	end
+	
 end

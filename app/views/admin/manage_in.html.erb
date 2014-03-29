@@ -31,7 +31,7 @@
 	<% @pictures.each do |p| %>
              <form>
 		<table><tr>
-                <td style="width:200px;height:100px" id=<%= p.id %>><img src=<%= "http://211.144.76.98:999/" + p.file_path %> style="height:100%;width:100%"/></td>
+                <td style="width:200px;height:100px" id=<%= p.id %>><img src=<%= SERVER_IMG + p.file_path %> style="height:100%;width:100%"/></td>
                 <td style="width:200px" id=<%= p.id %>><div><%= p.title %></div></td>
 		<td style="width:200px" id=<%= p.id %>><div><%= p.description %></div></td> 
 		<td style="width:80px" id=<%= p.id %>><a target="_blank"  href="change_info?pic_id=<%=p.id %>">修改</a>|<a  href="delete_pic?pic_id=<%= p.id %>">删除</a></td>

@@ -235,8 +235,8 @@ class WeixinProcesser
 			user.save
 			return res = self.construct_text_response(msg,"您已退出授权码查询模式！")
 		end
-		content=content+".jpg"
-		photo=Photos.where("file_path"=>content).first
+		#content=content+".jpg"
+		photo=Photos.where("photo_id"=>content).first
 		if photo==nil
 			return res = self.construct_text_response(msg,"没有找到照片！\n请确定照片编码输入正确\n请重新输入\n回复Q可退出查询模式")
 		else
@@ -255,30 +255,12 @@ class WeixinProcesser
 			end
 	
 	else
-		if @@auto_response[content] != nil
-		  res = self.construct_text_response(msg, @@auto_response[content])
-		else    
-			if content == "1"
-					return res = self.construct_text_response(msg,MSG_1)
-			elsif content == "2"
-					return res = self.construct_text_response(msg,MSG_2) 
-			elsif content == "3"
-					return res = self.construct_text_response(msg,MSG_3) 
-			elsif content == "4"
-					return res = self.construct_text_response(msg,MSG_4) 
-			elsif content == "5"
-					return res = self.construct_text_response(msg,MSG_5)
-			elsif content == "6"
-                                        return res = self.construct_text_response(msg,MSG_6)
-			elsif content == "7"
-                                        return res = self.construct_text_response(msg,MSG_7)
-			elsif content == "8"
-                                        return res = self.construct_text_response(msg,MSG_8)
-			elsif content == "9"
-                                        return res = self.construct_text_response(msg,MSG_9)
-			else
-					return res = self.construct_text_response(msg,MSG_OTHER) 
-			end
+		message=Message.where("key"=>content).first
+		if message==nil
+			message=Message.where("key"=>"默认回复").first
+			return res = self.construct_text_response(msg,message.value.to_s)
+		else
+			return res = self.construct_text_response(msg,message.value.to_s)
 		end
 	end
 		return res
@@ -340,8 +322,8 @@ class WeixinProcesser
 			User.create(:weixin_id=>username)
 			
 		end
-
-		res = self.construct_text_response(msg,MSG_SUBSCRIBE)
+		message=Message.where("key"=>"关注回复").first
+		res = self.construct_text_response(msg,message.value.to_s)
 		
 	  return res
 	end

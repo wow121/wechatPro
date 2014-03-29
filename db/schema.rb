@@ -11,7 +11,7 @@
 #
 # It's strongly recommended to check this file into your version control system.
 
-ActiveRecord::Schema.define(:version => 20131224060250) do
+ActiveRecord::Schema.define(:version => 20140324023452) do
 
   create_table "merchant_codes", :force => true do |t|
     t.string   "merchant_id"
@@ -40,6 +40,13 @@ ActiveRecord::Schema.define(:version => 20131224060250) do
     t.string   "office_name"
     t.string   "token"
     t.integer  "admin"
+  end
+
+  create_table "messages", :force => true do |t|
+    t.string   "key"
+    t.datetime "created_at", :null => false
+    t.datetime "updated_at", :null => false
+    t.text     "value"
   end
 
   create_table "photo_logs", :force => true do |t|

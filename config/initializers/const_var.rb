@@ -2,17 +2,17 @@
 
 
 # -------------------------------------------------------------------
-SERVER_IP = "http://211.144.76.98"
-SERVER_DOWNLOAD_IP = "http://211.144.76.98:777/"
-SERVER_IMG="http://211.144.76.98:999/"
-SERVER_QRCODE="http://211.144.76.98:888/"
+SERVER_IP = "http://112.124.63.18"
+SERVER_DOWNLOAD_IP = "http://112.124.63.18:777/"
+SERVER_IMG="http://112.124.63.18:999/"
+SERVER_QRCODE="http://112.124.63.18:888/"
 IMG_PATH="/home/weixin/user_photos/"
 OLD_IMG_PATH="/home/weixin/old_photos/"
 LOG_PATH="/home/weixin/excel/"
 QRCODE_PATH="/home/weixin/merchant_qrcode/"
 JAVA_CLASS_PATH="/home/weixin/myjava"
-APPID="wx505c43b5996599e8"
-APPSECRET="ec3903f8e73edc50e9d0cc47a80c9663"
+APPID="wx959cb4c1f8a28c39"
+APPSECRET="00bc2cc77a05ddc101b7432868c9666e"
 
 
 # ---------------------- weixin message -----------------------------
